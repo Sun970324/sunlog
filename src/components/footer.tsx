@@ -11,10 +11,10 @@ const Footer = ({ isDesktop }: Props) => {
     return (
       <div className='h-44 pt-12 bg-gray-100 text-center'>
         <div className='flex flex-row justify-center mb-8'>
-          <FooterImg logo='assets/git-hub.png' />
-          <FooterImg logo='assets/notion.png' />
+          <FooterImg logo='/assets/git-hub.png' />
+          <FooterImg logo='/assets/notion.png' />
         </div>
-        <div className='text-sm'>© 2024. Sun's log. All rights reserved.</div>
+        <div className='text-sm'>© 2024. Sun&apos;s log. All rights reserved.</div>
       </div>
     );
   }

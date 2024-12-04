@@ -19,8 +19,8 @@ const Projects = ({ isDesktop }: Props) => {
           다양한 프로젝트를 경험해왔습니다.
         </p>
         <div className='flex flex-wrap gap-8 mx-auto max-w-6xl'>
-          {projectData.map(el => (
-            <ProjectCard data={el} />
+          {projectData.map((el, idx) => (
+            <ProjectCard data={el} key={idx} />
           ))}
         </div>
       </div>
