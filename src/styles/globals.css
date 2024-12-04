@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'SUIT-Variable';
+    src: url('/fonts/SUIT-Variable-1.ttf') format('truetype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'montserrat';
+    src: url('/fonts/Montserrat-Medium.ttf') format('truetype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'montserrat-bold';
+    src: url('/fonts/Montserrat-Bold.ttf') format('truetype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'montserrat-semibold';
+    src: url('/fonts/Montserrat-Semibold.ttf') format('truetype');
+    font-display: swap;
+  }
+}
+
+/* html {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+} */
+
+:root {
+  --primary: theme('colors.primary.DEFAULT');
+  --primary-hover: theme('colors.primary.hover');
+  --primary-active: theme('colors.primary.active');
+  --secondary-light: theme('colors.secondary.light');
+  --secondary-dark: theme('colors.secondary.dark');
+  --black: theme('colors.black');
+
+  /* spacing */
+  --content-padding: 40px;
+  --content-width: calc(1570px + (var(--content-padding) * 2));
+
+  /* mobile */
+  --mobile-header-height: 70px;
+  @media only screen and (max-width: 767px) {
+    body {
+      background-color: black;
+    }
+  }
+}
+
+body {
+  min-block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: overlay;
+  /* color: var(--black); */
+}
+
+img {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  /* user-drag: none; */
+}
+
+.backToTop {
+  filter: drop-shadow(0px 10px 10px rgba(40, 40, 48, 0.051));
+  path {
+    stroke: none;
+    fill: var(--black);
+    &:nth-last-of-type(1) {
+      stroke: var(--white);
+    }
+  }
+}
