@@ -13,8 +13,8 @@ const ProjectCard = ({ data }: Props) => {
       <hr className='h-[2px] bg-gray-400 mb-2' />
       <p className='font-bold mb-1'>{data.subtitle}</p>
       <ol className='list-disc ml-4 text-[14px] leading-6 mb-2'>
-        {data.content.map(el => (
-          <li>{el}</li>
+        {data.content.map((el, idx) => (
+          <li key={idx}>{el}</li>
         ))}
       </ol>
       <p className='border border-secondary-dark bg-secondary-light rounded-lg px-3 py-1 text-[14px]'>
