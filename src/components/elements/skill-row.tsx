@@ -7,7 +7,7 @@ interface Props {
 const SkillRow = ({ data }: Props) => {
   return (
     <div className='flex items-center'>
-      <div className='w-48 font-extrabold text-[20px] flex'>
+      <div className='w-44 font-extrabold text-[20px] flex'>
         <Image
           className='mr-4'
           src={`/assets/${data.title}.png`}
@@ -17,6 +17,7 @@ const SkillRow = ({ data }: Props) => {
         />
         <div>{data.title}</div>
       </div>
+      <div className='bg-gray-400 w-[2px] h-10 mr-5' />
       <div className='flex gap-x-5'>
         {data.stacks.map((el, idx) => (
           <div
