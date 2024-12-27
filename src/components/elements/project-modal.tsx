@@ -47,7 +47,14 @@ const ProjectModal = ({ isModalOpen, setIsModalOpen, data }: Props) => {
           </div>
           <div className='font-bold text-[20px]'>Images</div>
           {data.images.map((el, idx) => (
-            <img key={idx} src={`assets/projects/${el}`} className='mx-auto my-3' />
+            <Image
+              alt={el}
+              width={600}
+              height={400}
+              key={idx}
+              src={`/assets/projects/${el}`}
+              className='mx-auto my-3'
+            />
           ))}
         </div>
       </div>

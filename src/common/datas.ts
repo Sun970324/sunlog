@@ -184,8 +184,10 @@ export const skillData: SkillData[] = [
     title: 'Frontend',
     stacks: [
       { name: 'React', color: '#61DAFB', isWhite: false },
+      { name: 'React-Redux', color: '#764ABC', isWhite: true },
       { name: 'Next.js', color: '#000000', isWhite: true },
       { name: 'Tailwind CSS', color: '#0DA5E9', isWhite: true },
+      { name: 'Styled-Components', color: '#F1AF9C', isWhite: true },
     ],
   },
   {
@@ -196,6 +198,7 @@ export const skillData: SkillData[] = [
       { name: 'MySQL', color: '#F29221', isWhite: true },
       { name: 'GraphQL', color: '#F6009B', isWhite: true },
       { name: 'Firebase', color: '#FF9100', isWhite: true },
+      { name: 'Prisma', color: '#01354D', isWhite: true },
     ],
   },
   {
