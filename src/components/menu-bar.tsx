@@ -1,6 +1,4 @@
-import { Modal } from '@mui/material';
 import Image from 'next/image';
-import { useState } from 'react';
 
 interface Props {
   handleClickMenu: (idx: number) => void;
@@ -10,55 +8,39 @@ interface Props {
 
 const MenuBar = ({ handleClickMenu, isMenuOpen, setIsMenuOpen }: Props) => {
   return (
-    <Modal open={isMenuOpen} className='w-full flex justify-end h-full'>
-      <div className='w-[80%] h-full bg-[rgb(198,198,198)] backdrop-blur-[50px] bg-opacity-[0.2] px-[20px] py-[15px] focus:outline-none'>
-        <div className='flex justify-end mb-[20px]'>
+    <>
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
+          isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      />
+
+      {/* Drawer */}
+      <div
+        className={`fixed top-0 right-0 h-full w-[75%] max-w-[300px] z-50 bg-zinc-900 transition-transform duration-300 ease-in-out font-suitVariable ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className='flex justify-end p-4'>
           <Image
             src='/assets/close.png'
-            alt=''
-            width={25}
-            height={25}
+            alt='닫기'
+            width={24}
+            height={24}
             onClick={() => setIsMenuOpen(false)}
+            className='cursor-pointer brightness-0 invert'
           />
         </div>
-        <ul className='h-full flex flex-col justify-between text-[16px] tracking-wider text-gray-200 font-[300] pb-[50px]'>
-          <div className='h-[60%] flex justify-between flex-col'>
-            <li
-              onClick={() => {
-                handleClickMenu(0);
-                setIsMenuOpen(false);
-              }}
-            >
-              Home
-            </li>
-            <li
-              onClick={() => {
-                handleClickMenu(1);
-                setIsMenuOpen(false);
-              }}
-            >
-              Tech Skills
-            </li>
-            <li
-              onClick={() => {
-                handleClickMenu(2);
-                setIsMenuOpen(false);
-              }}
-            >
-              Projects
-            </li>
-            <li
-              onClick={() => {
-                handleClickMenu(3);
-                setIsMenuOpen(false);
-              }}
-            >
-              Contact
-            </li>
-          </div>
+        <ul className='flex flex-col gap-y-8 px-8 pt-4 text-white text-[18px] font-[300] tracking-wider cursor-pointer'>
+          <li onClick={() => { handleClickMenu(0); setIsMenuOpen(false); }}>Home</li>
+          <li onClick={() => { handleClickMenu(1); setIsMenuOpen(false); }}>Tech Skills</li>
+          <li onClick={() => { handleClickMenu(2); setIsMenuOpen(false); }}>Projects</li>
+          <li onClick={() => { handleClickMenu(3); setIsMenuOpen(false); }}>Contact</li>
         </ul>
       </div>
-    </Modal>
+    </>
   );
 };
 

@@ -2,8 +2,6 @@ import Footer from '@/components/footer';
 import Header from '@/components/header';
 import HomeSection from '@/components/sections/home';
 import { useRef, useState } from 'react';
-import { GetServerSideProps } from 'next';
-import { getDeviceType } from '@/common/utils';
 import { NAV_HEIGHT } from '@/common/constants';
 import MenuBar from '@/components/menu-bar';
 import TechSkills from '@/components/sections/tech-skills';
@@ -11,10 +9,7 @@ import Projects from '@/components/sections/projects';
 import Contact from '@/components/sections/contact';
 import { DeviceProvider } from '@/context/DeviceContext';
 
-interface Props {
-  isDesktop: boolean;
-}
-export default function Home({ isDesktop }: Props) {
+export default function Home() {
   const scrollRef = useRef<HTMLDivElement[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleClickMenu = (idx: number) => {
@@ -25,9 +20,9 @@ export default function Home({ isDesktop }: Props) {
   };
 
   return (
-    <DeviceProvider isDesktop={isDesktop}>
+    <DeviceProvider>
       <div className='w-full overflow-clip'>
-        <Header handleClickMenu={handleClickMenu} />
+        <Header handleClickMenu={handleClickMenu} setIsMenuOpen={setIsMenuOpen} />
         <MenuBar
           handleClickMenu={handleClickMenu}
           isMenuOpen={isMenuOpen}
@@ -54,10 +49,3 @@ export default function Home({ isDesktop }: Props) {
     </DeviceProvider>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
-  const device = getDeviceType(req);
-  const isDesktop = device === 'desktop';
-
-  return { props: { isDesktop } };
-};
