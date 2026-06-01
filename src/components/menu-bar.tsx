@@ -41,7 +41,7 @@ const MenuBar = ({ handleClickMenu, isMenuOpen, setIsMenuOpen }: Props) => {
             </li>
             <li
               onClick={() => {
-                handleClickMenu(3);
+                handleClickMenu(2);
                 setIsMenuOpen(false);
               }}
             >
@@ -49,7 +49,7 @@ const MenuBar = ({ handleClickMenu, isMenuOpen, setIsMenuOpen }: Props) => {
             </li>
             <li
               onClick={() => {
-                handleClickMenu(4);
+                handleClickMenu(3);
                 setIsMenuOpen(false);
               }}
             >

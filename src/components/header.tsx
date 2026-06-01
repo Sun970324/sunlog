@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import { useState } from 'react';
+import { useDevice } from '@/context/DeviceContext';
 
 interface Props {
   handleClickMenu: (idx: number) => void;
-  isDesktop: boolean;
 }
-const Header = ({ handleClickMenu, isDesktop }: Props) => {
+const Header = ({ handleClickMenu }: Props) => {
+  const isDesktop = useDevice();
   if (isDesktop) {
     return (
       <header className='text-gray-700 h-[72px] w-full  sticky top-0 bg-black bg-opacity-[0.01] backdrop-blur-[15px] z-30 font-suitVariable'>

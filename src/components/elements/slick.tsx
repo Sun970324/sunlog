@@ -4,24 +4,13 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { styled } from '@mui/material';
 import { useRef, useState } from 'react';
-
-interface Props {
-  isDesktop: boolean;
-}
+import { useDevice } from '@/context/DeviceContext';
 
 const imageList = [
-  {
-    src: '/assets/AI.jpg',
-  },
-  {
-    src: '/assets/AI.jpg',
-  },
-  {
-    src: '/assets/AI.jpg',
-  },
-  {
-    src: '/assets/AI.jpg',
-  },
+  { src: '/assets/AI.jpg' },
+  { src: '/assets/AI.jpg' },
+  { src: '/assets/AI.jpg' },
+  { src: '/assets/AI.jpg' },
 ];
 
 const StyledSlider = styled(Slider)`
@@ -47,8 +36,9 @@ const StyledSlider = styled(Slider)`
   }
 `;
 
-const Slick = ({ isDesktop }: Props) => {
-  const slickRef = useRef<any>(null);
+const Slick = () => {
+  const isDesktop = useDevice();
+  const slickRef = useRef<Slider>(null);
   const [current, setCurrent] = useState(0);
   const settings = {
     arrows: true,

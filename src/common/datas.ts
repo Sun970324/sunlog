@@ -64,7 +64,7 @@ export const projectData: ProjectData[] = [
     content: [
       'Flutter로 Figma 디자인을 반영한 UX/UI 개발',
       '음원 내 트랙별 음량 조절 기능 구현',
-      'meaning 음원재생 기능 구현',
+      '음원재생 기능 구현',
       'Firebase DB로 회원, 음원, 좋아요 등 데이터 관리',
       'Android 플레이 스토어, IOS 앱 스토어 출시',
     ],

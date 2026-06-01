@@ -27,9 +27,9 @@ const config: Config = {
       },
       colors: {
         primary: {
-          DEFAULT: "#2C3A84",
-          hover: "#3A4CA8",
-          active: "#07124F",
+          DEFAULT: "var(--color-primary)",
+          hover: "var(--color-primary-hover)",
+          active: "var(--color-primary-active)",
         },
         secondary: {
           light: "#d8deff",
