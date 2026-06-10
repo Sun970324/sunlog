@@ -18,6 +18,27 @@ export type ProjectData = {
 
 export const projectData: ProjectData[] = [
   {
+    id: 'jay',
+    name: 'Jay',
+    date: '’25.12. ~',
+    role: 'App ・ Backend',
+    subtitle: '의료 복지 혜택 정보 제공 및 커뮤니티 플랫폼',
+    content: [
+      '의료 복지 혜택 프로그램을 질환, 지역, 나이, 소득 등 다양한 조건으로 검색 및 필터링하는 기능 개발',
+      'Riverpod을 활용한 상태 관리 및 go_router 기반 탭 네비게이션 구조 설계',
+      '게시글, 댓글, 좋아요 기능이 포함된 커뮤니티 기능 개발',
+      'Google, Kakao 소셜 로그인(OAuth PKCE) 구현',
+      'Supabase RLS(Row Level Security)를 활용한 데이터 보안 관리',
+    ],
+    stacks: 'Flutter, Supabase, Riverpod, Firebase',
+    images: ['jay/jay-1.png', 'jay/jay-2.png', 'jay/jay-3.png', 'jay/jay-4.png', 'jay/jay-5.png'],
+    meaning: [
+      'Jay는 복잡하게 흩어져 있는 의료 복지 혜택 정보를 한 곳에서 쉽게 찾고, 같은 경험을 가진 사람들과 정보를 나눌 수 있는 커뮤니티 플랫폼입니다.',
+      'Riverpod의 AsyncNotifier를 활용하여 비동기 상태 관리를 체계적으로 구성하였으며, Supabase의 RLS를 통해 사용자별 데이터 접근 권한을 관리했습니다.',
+      '스타트업 개인 프로젝트로서 기획부터 앱 개발, 백엔드 설계까지 전 과정을 담당하며 서비스를 처음부터 설계하고 구현하는 경험을 쌓을 수 있었습니다.',
+    ],
+  },
+  {
     id: 'modu',
     name: '모두의 점원 - 팀 프로젝트',
     date: '’24.10. - ’24.11.',
