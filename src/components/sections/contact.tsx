@@ -27,8 +27,6 @@ const Contact = () => {
   useEffect(() => {
     emailjs.init({
       publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-      blockHeadless: true,
-      limitRate: { id: 'app', throttle: 10000 },
     });
   }, []);
 
@@ -47,11 +45,12 @@ const Contact = () => {
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
         formRef.current,
-        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }
+        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY },
       );
       setFormData(INITIAL_FORM);
       setStatus('sent');
-    } catch {
+    } catch (err) {
+      console.error('EmailJS error:', err);
       setStatus('error');
     }
   };
@@ -82,50 +81,69 @@ const Contact = () => {
       </p>
       <form ref={formRef} className='w-fit mx-auto' onSubmit={sendEmail}>
         <div className='my-3'>
+          <label className='block text-sm font-medium text-gray-300 md:text-gray-600 mb-1'>
+            성함 <span className='text-red-400'>*</span>
+          </label>
           <input
             value={formData.userName}
             type='text'
             name='userName'
-            placeholder='성함'
+            placeholder='성함을 입력해주세요'
+            required
             className='w-[90vw] md:w-[40vw] p-3 bg-zinc-800 md:bg-gray-100 text-white md:text-gray-800 placeholder:text-gray-500'
             onChange={handleChange}
           />
         </div>
         <div className='my-3'>
-          <input
-            value={formData.company}
-            type='text'
-            name='company'
-            placeholder='소속'
-            className='w-[90vw] md:w-[40vw] p-3 bg-zinc-800 md:bg-gray-100 text-white md:text-gray-800 placeholder:text-gray-500'
-            onChange={handleChange}
-          />
-        </div>
-        <div className='my-3'>
+          <label className='block text-sm font-medium text-gray-300 md:text-gray-600 mb-1'>
+            이메일 <span className='text-red-400'>*</span>
+          </label>
           <input
             value={formData.email}
             type='email'
             name='email'
-            placeholder='이메일'
+            placeholder='이메일을 입력해주세요'
+            required
             className='w-[90vw] md:w-[40vw] p-3 bg-zinc-800 md:bg-gray-100 text-white md:text-gray-800 placeholder:text-gray-500'
             onChange={handleChange}
           />
         </div>
         <div className='my-3'>
+          <label className='block text-sm font-medium text-gray-300 md:text-gray-600 mb-1'>
+            소속 <span className='text-gray-500 font-normal'>(선택)</span>
+          </label>
+          <input
+            value={formData.company}
+            type='text'
+            name='company'
+            placeholder='소속을 입력해주세요'
+            className='w-[90vw] md:w-[40vw] p-3 bg-zinc-800 md:bg-gray-100 text-white md:text-gray-800 placeholder:text-gray-500'
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className='my-3'>
+          <label className='block text-sm font-medium text-gray-300 md:text-gray-600 mb-1'>
+            전화번호 <span className='text-gray-500 font-normal'>(선택)</span>
+          </label>
           <input
             value={formData.phone}
             type='text'
             name='phone'
             onChange={handleChange}
-            placeholder='전화번호'
+            placeholder='전화번호를 입력해주세요'
             className='w-[90vw] md:w-[40vw] p-3 bg-zinc-800 md:bg-gray-100 text-white md:text-gray-800 placeholder:text-gray-500'
           />
         </div>
         <div className='my-3'>
+          <label className='block text-sm font-medium text-gray-300 md:text-gray-600 mb-1'>
+            내용 <span className='text-red-400'>*</span>
+          </label>
           <textarea
             value={formData.message}
-            placeholder='내용'
+            placeholder='문의 내용을 입력해주세요'
             name='message'
+            required
             className='w-[90vw] md:w-[40vw] p-3 bg-zinc-800 md:bg-gray-100 text-white md:text-gray-800 placeholder:text-gray-500 h-40'
             onChange={handleChange}
           />

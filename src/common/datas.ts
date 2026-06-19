@@ -20,48 +20,52 @@ export const projectData: ProjectData[] = [
   {
     id: 'jay',
     name: 'Jay',
-    date: '’25.12. ~',
-    role: 'App ・ Backend',
-    subtitle: '의료 복지 혜택 정보 제공 및 커뮤니티 플랫폼',
+    date: '25.10. ~',
+    role: 'Web ・ App ・ Backend',
+    subtitle: '사용자 맞춤형 의료복지 정보 플랫폼',
     content: [
+      'Flutter 단일 코드베이스로 웹/iOS/Android 동시 대응',
       '의료 복지 혜택 프로그램을 질환, 지역, 나이, 소득 등 다양한 조건으로 검색 및 필터링하는 기능 개발',
-      'Riverpod을 활용한 상태 관리 및 go_router 기반 탭 네비게이션 구조 설계',
+      'Riverpod(MVVM) 뷰-로직 분리로 기능 추가 시 영향 범위 최소화',
       '게시글, 댓글, 좋아요 기능이 포함된 커뮤니티 기능 개발',
       'Google, Kakao 소셜 로그인(OAuth PKCE) 구현',
-      'Supabase RLS(Row Level Security)를 활용한 데이터 보안 관리',
+      'Supabase(Auth·DB·RLS) 활용 별도 서버 없이 백엔드 구축',
+      'Claude Code를 설계·코드 생성·디버깅 전 주기에 활용, 화면 구현 시간 약 90% 단축',
     ],
-    stacks: 'Flutter, Supabase, Riverpod, Firebase',
+    stacks: 'Flutter, Supabase, Riverpod, Claude Code',
     images: ['jay/jay-1.png', 'jay/jay-2.png', 'jay/jay-3.png', 'jay/jay-4.png', 'jay/jay-5.png'],
     meaning: [
       'Jay는 복잡하게 흩어져 있는 의료 복지 혜택 정보를 한 곳에서 쉽게 찾고, 같은 경험을 가진 사람들과 정보를 나눌 수 있는 커뮤니티 플랫폼입니다.',
-      'Riverpod의 AsyncNotifier를 활용하여 비동기 상태 관리를 체계적으로 구성하였으며, Supabase의 RLS를 통해 사용자별 데이터 접근 권한을 관리했습니다.',
-      '스타트업 개인 프로젝트로서 기획부터 앱 개발, 백엔드 설계까지 전 과정을 담당하며 서비스를 처음부터 설계하고 구현하는 경험을 쌓을 수 있었습니다.',
+      'Riverpod의 MVVM 패턴으로 뷰와 로직을 분리하여 기능 추가 시 영향 범위를 최소화했으며, Supabase의 RLS를 통해 별도 서버 없이 사용자별 데이터 접근 권한을 관리했습니다.',
+      'Claude Code를 설계·생성·디버깅 전 주기에 활용하여 화면 구현 시간을 약 90% 단축했습니다. 기획부터 웹·앱·백엔드까지 전 과정을 1인으로 담당하며 서비스를 처음부터 구현하는 경험을 쌓을 수 있었습니다.',
     ],
   },
   {
     id: 'modu',
     name: '모두의 점원 - 팀 프로젝트',
-    date: '’24.10. - ’24.11.',
+    date: '24.10. - 24.11.',
     role: 'PM ・ STT ・ App',
     subtitle: 'AI 음성 주문 시스템',
     content: [
       '고령층, 시각 장애인 등 디지털 취약계층의 키오스크 사용 불편감을 해소하기 위한 아이디어로 개발',
       'STT, LLM, TTS 모델을 활용하여 음성으로 대화하며 사용자가 주문을 할 수 있는 시스템',
-      'RAG를 활용하여 정확한 응답을 출력',
-      'API 서버와 LLM을 연동하여 장바구니 기능 개발',
+      'Whisper STT에 잡음 제거(VAD) 적용으로 인식 정확도 개선',
+      'LangChain + RAG 적용으로 LLM 의도 응답률 35% → 90% 향상',
+      '모듈화 구조 설계로 주문 완료 시간 72초 → 25초 단축',
+      'AI 생성 쿼리 스키마 불일치 배포 전 탐지·수정 검증 루프 구축',
     ],
-    stacks: 'GPT, Langchain, Whisper, Flutter, FastAPI',
+    stacks: 'Python, LangChain, RAG, Whisper(STT), FastAPI, Flutter',
     images: ['modu/modu-1.jpg', 'modu/modu-2.jpg', 'modu/modu-3.png', 'modu/modu-4.png'],
     meaning: [
       'AI를 같이 공부한 팀원들과 함께 AI KDT 해커톤 대회를 위해 준비한 프로젝트입니다.\n고령층, 시각 장애인 등 디지털 취약계층이 늘어나고 있는 키오스크를 사용하기 어렵다는 기사와 통계를 확인하여 이들의 불편함을 AI 기술로 해결하기 위해 STT, LLM을 이용한 음성주문시스템을 만들었습니다.',
-      'STT는 OpenAI에서 공개한 오픈소스 STT 모델인 Whisper AI를 사용하였고 잡음 제거 알고리즘을 추가하여 STT 모델의 성능을 더욱 향상 시켰습니다. \n LLM은 기본 Cloade 모델에 Langchain을 활용하여 식당의 메뉴 정보를 정확하게 전달하기 위해 RAG를 사용하였습니다.',
-      '프로젝트에서 팀장의 역할을 맡으면서 AI 서비스를 개발하며 기술적인 성장과 더불어 일정관리, 시장에 대한 분석, 문서작업 등 기술 외적인 필요한 역량을 키울 수 있었습니다.',
+      'STT는 Whisper AI에 잡음 제거(VAD) 알고리즘을 추가해 인식 정확도를 높였습니다. LLM은 Claude 모델에 LangChain + RAG를 적용하여 의도 응답률을 35%에서 90%로 향상시켰습니다.',
+      '팀장으로서 STT 파이프라인 개발과 일정·역할·문서 총괄을 담당하며, AI 서비스 개발의 기술적 성장과 더불어 팀 리딩 역량을 키울 수 있었습니다.',
     ],
   },
   {
     id: 'diary',
     name: '감정 일기 - 팀 프로젝트',
-    date: '’24.09.',
+    date: '24.09.',
     role: 'Machine learning ・ App',
     subtitle: '일기기반 감정 진단 앱',
     content: [
@@ -79,7 +83,7 @@ export const projectData: ProjectData[] = [
   {
     id: 'highsleep',
     name: 'HighSleep - 올케어디엑스',
-    date: '’23.09. ~ ’24.03.',
+    date: '23.09. ~ 24.03.',
     role: 'App ・ Backend ・ Deploy',
     subtitle: '숙면유도 헬스케어 시스템 어플리케이션',
     content: [
@@ -108,7 +112,7 @@ export const projectData: ProjectData[] = [
   {
     id: 'go2work',
     name: '출근하자 - (주)드림픽셀',
-    date: '’22.10. ~ ’23.09.',
+    date: '22.10. ~ 23.09.',
     role: 'Frontend ・ Backend ・ App ・ Deploy',
     subtitle: '위치기반 구인구직 플랫폼',
     content: [
@@ -138,7 +142,7 @@ export const projectData: ProjectData[] = [
   {
     id: 'airus',
     name: 'Airus 홈페이지 - AIRUS',
-    date: '’24.09.',
+    date: '24.09.',
     subtitle: '무프로펠러 드론 제작 업체인 Airus의 소개 페이지',
     role: 'Frontend ・ Deploy',
     content: [
@@ -167,7 +171,7 @@ export const projectData: ProjectData[] = [
   {
     id: 'nostanding',
     name: 'No Standing - 팀 프로젝트',
-    date: '’22.06.',
+    date: '22.06.',
     role: 'Frontend',
     subtitle: '내 주변 맛집 예약 플랫폼',
     content: [

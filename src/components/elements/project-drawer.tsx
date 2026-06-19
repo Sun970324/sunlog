@@ -1,6 +1,6 @@
 import { ProjectData } from '@/common/datas';
-import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import Carousel from './carousel';
 
 interface Props {
   isOpen: boolean;
@@ -8,55 +8,20 @@ interface Props {
   data: ProjectData;
 }
 
-const THRESHOLD = 80;
-const MAX_OFFSET = 200;
-
 const ProjectDrawer = ({ isOpen, onClose, data }: Props) => {
   const [imgIdx, setImgIdx] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragMeta = useRef({ startX: 0, startY: 0, dir: null as 'h' | 'v' | null });
-
-  const handleStart = (x: number, y: number) => {
-    dragMeta.current = { startX: x, startY: y, dir: null };
-    setIsDragging(true);
-  };
-
-  const handleMove = (x: number, y: number) => {
-    if (!isDragging) return;
-    const { startX, startY, dir } = dragMeta.current;
-    const dx = x - startX;
-
-    if (dir === null) {
-      if (Math.abs(dx) < 5 && Math.abs(y - startY) < 5) return;
-      dragMeta.current.dir = Math.abs(dx) >= Math.abs(y - startY) ? 'h' : 'v';
-    }
-
-    if (dragMeta.current.dir === 'v') return;
-
-    setDragOffset(Math.max(Math.min(dx, MAX_OFFSET), -MAX_OFFSET));
-  };
-
-  const handleEnd = () => {
-    if (!isDragging) return;
-    if (dragMeta.current.dir === 'h' && data.images.length > 1) {
-      if (Math.abs(dragOffset) > THRESHOLD) {
-        setImgIdx(i => dragOffset < 0
-          ? (i + 1) % data.images.length
-          : (i - 1 + data.images.length) % data.images.length
-        );
-      }
-    }
-    setDragOffset(0);
-    setIsDragging(false);
-  };
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        isLightboxOpen ? setIsLightboxOpen(false) : onClose();
+      }
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [isOpen, onClose]);
+  }, [isOpen, isLightboxOpen, onClose]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -64,7 +29,10 @@ const ProjectDrawer = ({ isOpen, onClose, data }: Props) => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) setImgIdx(0);
+    if (!isOpen) {
+      setImgIdx(0);
+      setIsLightboxOpen(false);
+    }
   }, [isOpen]);
 
   return (
@@ -122,73 +90,45 @@ const ProjectDrawer = ({ isOpen, onClose, data }: Props) => {
             ))}
           </div>
 
-          {/* Images 캐러셀 */}
           {data.images.length > 0 && (
             <>
               <div className='font-bold text-[20px] text-white md:text-gray-800 mb-3'>Images</div>
-              <div className='relative overflow-hidden rounded-lg'>
-                {/* 드래그 가능 이미지 영역 */}
-                <div
-                  className='cursor-grab active:cursor-grabbing select-none'
-                  style={{
-                    transform: `translateX(${dragOffset}px)`,
-                    transition: isDragging ? 'none' : 'transform 0.3s ease',
-                  }}
-                  onMouseDown={e => handleStart(e.clientX, e.clientY)}
-                  onMouseMove={e => handleMove(e.clientX, e.clientY)}
-                  onMouseUp={handleEnd}
-                  onMouseLeave={handleEnd}
-                  onTouchStart={e => handleStart(e.touches[0].clientX, e.touches[0].clientY)}
-                  onTouchMove={e => handleMove(e.touches[0].clientX, e.touches[0].clientY)}
-                  onTouchEnd={handleEnd}
-                >
-                  <Image
-                    key={imgIdx}
-                    alt={data.images[imgIdx]}
-                    width={500}
-                    height={400}
-                    src={`/assets/projects/${data.images[imgIdx]}`}
-                    className='w-full h-auto pointer-events-none'
-                  />
-                </div>
-
-                {/* 화살표 버튼 (드래그 div 외부, transform 미적용) */}
-                {data.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={() => setImgIdx(i => (i - 1 + data.images.length) % data.images.length)}
-                      className='absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-[20px]'
-                    >
-                      ‹
-                    </button>
-                    <button
-                      onClick={() => setImgIdx(i => (i + 1) % data.images.length)}
-                      className='absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-[20px]'
-                    >
-                      ›
-                    </button>
-                  </>
-                )}
-              </div>
-
-              {/* 점 인디케이터 */}
-              {data.images.length > 1 && (
-                <div className='flex justify-center gap-x-2 mt-3'>
-                  {data.images.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setImgIdx(i)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        i === imgIdx ? 'bg-primary' : 'bg-zinc-500 md:bg-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
+              <Carousel
+                images={data.images}
+                imgIdx={imgIdx}
+                onIndexChange={setImgIdx}
+                onImageClick={() => setIsLightboxOpen(true)}
+                containerClassName='h-72 bg-zinc-800 md:bg-gray-100 rounded-lg'
+              />
             </>
           )}
         </div>
       </div>
+
+      {/* Lightbox */}
+      {isLightboxOpen && (
+        <>
+          <div
+            className='fixed inset-0 z-[60] bg-black/90'
+            onClick={() => setIsLightboxOpen(false)}
+          />
+          <button
+            className='fixed top-4 right-4 z-[62] text-white text-[28px] leading-none w-10 h-10 flex items-center justify-center bg-black/40 rounded-full hover:bg-black/60'
+            onClick={() => setIsLightboxOpen(false)}
+          >
+            ✕
+          </button>
+          <div className='fixed inset-0 z-[61] flex flex-col items-center justify-center px-4'>
+            <Carousel
+              images={data.images}
+              imgIdx={imgIdx}
+              onIndexChange={setImgIdx}
+              containerClassName='w-full h-[80vh] max-w-5xl'
+              overlay
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };
