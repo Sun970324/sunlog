@@ -1,8 +1,29 @@
 import { careerData } from '@/common/datas';
+import { useEffect, useState } from 'react';
+import Carousel from '../elements/carousel';
 import SectionContainer from '../elements/section-container';
 import SectionTitle from '../elements/section-title';
 
 const Career = () => {
+  const [imgIdxMap, setImgIdxMap] = useState<Record<string, number>>({});
+  const [lightbox, setLightbox] = useState<{ id: string; images: string[] } | null>(null);
+
+  const getImgIdx = (id: string) => imgIdxMap[id] ?? 0;
+  const makeSetImgIdx = (id: string) => (action: React.SetStateAction<number>) =>
+    setImgIdxMap(prev => ({
+      ...prev,
+      [id]: typeof action === 'function' ? action(prev[id] ?? 0) : action,
+    }));
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightbox(null);
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [lightbox]);
+
   return (
     <SectionContainer className='py-[40px] md:py-[70px]'>
       <div className='mx-auto w-fit'>
@@ -44,10 +65,46 @@ const Career = () => {
               <p className='border border-secondary-dark bg-secondary-light rounded-lg px-3 py-1 text-[13px] text-gray-800 w-fit'>
                 {item.stacks}
               </p>
+
+              {item.images && item.images.length > 0 && (
+                <div className='mt-5'>
+                  <Carousel
+                    images={item.images}
+                    imgIdx={getImgIdx(item.id)}
+                    onIndexChange={makeSetImgIdx(item.id)}
+                    onImageClick={() => setLightbox({ id: item.id, images: item.images! })}
+                    containerClassName='h-64 bg-zinc-800 md:bg-gray-100 rounded-lg'
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
       </div>
+
+      {lightbox && (
+        <>
+          <div
+            className='fixed inset-0 z-[60] bg-black/90'
+            onClick={() => setLightbox(null)}
+          />
+          <button
+            className='fixed top-4 right-4 z-[62] text-white text-[28px] leading-none w-10 h-10 flex items-center justify-center bg-black/40 rounded-full hover:bg-black/60'
+            onClick={() => setLightbox(null)}
+          >
+            ✕
+          </button>
+          <div className='fixed inset-0 z-[61] flex items-center justify-center px-4'>
+            <Carousel
+              images={lightbox.images}
+              imgIdx={getImgIdx(lightbox.id)}
+              onIndexChange={makeSetImgIdx(lightbox.id)}
+              containerClassName='w-full h-[80vh] max-w-5xl'
+              overlay
+            />
+          </div>
+        </>
+      )}
     </SectionContainer>
   );
 };

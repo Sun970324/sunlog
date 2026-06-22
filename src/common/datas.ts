@@ -7,6 +7,7 @@ export type CareerData = {
   subtitle: string;
   content: string[];
   stacks: string;
+  images?: string[];
 };
 
 export const careerData: CareerData[] = [
@@ -24,6 +25,15 @@ export const careerData: CareerData[] = [
       '사내 유일 개발자로 프론트엔드·백엔드·배포 전 영역 단독 담당',
     ],
     stacks: 'Next.js, Node.js, GraphQL, React Native, MariaDB, AWS',
+    images: [
+      'go2work/go2work-1.png',
+      'go2work/go2work-2.png',
+      'go2work/go2work-3.png',
+      'go2work/go2work-4.png',
+      'go2work/go2work-5.png',
+      'go2work/go2work-6.png',
+      'go2work/go2work-7.png',
+    ],
   },
   {
     id: 'highsleep',
@@ -39,6 +49,15 @@ export const careerData: CareerData[] = [
       '스타트업 유일 개발자로 기획~iOS·Android 동시 출시 단독 완수',
     ],
     stacks: 'Dart, Flutter, Firebase, Node.js',
+    images: [
+      'highsleep/highsleep-1.jpg',
+      'highsleep/highsleep-2.jpg',
+      'highsleep/highsleep-3.jpg',
+      'highsleep/highsleep-4.jpg',
+      'highsleep/highsleep-5.jpg',
+      'highsleep/highsleep-6.jpg',
+      'highsleep/highsleep-7.jpg',
+    ],
   },
 ];
 
