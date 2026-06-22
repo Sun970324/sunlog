@@ -1,3 +1,47 @@
+export type CareerData = {
+  id: string;
+  company: string;
+  name: string;
+  date: string;
+  role: string;
+  subtitle: string;
+  content: string[];
+  stacks: string;
+};
+
+export const careerData: CareerData[] = [
+  {
+    id: 'go2work',
+    company: '(주)드림픽셀',
+    name: '출근하자',
+    date: '22.10. ~ 23.09.',
+    role: 'Frontend ・ Backend ・ App ・ Deploy',
+    subtitle: '위치기반 구인구직 플랫폼',
+    content: [
+      '카카오맵 MarkerClusterer 기반 클러스터링 전환 → 지도 응답 40초 → 5초 이내 (약 90%↓)',
+      '지도 검색 GraphQL 쿼리 불필요 필드 제거 및 검색 반경 30% 축소 → 응답 페이로드 50MB → 5MB',
+      '직무 3단계 트리 클라이언트 메모리 필터링 자동완성(SuggestBox) 재설계 → 서버 호출 없이 즉시 응답',
+      '사내 유일 개발자로 프론트엔드·백엔드·배포 전 영역 단독 담당',
+    ],
+    stacks: 'Next.js, Node.js, GraphQL, React Native, MariaDB, AWS',
+  },
+  {
+    id: 'highsleep',
+    company: '올케어디엑스',
+    name: 'HighSleep',
+    date: '23.09. ~ 24.03.',
+    role: 'App ・ Backend ・ Deploy',
+    subtitle: '숙면유도 헬스케어 앱',
+    content: [
+      '멜로디·자연음·수면주파수 3개 트랙 개별 인스턴스를 단일 ViewModel로 통합 제어 → 반복 재생 시 음 끊김 제거',
+      'Firebase 기반 회원·음원·좋아요 NoSQL 설계 및 OAuth 2.0 구현',
+      '앱스토어 개인정보 정책 반려 건 회원탈퇴·약관 인앱 구현으로 해결, 양대 스토어 등록 완료',
+      '스타트업 유일 개발자로 기획~iOS·Android 동시 출시 단독 완수',
+    ],
+    stacks: 'Dart, Flutter, Firebase, Node.js',
+  },
+];
+
 export type SkillData = {
   title: string;
   stacks: { name: string; color: string; isWhite: boolean }[];
@@ -78,65 +122,6 @@ export const projectData: ProjectData[] = [
     meaning: [
       '감정 일기는 사용자의 일기에서 감정을 분석하는 AI 어플리케이션입니다. 데이터셋을 구하고 전처리하는 것부터 NLP 모델 학습, Flutter앱 개발까지 진행하면서 AI 서비스 제작의 전체적인 흐름을 경험한 프로젝트입니다.',
       'NLP는 BERT모델을 기본으로 하이퍼 파라미터 조정과 데이터 증강 기법으로 파인튜닝하여 성능을 개선시켰습니다.',
-    ],
-  },
-  {
-    id: 'highsleep',
-    name: 'HighSleep - 올케어디엑스',
-    date: '23.09. ~ 24.03.',
-    role: 'App ・ Backend ・ Deploy',
-    subtitle: '숙면유도 헬스케어 시스템 어플리케이션',
-    content: [
-      'Flutter로 Figma 디자인을 반영한 UX/UI 개발',
-      '음원 내 트랙별 음량 조절 기능 구현',
-      '음원재생 기능 구현',
-      'Firebase DB로 회원, 음원, 좋아요 등 데이터 관리',
-      'Android 플레이 스토어, IOS 앱 스토어 출시',
-    ],
-    stacks: 'Dart, Flutter, Firebase, Node.js',
-    images: [
-      'highsleep/highsleep-1.jpg',
-      'highsleep/highsleep-2.jpg',
-      'highsleep/highsleep-3.jpg',
-      'highsleep/highsleep-4.jpg',
-      'highsleep/highsleep-5.jpg',
-      'highsleep/highsleep-6.jpg',
-      'highsleep/highsleep-7.jpg',
-    ],
-    meaning: [
-      'HighSleep은 숙면유도를 목적으로 하는 음악을 제공하는 서비스 어플리케이션입니다. 앱에서 제공하는 음원은 수면에 도움이 되는 멜로디 패턴과 주파수를 사용하여 사용자의 수면에 도움을 줍니다.',
-      '음원에는 주파수, 자연소리, 멜로디 세 요소로 나뉘어져 있어 이 요소들의 음량을 각각 조정하는 기능을 구현했습니다.',
-      '회사 내 유일한 개발자로써 서비스 기획부터 앱스토어 출시까지 총괄하며 기획 및 개발, 배포까지의 역량을 키울 수 있었습니다.',
-    ],
-  },
-  {
-    id: 'go2work',
-    name: '출근하자 - (주)드림픽셀',
-    date: '22.10. ~ 23.09.',
-    role: 'Frontend ・ Backend ・ App ・ Deploy',
-    subtitle: '위치기반 구인구직 플랫폼',
-    content: [
-      '네이버, 카카오 지도 API로 위치기반 서비스 개발',
-      '지도의 Marker clustering 기능을 구현하여 렌더링 속도 최적화',
-      '웹뷰을 사용하여 웹/앱 개발의 효율성 향상',
-      'GraphQL을 사용하여 API 최적화, 데이터 응답 속도 개선',
-      '구인공고 템플릿 자동생성 기능 개발',
-      '스켈레톤, 로딩 인디케이터 등 사용자 경험 향상 UX/UI 구현',
-    ],
-    stacks: 'Next.js, Node.js, GraphQL, React Native, MariaDB, AWS',
-    images: [
-      'go2work/go2work-1.png',
-      'go2work/go2work-2.png',
-      'go2work/go2work-3.png',
-      'go2work/go2work-4.png',
-      'go2work/go2work-5.png',
-      'go2work/go2work-6.png',
-      'go2work/go2work-7.png',
-    ],
-    meaning: [
-      '개발자 커리어의 첫 걸음이 된 프로젝트입니다. 사용자의 위치를 기반으로 하여 구인공고를 추천하는 구인구직 플랫폼입니다.',
-      '회사 내 유일한 개발자로써 서비스 개발 및 유지보수를 전담하여 빠르게 개발 역량을 키울 수 있었습니다.',
-      '구인공고를 자동으로 작성해주는 템플릿 제공기능, 지도 API 마커 클러스터링으로 렌더링 성능 90% 이상 향상, GraphQL을 사용하여 API 응답속도 50% 이상 향상 등 다양한 기능과 개선 개발을 진행했습니다.',
     ],
   },
   {

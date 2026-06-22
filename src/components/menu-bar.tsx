@@ -36,8 +36,9 @@ const MenuBar = ({ handleClickMenu, isMenuOpen, setIsMenuOpen }: Props) => {
         <ul className='flex flex-col gap-y-8 px-8 pt-4 text-white text-[18px] font-[300] tracking-wider cursor-pointer'>
           <li onClick={() => { handleClickMenu(0); setIsMenuOpen(false); }}>Home</li>
           <li onClick={() => { handleClickMenu(1); setIsMenuOpen(false); }}>Tech Skills</li>
-          <li onClick={() => { handleClickMenu(2); setIsMenuOpen(false); }}>Projects</li>
-          <li onClick={() => { handleClickMenu(3); setIsMenuOpen(false); }}>Contact</li>
+          <li onClick={() => { handleClickMenu(2); setIsMenuOpen(false); }}>Career</li>
+          <li onClick={() => { handleClickMenu(3); setIsMenuOpen(false); }}>Projects</li>
+          <li onClick={() => { handleClickMenu(4); setIsMenuOpen(false); }}>Contact</li>
         </ul>
       </div>
     </>

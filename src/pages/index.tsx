@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { NAV_HEIGHT } from '@/common/constants';
 import MenuBar from '@/components/menu-bar';
 import TechSkills from '@/components/sections/tech-skills';
+import Career from '@/components/sections/career';
 import Projects from '@/components/sections/projects';
 import Contact from '@/components/sections/contact';
 import { DeviceProvider } from '@/context/DeviceContext';
@@ -36,9 +37,12 @@ export default function Home() {
             <TechSkills />
           </div>
           <div ref={ref => (ref ? (scrollRef.current[2] = ref) : null)}>
-            <Projects />
+            <Career />
           </div>
           <div ref={ref => (ref ? (scrollRef.current[3] = ref) : null)}>
+            <Projects />
+          </div>
+          <div ref={ref => (ref ? (scrollRef.current[4] = ref) : null)}>
             <Contact />
           </div>
           <div>

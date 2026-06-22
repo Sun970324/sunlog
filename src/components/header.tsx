@@ -20,8 +20,9 @@ const Header = ({ handleClickMenu, setIsMenuOpen }: Props) => {
         <nav className='hidden md:flex items-center text-[14px]'>
           <button onClick={() => handleClickMenu(0)} className='cursor-pointer hover:scale-[1.1] hover:duration-300 px-[20px]'>Home</button>
           <button onClick={() => handleClickMenu(1)} className='cursor-pointer hover:scale-[1.1] hover:duration-300 mx-[20px]'>Tech Skills</button>
-          <button onClick={() => handleClickMenu(2)} className='cursor-pointer hover:scale-[1.1] hover:duration-300 mx-[20px]'>Projects</button>
-          <button onClick={() => handleClickMenu(3)} className='cursor-pointer hover:scale-[1.1] hover:duration-300 mx-[20px]'>Contact</button>
+          <button onClick={() => handleClickMenu(2)} className='cursor-pointer hover:scale-[1.1] hover:duration-300 mx-[20px]'>Career</button>
+          <button onClick={() => handleClickMenu(3)} className='cursor-pointer hover:scale-[1.1] hover:duration-300 mx-[20px]'>Projects</button>
+          <button onClick={() => handleClickMenu(4)} className='cursor-pointer hover:scale-[1.1] hover:duration-300 mx-[20px]'>Contact</button>
         </nav>
 
         {/* 모바일 햄버거 */}
