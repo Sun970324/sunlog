@@ -70,7 +70,7 @@ const Contact = () => {
       <Container>
         <SectionLabel>Contact</SectionLabel>
         <p data-reveal-item className='mt-8 text-[17px] leading-[1.7]'>
-          함께할 프로젝트나 채용 관련 문의는 아래로 보내 주세요. 하루 안에 답장합니다.
+          채용이나 함께할 프로젝트 이야기는 아래로 편하게 보내 주세요. 하루 안에 답장합니다.
         </p>
         <form
           ref={formRef}

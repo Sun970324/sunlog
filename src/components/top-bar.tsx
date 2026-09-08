@@ -121,14 +121,6 @@ const TopBar = () => {
               }}
             />
           </div>
-          <a
-            href='/resume.pdf'
-            target='_blank'
-            rel='noreferrer'
-            className='link-underline rounded-sm text-accent'
-          >
-            이력서 PDF
-          </a>
         </nav>
       </div>
     </header>

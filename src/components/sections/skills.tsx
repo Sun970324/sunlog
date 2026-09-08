@@ -7,23 +7,37 @@ const Skills = () => (
   <Reveal stagger className='pb-16 pt-16 md:pb-[96px] md:pt-[96px]'>
     <Container>
       <SectionLabel>Skills</SectionLabel>
-      <div data-reveal-item className='flex flex-wrap gap-x-8 gap-y-2 border-b border-line py-8 text-[28px] font-semibold leading-[1.3] tracking-[-0.02em]'>
-        {primarySkills.map(skill => (
-          <span key={skill}>{skill}</span>
-        ))}
+
+      <div data-reveal-item className='border-b border-line py-8'>
+        <p className='m-0 mb-3 text-[13px] text-muted'>메인</p>
+        <div className='flex flex-wrap gap-x-8 gap-y-2 text-[28px] font-semibold leading-[1.3] tracking-[-0.02em]'>
+          {primarySkills.map(skill => (
+            <span key={skill}>{skill}</span>
+          ))}
+        </div>
       </div>
-      <div>
+
+      <dl className='m-0'>
         {skillGroups.map(group => (
           <div
             key={group.title}
             data-reveal-item
-            className='grid gap-x-8 gap-y-1 border-b border-line py-4 text-[15px] md:grid-cols-[160px_1fr]'
+            className='grid gap-x-8 gap-y-2 border-b border-line py-5 md:grid-cols-[160px_1fr]'
           >
-            <div className='text-muted'>{group.title}</div>
-            <div>{group.items}</div>
+            <dt className='text-[13px] font-medium tracking-[0.04em] text-muted md:pt-[3px]'>
+              {group.title}
+            </dt>
+            <dd className='m-0 flex flex-wrap items-baseline gap-y-1.5 text-[16px] leading-[1.5]'>
+              {group.items.map((item, idx) => (
+                <span key={item} className='whitespace-nowrap'>
+                  {idx > 0 && <span className='mx-3 text-muted' aria-hidden>·</span>}
+                  {item}
+                </span>
+              ))}
+            </dd>
           </div>
         ))}
-      </div>
+      </dl>
     </Container>
   </Reveal>
 );

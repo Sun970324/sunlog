@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import Container from '@/components/elements/container';
 import SectionLabel from '@/components/elements/section-label';
 import Reveal from '@/components/elements/reveal';
@@ -24,20 +24,28 @@ export default function Work() {
         </Container>
       </Reveal>
 
-      <div className='flex flex-col gap-20 pt-20 md:gap-[120px] md:pt-[120px]'>
-        {caseStudies.map(caseStudy => (
-          <CaseStudyItem
-            key={caseStudy.id}
-            caseStudy={caseStudy}
-            onOpenLightbox={index =>
-              setLightbox({
-                images: caseStudy.images,
-                index,
-                ratio: caseStudy.ratio,
-                alt: caseStudy.name,
-              })
-            }
-          />
+      <div className='flex flex-col gap-16 pt-16 md:gap-20 md:pt-20'>
+        {caseStudies.map((caseStudy, idx) => (
+          <Fragment key={caseStudy.id}>
+            {idx > 0 && (
+              <Container wide>
+                <hr className='m-0 border-0 border-t border-line' />
+              </Container>
+            )}
+            <CaseStudyItem
+              caseStudy={caseStudy}
+              index={idx + 1}
+              total={caseStudies.length}
+              onOpenLightbox={index =>
+                setLightbox({
+                  images: caseStudy.images,
+                  index,
+                  ratio: caseStudy.ratio,
+                  alt: caseStudy.name,
+                })
+              }
+            />
+          </Fragment>
         ))}
       </div>
 

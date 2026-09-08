@@ -19,10 +19,10 @@ export default function Home() {
           <Work />
         </section>
         <section className='section-fill'>
-          <AiWorkflow />
+          <OtherProjects />
         </section>
         <section className='section-fill'>
-          <OtherProjects />
+          <AiWorkflow />
         </section>
         <section id='skills' className='section-fill'>
           <Skills />

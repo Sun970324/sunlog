@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import Image from 'next/image';
-import clsx from 'clsx';
 
 type Props = {
   images: string[];
@@ -19,7 +18,17 @@ export function setLightboxOrigin(rect: DOMRect | null) {
 
 const OPEN_MS = 380;
 const CLOSE_MS = 280;
+const SLIDE_MS = 260;
+const SNAP_MS = 220;
+const SLIDE_FALLBACK_MS = 300;
+const DISTANCE_RATIO = 0.25;
+const VELOCITY_THRESHOLD = 0.5;
+const VELOCITY_MIN_DISTANCE = 20;
 const EASING = 'cubic-bezier(.2,.8,.2,1)';
+// The track is 3 frames wide, so translate percentages are thirds of the track.
+const REST_TRANSFORM = 'translateX(-33.3333%)';
+const PREV_TRANSFORM = 'translateX(0%)';
+const NEXT_TRANSFORM = 'translateX(-66.6667%)';
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -48,13 +57,49 @@ export default function Lightbox({
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const originRef = useRef<DOMRect | null>(null);
   const closingRef = useRef(false);
   const timerRef = useRef<number | null>(null);
+  const slideTimerRef = useRef<number | null>(null);
+  const animatingRef = useRef(false);
+  const dragRef = useRef({ active: false, startX: 0, startTime: 0, dx: 0 });
 
   const [overlayStyle, setOverlayStyle] = useState<CSSProperties>({ opacity: 0 });
   const [frameStyle, setFrameStyle] = useState<CSSProperties>({});
-  const [slideStyle, setSlideStyle] = useState<CSSProperties>({});
+  const [naturalRatios, setNaturalRatios] = useState<Record<string, number>>({});
+
+  const [viewport, setViewport] = useState(() =>
+    typeof window === 'undefined'
+      ? { w: 0, h: 0 }
+      : { w: window.innerWidth, h: window.innerHeight },
+  );
+
+  useEffect(() => {
+    const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const fallbackRatio = isWide ? 16 / 9 : 9 / 19.5;
+  const currentRatio = naturalRatios[images[index]] ?? fallbackRatio;
+  // Explicit px width/height (not aspect-ratio) so the frame can animate between images.
+  const frameWidth = Math.max(
+    0,
+    Math.min(viewport.w - 80, (viewport.h - 80) * currentRatio, 1200),
+  );
+  const sizeStyle: CSSProperties = {
+    width: frameWidth,
+    height: frameWidth / currentRatio,
+  };
+  const sizeTransition = prefersReducedMotion()
+    ? ''
+    : `width ${SLIDE_MS}ms ${EASING}, height ${SLIDE_MS}ms ${EASING}`;
+  const frameTransition = [frameStyle.transition, sizeTransition].filter(Boolean).join(', ');
+
+  const slideIndexes = hasMultiple
+    ? [(index - 1 + images.length) % images.length, index, (index + 1) % images.length]
+    : [index];
 
   useLayoutEffect(() => {
     const origin = originRect;
@@ -95,6 +140,7 @@ export default function Lightbox({
   useEffect(
     () => () => {
       if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+      if (slideTimerRef.current !== null) window.clearTimeout(slideTimerRef.current);
     },
     [],
   );
@@ -123,45 +169,138 @@ export default function Lightbox({
     timerRef.current = window.setTimeout(onClose, CLOSE_MS);
   }, [onClose]);
 
-  const goPrev = useCallback(() => {
-    onIndexChange((index - 1 + images.length) % images.length);
-  }, [index, images.length, onIndexChange]);
-
-  const goNext = useCallback(() => {
-    onIndexChange((index + 1) % images.length);
-  }, [index, images.length, onIndexChange]);
-
-  const prevIndexRef = useRef(index);
-
-  useEffect(() => {
-    const prev = prevIndexRef.current;
-    if (prev === index) return;
-    prevIndexRef.current = index;
-
+  const snapBack = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
     if (prefersReducedMotion()) {
-      setSlideStyle({});
+      track.style.transition = 'none';
+      track.style.transform = REST_TRANSFORM;
       return;
     }
+    track.style.transition = `transform ${SNAP_MS}ms ${EASING}`;
+    void track.offsetWidth;
+    track.style.transform = REST_TRANSFORM;
+  }, []);
 
-    const forward = (index - prev + images.length) % images.length === 1;
-    setSlideStyle({ opacity: 0, transform: `translateX(${forward ? 24 : -24}px)` });
+  const commit = useCallback(
+    (direction: 1 | -1) => {
+      if (!hasMultiple || animatingRef.current) return;
+      const track = trackRef.current;
+      const newIndex = (index + direction + images.length) % images.length;
 
-    let inner = 0;
-    const outer = requestAnimationFrame(() => {
-      inner = requestAnimationFrame(() => {
-        setSlideStyle({
-          opacity: 1,
-          transform: 'none',
-          transition: 'opacity 260ms ease, transform 260ms ease',
-        });
-      });
-    });
+      if (!track || prefersReducedMotion()) {
+        onIndexChange(newIndex);
+        return;
+      }
 
-    return () => {
-      cancelAnimationFrame(outer);
-      cancelAnimationFrame(inner);
-    };
-  }, [index, images.length]);
+      animatingRef.current = true;
+      let settled = false;
+
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        track.removeEventListener('transitionend', onTransitionEnd);
+        if (slideTimerRef.current !== null) {
+          window.clearTimeout(slideTimerRef.current);
+          slideTimerRef.current = null;
+        }
+        // Leave the track at the committed position; the layout effect on `index`
+        // resets it to rest in the same paint as the re-rendered slides, so the
+        // previous image never flashes.
+        animatingRef.current = false;
+        onIndexChange(newIndex);
+      };
+
+      const onTransitionEnd = (event: TransitionEvent) => {
+        if (event.target !== track || event.propertyName !== 'transform') return;
+        finish();
+      };
+
+      track.addEventListener('transitionend', onTransitionEnd);
+      slideTimerRef.current = window.setTimeout(finish, SLIDE_FALLBACK_MS);
+
+      track.style.transition = `transform ${SLIDE_MS}ms ${EASING}`;
+      void track.offsetWidth;
+      track.style.transform = direction === 1 ? NEXT_TRANSFORM : PREV_TRANSFORM;
+    },
+    [hasMultiple, images.length, index, onIndexChange],
+  );
+
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    if (!track || !hasMultiple) return;
+    track.style.transition = 'none';
+    track.style.transform = REST_TRANSFORM;
+  }, [index, hasMultiple]);
+
+  const goPrev = useCallback(() => commit(-1), [commit]);
+  const goNext = useCallback(() => commit(1), [commit]);
+
+  const onPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!hasMultiple || animatingRef.current) return;
+      const track = trackRef.current;
+      if (!track) return;
+      dragRef.current = {
+        active: true,
+        startX: event.clientX,
+        startTime: event.timeStamp,
+        dx: 0,
+      };
+      track.setPointerCapture(event.pointerId);
+      track.style.transition = 'none';
+    },
+    [hasMultiple],
+  );
+
+  const onPointerMove = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag.active) return;
+    const track = trackRef.current;
+    if (!track) return;
+    drag.dx = event.clientX - drag.startX;
+    track.style.transform = `translateX(calc(-33.3333% + ${drag.dx}px))`;
+  }, []);
+
+  const onPointerEnd = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const drag = dragRef.current;
+      if (!drag.active) return;
+      drag.active = false;
+
+      const track = trackRef.current;
+      if (track?.hasPointerCapture(event.pointerId)) {
+        track.releasePointerCapture(event.pointerId);
+      }
+
+      const { dx } = drag;
+      const distance = Math.abs(dx);
+      if (distance < 5) {
+        snapBack();
+        return;
+      }
+
+      const frameWidth = frameRef.current?.clientWidth ?? 0;
+      const elapsed = Math.max(1, event.timeStamp - drag.startTime);
+      const velocity = Math.abs(dx / elapsed);
+      const shouldCommit =
+        (frameWidth > 0 && distance > DISTANCE_RATIO * frameWidth) ||
+        (velocity > VELOCITY_THRESHOLD && distance > VELOCITY_MIN_DISTANCE);
+
+      if (shouldCommit) commit(dx > 0 ? -1 : 1);
+      else snapBack();
+    },
+    [commit, snapBack],
+  );
+
+  const handleLoad = useCallback(
+    (event: React.SyntheticEvent<HTMLImageElement>, key: string) => {
+      const { naturalWidth, naturalHeight } = event.currentTarget;
+      if (!naturalWidth || !naturalHeight) return;
+      setNaturalRatios(prev => (prev[key] ? prev : { ...prev, [key]: naturalWidth / naturalHeight }));
+    },
+    [],
+  );
 
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -227,9 +366,10 @@ export default function Lightbox({
         ref={closeRef}
         type='button'
         onClick={requestClose}
-        className='absolute right-5 top-5 text-[13px] text-white/80'
+        aria-label='닫기'
+        className='absolute right-5 top-5 text-[24px] leading-none text-white/80'
       >
-        ESC 또는 배경 클릭으로 닫기
+        ×
       </button>
 
       {hasMultiple && (
@@ -249,21 +389,41 @@ export default function Lightbox({
       <div
         ref={frameRef}
         onClick={event => event.stopPropagation()}
-        style={frameStyle}
-        className={clsx(
-          'relative max-h-full w-full cursor-default overflow-hidden rounded-md border border-line shadow-[0_24px_64px_rgba(0,0,0,0.3)]',
-          isWide ? 'aspect-[16/9] max-w-[1200px]' : 'aspect-[9/19.5] max-w-[400px]',
-        )}
+        style={{ ...sizeStyle, ...frameStyle, transition: frameTransition || undefined }}
+        className='relative cursor-default overflow-hidden rounded-md border border-line shadow-[0_24px_64px_rgba(0,0,0,0.3)]'
       >
-        <div key={index} style={slideStyle} className='absolute inset-0'>
-          <Image
-            src={images[index]}
-            alt={`${alt} 화면 ${index + 1}`}
-            fill
-            sizes={isWide ? '(max-width: 1200px) 100vw, 1200px' : '400px'}
-            className='object-contain'
-            priority
-          />
+        <div
+          ref={trackRef}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerEnd}
+          onPointerCancel={onPointerEnd}
+          style={{
+            width: hasMultiple ? '300%' : '100%',
+            transform: hasMultiple ? REST_TRANSFORM : undefined,
+            willChange: 'transform',
+            touchAction: 'none',
+          }}
+          className='absolute inset-y-0 left-0 flex select-none'
+        >
+          {slideIndexes.map((slideIndex, position) => (
+            <div
+              key={position}
+              style={{ width: `${100 / slideIndexes.length}%` }}
+              className='relative h-full shrink-0'
+            >
+              <Image
+                src={images[slideIndex]}
+                alt={`${alt} 화면 ${slideIndex + 1}`}
+                fill
+                sizes='(max-width: 1200px) 100vw, 1200px'
+                className='select-none object-contain'
+                draggable={false}
+                priority={images[slideIndex] === images[index]}
+                onLoad={event => handleLoad(event, images[slideIndex])}
+              />
+            </div>
+          ))}
         </div>
       </div>
 

@@ -13,8 +13,10 @@ export default function ScreenshotGrid({ images, ratio, alt, onOpen }: Props) {
 
   return (
     <div
-      className={clsx('grid gap-4', isWide && 'md:grid-cols-2')}
-      style={isWide ? undefined : { gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))' }}
+      className={clsx(
+        'grid justify-end gap-4',
+        isWide ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-2 md:grid-cols-[repeat(3,minmax(0,220px))]'
+      )}
     >
       {images.map((src, index) => (
         <button
@@ -25,21 +27,15 @@ export default function ScreenshotGrid({ images, ratio, alt, onOpen }: Props) {
           className={clsx(
             'relative block w-full cursor-zoom-in overflow-hidden rounded-md border border-line bg-subtle',
             'transition-[transform,border-color] duration-[280ms] hover:border-fg hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100',
-            isWide ? 'aspect-[16/9]' : 'aspect-[9/19.5]',
-            isWide && index === 0 && 'md:col-span-2',
+            isWide ? 'aspect-[4/3]' : 'aspect-[9/19.5]',
+            index >= 2 && 'hidden md:block',
           )}
         >
           <Image
             src={src}
             alt={`${alt} 화면 ${index + 1}`}
             fill
-            sizes={
-              isWide
-                ? index === 0
-                  ? '(max-width: 768px) 100vw, 1040px'
-                  : '(max-width: 768px) 100vw, 520px'
-                : '(max-width: 768px) 50vw, 200px'
-            }
+            sizes={isWide ? '(max-width: 768px) 100vw, 340px' : '(max-width: 768px) 50vw, 220px'}
             className='object-cover'
           />
         </button>
