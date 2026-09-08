@@ -6,7 +6,9 @@ export default function Document() {
   return (
     <Html lang='ko'>
       <Head>
-        <link rel='icon' href='/assets/favicon.png' sizes='500' type='image/png' />
+        <link rel='icon' href='/assets/favicon.svg' type='image/svg+xml' />
+        <link rel='icon' href='/assets/favicon.png' sizes='any' type='image/png' />
+        <link rel='apple-touch-icon' href='/assets/favicon.png' />
         <link
           rel='stylesheet'
           as='style'

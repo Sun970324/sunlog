@@ -83,7 +83,7 @@ const TopBar = () => {
             aria-hidden
             className='block h-8 w-auto bg-current'
             style={{
-              aspectRatio: '2079 / 513',
+              aspectRatio: '1323 / 414',
               WebkitMaskImage: 'url(/assets/logo.svg)',
               maskImage: 'url(/assets/logo.svg)',
               WebkitMaskSize: 'contain',
