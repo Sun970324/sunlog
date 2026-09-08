@@ -4,6 +4,8 @@ import Router from 'next/router';
 import { useState } from 'react';
 
 const NAME = "Sun's log";
+const DESCRIPTION =
+  "기획부터 출시까지 끝까지 책임지는 프론트엔드 개발자 윤선웅의 포트폴리오, Sun's log. Flutter, Next.js.";
 
 const NextHead = () => {
   const [routerChange, setRouterChange] = useState(false);
@@ -27,16 +29,13 @@ const NextHead = () => {
           'maximum-scale=1.0': routerChange,
         })}
       />
-      <meta name='description' content={NAME} />
+      <meta name='description' content={DESCRIPTION} />
       <meta name='format-detection' content='telephone=no' />
       <meta property='og:site_name' content={NAME} />
       <meta property='og:title' content={NAME} />
-      <meta
-        property='og:description'
-        content='풀스택, 근데 이제 AI를 곁들인 개발자 윤선웅입니다.'
-      />
+      <meta property='og:description' content={DESCRIPTION} />
       <meta property='og:type' content='website' />
-      <meta property='og:url' content='https://localhost:3000' />
+      <meta property='og:url' content='https://www.sunslog.com' />
     </Head>
   );
 };

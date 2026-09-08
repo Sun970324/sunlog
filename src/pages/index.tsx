@@ -1,55 +1,40 @@
 import Footer from '@/components/footer';
-import Header from '@/components/header';
-import HomeSection from '@/components/sections/home';
-import { useRef, useState } from 'react';
-import { NAV_HEIGHT } from '@/common/constants';
-import MenuBar from '@/components/menu-bar';
-import TechSkills from '@/components/sections/tech-skills';
+import TopBar from '@/components/top-bar';
+import Hero from '@/components/sections/hero';
+import Work from '@/components/sections/work';
+import AiWorkflow from '@/components/sections/ai-workflow';
+import OtherProjects from '@/components/sections/other-projects';
+import Skills from '@/components/sections/skills';
 import Career from '@/components/sections/career';
-import Projects from '@/components/sections/projects';
 import Contact from '@/components/sections/contact';
-import { DeviceProvider } from '@/context/DeviceContext';
 
 export default function Home() {
-  const scrollRef = useRef<HTMLDivElement[]>([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const handleClickMenu = (idx: number) => {
-    window.scrollTo({
-      top: scrollRef.current[idx].offsetTop - NAV_HEIGHT,
-      behavior: 'smooth',
-    });
-  };
 
   return (
-    <DeviceProvider>
-      <div className='w-full overflow-clip'>
-        <Header handleClickMenu={handleClickMenu} setIsMenuOpen={setIsMenuOpen} />
-        <MenuBar
-          handleClickMenu={handleClickMenu}
-          isMenuOpen={isMenuOpen}
-          setIsMenuOpen={setIsMenuOpen}
-        />
-        <div>
-          <div ref={ref => (ref ? (scrollRef.current[0] = ref) : null)}>
-            <HomeSection handleClickMenu={handleClickMenu} />
-          </div>
-          <div ref={ref => (ref ? (scrollRef.current[1] = ref) : null)}>
-            <TechSkills />
-          </div>
-          <div ref={ref => (ref ? (scrollRef.current[2] = ref) : null)}>
-            <Career />
-          </div>
-          <div ref={ref => (ref ? (scrollRef.current[3] = ref) : null)}>
-            <Projects />
-          </div>
-          <div ref={ref => (ref ? (scrollRef.current[4] = ref) : null)}>
-            <Contact />
-          </div>
-          <div>
-            <Footer />
-          </div>
-        </div>
-      </div>
-    </DeviceProvider>
+    <>
+      <TopBar />
+      <main>
+        <Hero />
+        <section id='work' className='section-fill'>
+          <Work />
+        </section>
+        <section className='section-fill'>
+          <AiWorkflow />
+        </section>
+        <section className='section-fill'>
+          <OtherProjects />
+        </section>
+        <section id='skills' className='section-fill'>
+          <Skills />
+        </section>
+        <section id='career' className='section-fill'>
+          <Career />
+        </section>
+        <section id='contact' className='section-fill'>
+          <Contact />
+        </section>
+      </main>
+      <Footer />
+    </>
   );
 }

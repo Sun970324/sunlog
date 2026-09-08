@@ -1,16 +1,18 @@
-import FooterImg from './elements/footer-img';
+import Container from './elements/container';
+import { useTheme } from '@/hooks/use-theme';
 
 const Footer = () => {
+  const { theme, toggle } = useTheme();
+
   return (
-    <div className='h-auto md:h-44 pt-8 md:pt-12 pb-6 md:pb-0 bg-zinc-900 md:bg-gray-100 text-center'>
-      <div className='flex flex-row justify-center mb-6 md:mb-8'>
-        <FooterImg logo='/assets/git-hub.png' />
-        <FooterImg logo='/assets/notion.png' />
-      </div>
-      <div className='text-sm text-gray-200 md:text-gray-700'>
-        © 2026. Sun&apos;s log. All rights reserved.
-      </div>
-    </div>
+    <footer className='border-t border-line'>
+      <Container className='flex items-center justify-between py-6 text-[13px] text-muted'>
+        <span>© 2026 Sun&apos;s log</span>
+        <button type='button' onClick={toggle} className='rounded-sm hover:text-fg'>
+          {theme === 'dark' ? '라이트 모드' : '다크 모드'}
+        </button>
+      </Container>
+    </footer>
   );
 };
 

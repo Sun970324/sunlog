@@ -36,4 +36,10 @@ next-env.d.ts
 
 .env
 
+# 개인 문서·작업 참고 자료 (배포와 무관)
 profile.md
+interview.md
+design-prompt.md
+design_handoff_sunlog_portfolio/
+이력서*.doc
+이력서*.docx

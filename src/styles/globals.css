@@ -2,79 +2,137 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  @font-face {
-    font-family: 'SUIT-Variable';
-    src: url('/fonts/SUIT-Variable-1.ttf') format('truetype');
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'montserrat';
-    src: url('/fonts/Montserrat-Medium.ttf') format('truetype');
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'montserrat-bold';
-    src: url('/fonts/Montserrat-Bold.ttf') format('truetype');
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'montserrat-semibold';
-    src: url('/fonts/Montserrat-Semibold.ttf') format('truetype');
-    font-display: swap;
-  }
-}
-
-/* html {
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-} */
-
 :root {
-  --color-primary: #2C3A84;
-  --color-primary-hover: #3A4CA8;
-  --color-primary-active: #07124F;
-  --secondary-light: #d8deff;
-  --secondary-dark: #979fc7;
-
-  /* spacing */
-  --content-padding: 40px;
-  --content-width: calc(1570px + (var(--content-padding) * 2));
-
-  /* mobile */
-  --mobile-header-height: 70px;
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #6b6b6b;
+  --line: #e6e6e6;
+  --subtle: #f4f4f4;
+  --accent: #2f55d4;
 }
 
-@media only screen and (max-width: 767px) {
-  :root {
-    --color-primary: #0DA5E9;
-    --color-primary-hover: #2BB8F5;
-    --color-primary-active: #0884BC;
-  }
-  body {
-    background-color: black;
-  }
+.dark {
+  --bg: #111111;
+  --fg: #ececec;
+  --muted: #9a9a9a;
+  --line: #2a2a2a;
+  --subtle: #1b1b1b;
+  --accent: #7c9bff;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 56px;
 }
 
 body {
-  min-block-size: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-x: overlay;
-  /* color: var(--black); */
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  word-break: keep-all;
+  text-wrap: pretty;
+  -webkit-font-smoothing: antialiased;
 }
 
-img {
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  /* user-drag: none; */
+/* 앵커 오프셋은 html의 scroll-padding-top(56px)이 담당한다. 여기서 margin을 더 주면 두 배로 밀린다. */
+section[id] {
+  scroll-margin-top: 0;
+}
+
+.section-fill {
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 320ms ease-out, transform 320ms ease-out;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal-item] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 360ms ease-out, transform 360ms ease-out;
+}
+
+[data-reveal-item].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-seq [data-reveal-item] {
+  transition-duration: 480ms;
+}
+
+@keyframes label-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.btn-label {
+  animation: label-fade 220ms ease-out;
+}
+
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 320ms ease, color 280ms ease;
+}
+
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 450ms ease, color 450ms ease, border-color 450ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  [data-reveal-item] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .link-underline {
+    transition: none;
+  }
+
+  .btn-label {
+    animation: none;
+  }
+
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: none !important;
+  }
 }
