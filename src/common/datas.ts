@@ -241,37 +241,62 @@ export const skillGroups: SkillGroup[] = [
   { title: 'Language', items: ['JavaScript', 'Dart', 'Python'] },
 ];
 
-export type CareerRow = { period: string; org: string; role?: string };
+/** work: 재직·운영·강사 / project: 개인 프로젝트 / education: 교육·수료·해커톤 */
+export type CareerRow = {
+  period: string;
+  org: string;
+  role?: string;
+  type: 'work' | 'project' | 'education';
+};
 
 export const careerRows: CareerRow[] = [
   {
     period: '2026.07 – 현재',
     org: '제이위드미 (개인사업자)',
     role: 'Jay·스도쿠 리그 개발·운영',
+    type: 'work',
   },
-  { period: '2025.10 – 2026.06', org: 'Jay (개인 프로젝트)', role: '기획·개발' },
+  {
+    period: '2025.10 – 2026.06',
+    org: 'Jay (개인 프로젝트)',
+    role: '기획·개발',
+    type: 'project',
+  },
   {
     period: '2025.01 – 2025.10',
     org: '경기도교육청 방과후학교',
     role: '코딩 수업 강사 (스크래치)',
+    type: 'work',
   },
-  { period: '2024.10', org: 'K-Digital Training 해커톤 (고용노동부)', role: '팀장' },
+  {
+    period: '2024.10',
+    org: 'K-Digital Training 해커톤 (고용노동부)',
+    role: '팀장',
+    type: 'education',
+  },
   {
     period: '2024.05 – 2024.11',
     org: 'AIFFEL 온라인 코어과정 8기',
     role: 'NLP·STT·RAG 프로젝트',
+    type: 'education',
   },
   {
     period: '2023.09 – 2023.12',
     org: '올케어디엑스',
     role: '앱 풀스택 개발',
+    type: 'work',
   },
   {
     period: '2022.10 – 2023.09',
     org: '(주)드림픽셀',
     role: '풀스택 개발',
+    type: 'work',
   },
-  { period: '2021.12 – 2022.06', org: '코드스테이츠 소프트웨어 엔지니어링 38기' },
+  {
+    period: '2021.12 – 2022.06',
+    org: '코드스테이츠 소프트웨어 엔지니어링 38기',
+    type: 'education',
+  },
 ];
 
 export const aiParagraphs: string[] = [
