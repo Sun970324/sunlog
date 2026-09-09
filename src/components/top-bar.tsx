@@ -34,8 +34,7 @@ const TopBar = () => {
       setScrolled(window.scrollY > 8);
 
       const atBottom =
-        window.scrollY + window.innerHeight >=
-        document.documentElement.scrollHeight - 2;
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
 
       let active: string | null = null;
       if (atBottom) {
@@ -70,18 +69,14 @@ const TopBar = () => {
     <header
       className={clsx(
         'sticky top-0 z-30 border-b bg-bg transition-colors duration-300',
-        scrolled ? 'border-line' : 'border-transparent'
+        scrolled ? 'border-line' : 'border-transparent',
       )}
     >
       <div className='mx-auto flex h-14 w-full max-w-[1040px] items-center justify-between gap-6 px-5'>
-        <button
-          type='button'
-          onClick={scrollTop}
-          className='rounded-sm text-fg'
-        >
+        <button type='button' onClick={scrollTop} className='rounded-sm text-fg'>
           <span
             aria-hidden
-            className='block h-8 w-auto bg-current'
+            className='block h-9 w-auto bg-current'
             style={{
               aspectRatio: '1323 / 414',
               WebkitMaskImage: 'url(/assets/logo.svg)',
@@ -105,7 +100,7 @@ const TopBar = () => {
                 href={`#${item.id}`}
                 className={clsx(
                   'rounded-sm transition-colors hover:text-fg',
-                  activeSection === item.id ? 'text-fg' : 'text-muted'
+                  activeSection === item.id ? 'text-fg' : 'text-muted',
                 )}
               >
                 {item.label}
