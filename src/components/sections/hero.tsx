@@ -15,7 +15,7 @@ export default function Hero() {
     >
       <Container className='py-16'>
         <p data-reveal-item className='text-[15px] text-muted'>
-          윤선웅 · 프론트엔드 개발자
+          프론트엔드 개발자 윤선웅
         </p>
         <h1 className='mt-4 text-[36px] font-semibold leading-[1.2] tracking-[-0.02em] md:text-[56px]'>
           <span data-reveal-item className='block'>
@@ -26,12 +26,14 @@ export default function Hero() {
           </span>
         </h1>
         <p data-reveal-item className='mt-6 max-w-[560px] text-[18px] leading-[1.7] text-muted'>
-          <span className='block'>사용자가 실제로 겪는 문제를 서비스로 해결합니다.</span>
           <span className='block'>
-            기획부터 출시까지 직접 만들고, 기능은 사용자 흐름 안에서 확인합니다.
+            Next.js와 Flutter로 웹과 앱 4개를 기획부터 스토어 출시까지 맡았습니다.
           </span>
           <span className='block'>
-            성능과 예외 상황까지 점검해 서비스가 안정적으로 이어지도록 개선합니다.
+            두 회사 모두 개발자가 저 혼자였고, 리뷰어가 없는 공백은 테스트로 메웠습니다.
+          </span>
+          <span className='block'>
+            AI로 만든 코드는 읽기 전에 먼저 실행해 사용자 흐름대로 확인한 뒤 배포합니다.
           </span>
         </p>
         <div
@@ -41,7 +43,11 @@ export default function Hero() {
           {heroStats.map(stat => (
             <div key={stat.label}>
               <div className='whitespace-nowrap text-[24px] font-semibold leading-[1.2] tracking-[-0.02em] md:text-[32px]'>
-                {stat.before && <span className='font-normal text-muted'>{stat.before} → </span>}
+                {stat.before && (
+                  <span className='mr-2 font-normal text-muted line-through decoration-1'>
+                    {stat.before}
+                  </span>
+                )}
                 <AnimatedNumber text={stat.value} from={stat.before} className='text-accent' />
               </div>
               <div className='mt-1.5 text-[14px] text-muted'>{stat.label}</div>

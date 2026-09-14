@@ -30,8 +30,8 @@ const Skills = () => (
             <dd className='m-0 flex flex-wrap items-baseline gap-y-1.5 text-[16px] leading-[1.5]'>
               {group.items.map((item, idx) => (
                 <span key={item} className='whitespace-nowrap'>
-                  {idx > 0 && <span className='mx-3 text-muted' aria-hidden>·</span>}
                   {item}
+                  {idx < group.items.length - 1 && <span className='mr-3 text-muted'>,</span>}
                 </span>
               ))}
             </dd>

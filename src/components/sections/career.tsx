@@ -13,7 +13,7 @@ const markerByType: Record<CareerRow['type'], string> = {
 const Career = () => (
   <Reveal stagger className='pb-16 pt-16 md:pb-[96px] md:pt-[96px]'>
     <Container>
-      <SectionLabel>Career · Education</SectionLabel>
+      <SectionLabel>Career &amp; Education</SectionLabel>
       <div>
         {careerRows.map((row, i) => {
           const isCurrent = row.period.includes('현재');
@@ -40,7 +40,7 @@ const Career = () => (
               <div className='text-muted'>{row.period}</div>
               <div className='col-start-2 md:col-start-3'>
                 <span className='font-semibold'>{row.org}</span>
-                {row.role && <span className='text-muted'> · {row.role}</span>}
+                {row.role && <span className='text-muted'>, {row.role}</span>}
               </div>
             </div>
           );

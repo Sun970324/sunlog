@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useState } from 'react';
 import Container from '@/components/elements/container';
 import Reveal from '@/components/elements/reveal';
 import ScreenshotGrid from '@/components/elements/screenshot-grid';
@@ -14,8 +15,22 @@ type Props = {
 };
 
 export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox }: Props) {
-  const { name, org, period, role, stacks, numbers, summary, problem, decision, result, links } =
-    caseStudy;
+  const {
+    name,
+    org,
+    period,
+    role,
+    stacks,
+    numbers,
+    summary,
+    brief,
+    problem,
+    decision,
+    result,
+    links,
+  } = caseStudy;
+  const [expanded, setExpanded] = useState(false);
+  const detailId = `case-detail-${index}`;
 
   return (
     <Reveal as='article'>
@@ -25,7 +40,9 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
             <div key={number.label}>
               <div className='text-[40px] font-semibold leading-[1.1] tracking-[-0.03em] text-accent'>
                 {number.before && (
-                  <span className='font-normal text-muted'>{number.before} → </span>
+                  <span className='mr-2 font-normal text-muted line-through decoration-1'>
+                    {number.before}
+                  </span>
                 )}
                 <AnimatedNumber text={number.value} from={number.before} />
               </div>
@@ -43,12 +60,11 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
               {name}
             </h3>
             <span>
-              {org} · {period}
+              {org}, {period}
             </span>
           </div>
-          <p className='mt-2 text-[14px] text-muted'>
-            {role} · {stacks}
-          </p>
+          <p className='mt-2 text-[14px] text-muted'>{role}</p>
+          <p className='mt-1 text-[14px] text-muted'>{stacks}</p>
           {links && links.length > 0 && (
             <p className='mt-2 flex flex-wrap gap-x-4 text-[14px]'>
               {links.map(link => (
@@ -66,12 +82,33 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
           )}
           <p className='mt-8 text-[17px] leading-[1.7]'>{summary}</p>
 
-          <h4 className='mb-2 mt-10 text-[14px] font-semibold text-muted'>문제</h4>
-          <p className='text-[16px] leading-[1.7]'>{problem}</p>
-          <h4 className='mb-2 mt-8 text-[14px] font-semibold text-muted'>판단</h4>
-          <p className='text-[16px] leading-[1.7]'>{decision}</p>
-          <h4 className='mb-2 mt-8 text-[14px] font-semibold text-muted'>결과</h4>
-          <p className='text-[16px] leading-[1.7]'>{result}</p>
+          <dl className='mt-6 grid gap-x-4 gap-y-2 md:grid-cols-[56px_minmax(0,1fr)]'>
+            <dt className='text-[14px] font-semibold text-muted'>문제</dt>
+            <dd className='text-[16px] leading-[1.7]'>{brief.problem}</dd>
+            <dt className='mt-2 text-[14px] font-semibold text-muted md:mt-0'>판단</dt>
+            <dd className='text-[16px] leading-[1.7]'>{brief.decision}</dd>
+            <dt className='mt-2 text-[14px] font-semibold text-muted md:mt-0'>결과</dt>
+            <dd className='text-[16px] leading-[1.7]'>{brief.result}</dd>
+          </dl>
+
+          <button
+            type='button'
+            onClick={() => setExpanded(prev => !prev)}
+            aria-expanded={expanded}
+            aria-controls={detailId}
+            className='mt-6 text-[14px] text-accent underline underline-offset-4'
+          >
+            {expanded ? '접기' : '과정 자세히 보기'}
+          </button>
+
+          <div id={detailId} hidden={!expanded}>
+            <h4 className='mb-2 mt-8 text-[14px] font-semibold text-muted'>문제</h4>
+            <p className='text-[16px] leading-[1.7]'>{problem}</p>
+            <h4 className='mb-2 mt-8 text-[14px] font-semibold text-muted'>판단</h4>
+            <p className='text-[16px] leading-[1.7]'>{decision}</p>
+            <h4 className='mb-2 mt-8 text-[14px] font-semibold text-muted'>결과</h4>
+            <p className='text-[16px] leading-[1.7]'>{result}</p>
+          </div>
         </div>
 
         {caseStudy.images.length > 0 && (
