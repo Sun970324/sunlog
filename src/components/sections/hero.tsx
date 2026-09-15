@@ -27,14 +27,12 @@ export default function Hero() {
         </h1>
         <p data-reveal-item className='mt-6 max-w-[560px] text-[18px] leading-[1.7] text-muted'>
           <span className='block'>
-            Next.js와 Flutter로 웹과 앱 4개를 기획부터 스토어 출시까지 맡았습니다.
+            Next.js와 Flutter로 웹과 앱 4개를 기획부터 출시까지 맡았습니다.
           </span>
           <span className='block'>
-            두 회사 모두 개발자가 저 혼자였고, 리뷰어가 없는 공백은 테스트로 메웠습니다.
+            지도 검색 응답을 40초에서 5초로 줄였고, 스도쿠 리그는 출시 1주에 가입자 300명을 모았습니다.
           </span>
-          <span className='block'>
-            AI로 만든 코드는 읽기 전에 먼저 실행해 사용자 흐름대로 확인한 뒤 배포합니다.
-          </span>
+          <span className='block'>AI 코드는 사용자 흐름으로 검증한 뒤 배포합니다.</span>
         </p>
         <div
           data-reveal-item

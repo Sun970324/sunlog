@@ -34,7 +34,7 @@ export const caseStudies: CaseStudy[] = [
     name: '출근하자',
     org: '(주)드림픽셀',
     period: '2022.10 ~ 2023.08',
-    role: '프론트엔드, 백엔드, 배포 담당',
+    role: '프론트, 백엔드, 배포 전담',
     stacks: 'Next.js, Node.js, GraphQL, React Native, MariaDB, AWS',
     numbers: [
       { before: '40s', value: '5s', label: '지도 응답 시간' },
@@ -44,7 +44,7 @@ export const caseStudies: CaseStudy[] = [
       problem:
         '검색 조건을 바꿀 때마다 마커 수백 개를 다시 그려 지도가 40초씩 멈췄고, 쓰지 않는 필드까지 내려와 응답이 50MB였습니다.',
       decision:
-        '공식 클러스터러가 있는 카카오맵으로 바꾸고 쿼리에서 불필요한 필드 140줄을 지웠습니다.',
+        '공식 MarkerClusterer가 있는 카카오맵으로 바꾸고, 쿼리에서 불필요한 필드 140줄을 지우고 검색 반경을 30% 줄였습니다.',
       result: '지도 응답이 40초에서 5초로, 페이로드가 50MB에서 5MB로 줄었습니다.',
     },
     summary:
@@ -71,7 +71,7 @@ export const caseStudies: CaseStudy[] = [
     name: '스도쿠 리그',
     org: '제이위드미 (개인사업자)',
     period: '2026.07 ~ 진행 중',
-    role: '기획, 앱, 백엔드, 스토어 심사, 운영',
+    role: '기획, 프론트엔드, 백엔드, 스토어 심사, 운영, 마케팅',
     stacks: 'Flutter, Dart, Supabase, PostgreSQL, Edge Functions',
     links: [
       { label: 'App Store', href: 'https://apps.apple.com/kr/app/id6794986328' },
@@ -87,10 +87,10 @@ export const caseStudies: CaseStudy[] = [
     ],
     brief: {
       problem:
-        '난이도 판정과 힌트의 판단이 어긋나도 에러가 나지 않아 연습 보드 137개 중 4개가 틀어진 채 방치됐습니다.',
+        '난이도 판정과 힌트 엔진의 판단이 어긋나도 에러가 나지 않아 연습 보드 137개 중 4개가 방치됐고, 1:1에서 고친 온라인 동시성 문제 4건이 파티 대전에는 빠져 있었습니다.',
       decision:
-        '보드를 만들 때 두 엔진을 같이 돌려 결과가 다르면 실패하는 테스트를 넣고, 점수 같은 중요한 검사는 전부 서버로 옮겼습니다.',
-      result: '수정 누락이 4건에서 0으로 줄었고, 출시 1주에 가입자 300명을 모았습니다.',
+        '퍼즐을 만들 때 두 엔진을 같이 돌려 결과가 다르면 실패하는 테스트를 넣고, 점수 검사 같은 핵심 검증은 전부 서버로 옮겼습니다.',
+      result: '수정 누락이 4건에서 0으로 줄었고, 출시 1주 가입자 300명, DAU 40, App Store 보드 카테고리 34위에 올랐습니다.',
     },
     summary:
       '풀이 기법을 배우고 그 실력으로 실시간 랭크 대전을 하는 스도쿠 앱입니다. 마이그레이션 120개, RPC 148개짜리 백엔드까지 직접 만들어 양대 스토어에 올렸고 출시 1주에 가입자 300명을 모았습니다. 만드는 동안 스도쿠 카페에 진행 상황을 계속 올렸는데 색상 테마와 기법 설명 방식은 거기서 받은 의견을 반영했습니다.',
@@ -101,13 +101,13 @@ export const caseStudies: CaseStudy[] = [
     result:
       '스도쿠 카페에 진행 상황을 올리며 모은 사용자가 출시 1주에 300명이 됐고 2주 평균 DAU 40으로 우상향해 App Store 보드 카테고리 34위까지 올라갔습니다. 공통 테스트를 넣은 뒤로는 한쪽 컨트롤러만 고쳐지고 다른 쪽이 빠지는 일이 다시 생기지 않았습니다.',
     images: [
-      '/assets/projects/sudoku/sudoku-1.png',
-      '/assets/projects/sudoku/sudoku-2.png',
-      '/assets/projects/sudoku/sudoku-5.png',
-      '/assets/projects/sudoku/sudoku-7.png',
-      '/assets/projects/sudoku/sudoku-9.png',
-      '/assets/projects/sudoku/sudoku-12.png',
-      '/assets/projects/sudoku/sudoku-13.png',
+      '/assets/projects/sudoku/sudoku-home.png',
+      '/assets/projects/sudoku/sudoku-hint.png',
+      '/assets/projects/sudoku/sudoku-race.png',
+      '/assets/projects/sudoku/sudoku-leaderboard.png',
+      '/assets/projects/sudoku/sudoku-replay.png',
+      '/assets/projects/sudoku/sudoku-ipad-hint.png',
+      '/assets/projects/sudoku/sudoku-ipad-party.png',
     ],
     ratio: '9:19.5',
   },
@@ -149,7 +149,7 @@ export const caseStudies: CaseStudy[] = [
     name: 'HighSleep (Sorilab)',
     org: '올케어디엑스',
     period: '2023.08 ~ 2023.12',
-    role: '앱 개발, 양대 스토어 출시 담당',
+    role: '앱 풀스택 개발, 양대 스토어 출시',
     stacks: 'Flutter, Dart, Firebase, Node.js',
     numbers: [
       { value: '2', label: '출시한 스토어' },
@@ -183,7 +183,7 @@ export const caseStudies: CaseStudy[] = [
     id: 'sunslog',
     name: "Sun's log",
     org: '개인',
-    period: '2022.07 ~ 2026.09',
+    period: '2026.09',
     role: '설계, 구현, 배포',
     stacks: 'Next.js, React, TypeScript, Tailwind CSS, Vercel',
     numbers: [{ value: '4', label: '문제, 판단, 결과로 다시 쓴 케이스' }],
@@ -216,10 +216,10 @@ export type OtherProject = {
 export const otherProjects: OtherProject[] = [
   {
     name: '모두의 점원',
-    period: '2024.10 ~ 11',
-    role: '팀장',
+    period: '2024.10 ~ 2024.11',
+    role: '팀장 (기술 리드)',
     description:
-      '키오스크를 쓰기 어려워하는 사람들이 말로 주문할 수 있게 만든 시스템입니다. RAG를 붙여 의도대로 답한 비율이 35%에서 90%로 올랐고 주문 완료 시간은 72초에서 25초로 줄었습니다.',
+      '고령층과 시각장애인이 키오스크 대신 말로 주문할 수 있게 만든 시스템입니다. LangChain과 RAG를 붙여 의도대로 답한 비율이 35%에서 90%로 올랐고 주문 완료 시간은 72초에서 25초로 줄었습니다.',
     stacks: 'Python, LangChain, Whisper, FastAPI, Flutter',
   },
   {
@@ -233,14 +233,8 @@ export const otherProjects: OtherProject[] = [
     name: 'Airus 홈페이지',
     period: '2024.09',
     description:
-      '드론 제작사 소개 페이지입니다. 반응형으로 만들고 한국어와 영어를 함께 지원합니다.',
-    stacks: 'Next.js, Tailwind CSS, Vercel',
-  },
-  {
-    name: 'No Standing',
-    period: '2022.06',
-    description: '처음으로 팀을 짜서 만든 맛집 예약 플랫폼이고, 프론트엔드를 맡았습니다.',
-    stacks: 'React, Redux, Node.js, MySQL',
+      '드론 제작회사 소개 사이트입니다. 반응형으로 만들고 한국어와 영어를 함께 지원합니다.',
+    stacks: 'Next.js, Tailwind CSS',
   },
 ];
 
@@ -253,26 +247,13 @@ export const skillGroups: SkillGroup[] = [
     title: 'Front-End',
     items: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
   },
-  { title: 'App', items: ['Flutter', 'React Native'] },
+  { title: 'App', items: ['Flutter (Riverpod)', 'React Native', 'Dart'] },
   {
     title: 'Back-End',
-    items: [
-      'Node.js',
-      'FastAPI',
-      'GraphQL',
-      'MySQL',
-      'PostgreSQL',
-      'Firebase',
-      'Supabase',
-      'Prisma',
-    ],
+    items: ['Node.js', 'GraphQL', 'FastAPI', 'Supabase', 'PostgreSQL', 'Firebase'],
   },
-  {
-    title: 'AI / 도구',
-    items: ['Claude Code', 'TensorFlow', 'Keras', 'LangChain', 'RAG', 'Whisper'],
-  },
-  { title: 'DevOps', items: ['Git', 'AWS', 'Vercel', 'Docker', 'Linux', 'NCP'] },
-  { title: 'Language', items: ['JavaScript', 'Dart', 'Python'] },
+  { title: 'DevOps', items: ['AWS', 'Vercel', 'Docker', 'NCP', 'Git'] },
+  { title: 'AI', items: ['Claude Code', 'TensorFlow', 'Keras'] },
 ];
 
 /** work: 재직·운영·강사 / project: 개인 프로젝트 / education: 교육·수료·해커톤 */
@@ -287,7 +268,7 @@ export const careerRows: CareerRow[] = [
   {
     period: '2026.07 ~ 현재',
     org: '제이위드미 (개인사업자)',
-    role: 'Jay와 스도쿠 리그 개발, 운영',
+    role: '앱 2개 스토어 등록과 운영',
     type: 'work',
   },
   {
@@ -299,13 +280,13 @@ export const careerRows: CareerRow[] = [
   {
     period: '2025.01 ~ 2025.10',
     org: '경기도교육청 방과후학교',
-    role: '코딩 수업 강사 (스크래치)',
+    role: '초등학생 코딩 수업 기획과 진행',
     type: 'work',
   },
   {
     period: '2024.10',
     org: 'K-Digital Training 해커톤 (고용노동부)',
-    role: '팀장',
+    role: '팀장 (기술 리드)',
     type: 'education',
   },
   {
@@ -332,12 +313,12 @@ export const careerRows: CareerRow[] = [
     type: 'education',
   },
   {
-    period: '2026',
+    period: '2026.08',
     org: '학점은행제 경영학과 학사 학위 취득',
     type: 'education',
   },
   {
-    period: '2018 졸업',
+    period: '2016.03 ~ 2018.02',
     org: '동서울대학교 세무회계과 전문학사',
     type: 'education',
   },
