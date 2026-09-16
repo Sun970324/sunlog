@@ -45,3 +45,6 @@ design_handoff_sunlog_portfolio/
 이력서*.docx
 
 /ignore
+
+# 윤문 작업 폴더 (이력서·자소서 원문과 연락처 포함, 공개 저장소에 커밋 금지)
+/_workspace

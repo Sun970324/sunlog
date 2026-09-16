@@ -87,7 +87,7 @@ const TopBar = () => {
               maskRepeat: 'no-repeat',
             }}
           />
-          <span className='sr-only'>Sun&apos;s Log</span>
+          <span className='sr-only'>Sun&apos;s log</span>
         </button>
         <nav className='flex items-center gap-6 text-[14px]'>
           <div className='relative hidden items-center gap-6 md:flex'>

@@ -3,7 +3,7 @@ import Reveal from '@/components/elements/reveal';
 import SectionLabel from '@/components/elements/section-label';
 import { careerRows, type CareerRow } from '@/common/datas';
 
-/* 채운 원: 재직·운영 / 빈 원: 개인 프로젝트 / 빈 마름모: 교육·수료 */
+/* 채운 원: 재직, 운영 / 빈 원: 개인 프로젝트 / 빈 마름모: 교육, 수료 */
 const markerByType: Record<CareerRow['type'], string> = {
   work: 'rounded-full bg-fg',
   project: 'rounded-full border border-muted bg-bg',
@@ -25,7 +25,7 @@ const Career = () => (
               data-reveal-item
               className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-1 py-4 text-[15px] md:grid-cols-[16px_160px_1fr] md:gap-x-8'
             >
-              {/* 세로 레일 + 마커. 레일은 py-4만큼 위아래로 넘겨 행 사이가 이어지고, 첫·마지막 행은 마커에서 끊는다. */}
+              {/* 세로 레일 + 마커. 레일은 py-4만큼 위아래로 넘겨 행 사이가 이어지고, 첫 행과 마지막 행은 마커에서 끊는다. */}
               <div
                 className={`relative row-span-2 flex justify-center before:absolute before:w-px before:bg-line before:content-[""] md:row-span-1 ${
                   isFirst ? 'before:top-[11px]' : 'before:-top-4'

@@ -1,6 +1,6 @@
 # Sun's log
 
-윤선웅의 개인 포트폴리오 사이트입니다. 경력·프로젝트·기술 스택을 소개하고 이메일 문의를 받을 수 있습니다.
+윤선웅의 개인 포트폴리오 사이트입니다. 경력, 프로젝트, 기술 스택을 소개하고 이메일 문의를 받습니다.
 
 🔗 **[sunslog.com](https://www.sunslog.com)**
 
@@ -8,20 +8,19 @@
 
 ## Features
 
-- **홈** — 타이핑 애니메이션 히어로 섹션
-- **프로젝트** — 카드 목록 + 상세 드로어 + 이미지 캐러셀 · 라이트박스
-- **기술 스택** — 카테고리별 스킬 뱃지
-- **컨택** — EmailJS 연동 이메일 폼 (필수/선택 필드 구분)
-- **반응형** — 모바일 다크 테마 / 데스크탑 라이트 테마 이중 디자인
+- **Work** 프로젝트마다 문제, 판단, 결과를 나눠 쓰고 성과 숫자를 앞에 배치
+- **스크린샷 확대 보기** 클릭하면 크게 보이고 방향키로 넘기고 Esc로 닫기
+- **다크 모드** 시스템 설정을 따르고 직접 바꾸면 그 값을 기억
+- **Contact** EmailJS 연동 이메일 폼
+- **반응형** 모바일과 데스크톱 한 벌의 코드
 
 ## Tech Stack
 
 | 구분 | 사용 기술 |
 |------|-----------|
-| Framework | Next.js 13, React 18 |
+| Framework | Next.js 13 (Pages Router), React 18 |
 | Language | TypeScript |
-| Styling | Tailwind CSS, Emotion |
-| Icons | FontAwesome |
+| Styling | Tailwind CSS |
 | Email | EmailJS |
 | Deploy | Vercel |
 
@@ -61,13 +60,10 @@ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
 
 ```
 src/
-├── pages/
-│   └── index.tsx          # 메인 페이지
+├── pages/index.tsx         # 메인 페이지
 ├── components/
-│   ├── sections/          # 페이지 섹션 (home, projects, tech-skills, contact, career)
-│   └── elements/          # 재사용 컴포넌트 (project-card, carousel, project-drawer 등)
-├── common/
-│   └── datas.ts           # 프로젝트·스킬 데이터
-└── context/
-    └── DeviceContext.tsx  # 디바이스 감지 컨텍스트
+│   ├── sections/           # hero, work, ai-workflow, other-projects, skills, career, contact
+│   └── elements/           # case-study, screenshot-grid, lightbox, reveal, container 등
+├── common/datas.ts         # 프로젝트, 스킬 데이터
+└── hooks/use-theme.ts      # 다크 모드 상태
 ```
