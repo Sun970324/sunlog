@@ -266,11 +266,6 @@ export type CareerRow = {
 
 export const careerRows: CareerRow[] = [
   {
-    period: '2026.08',
-    org: '학점은행제 경영학과 학사 학위 취득',
-    type: 'education',
-  },
-  {
     period: '2026.07 ~ 현재',
     org: '제이위드미 (개인사업자)',
     role: '앱 2개 스토어 등록과 운영, 인앱 결제와 개인정보 처리',
@@ -321,6 +316,11 @@ export const careerRows: CareerRow[] = [
   {
     period: '2021.12 ~ 2022.06',
     org: '코드스테이츠 소프트웨어 엔지니어링 38기',
+    type: 'education',
+  },
+  {
+    period: '2026.08',
+    org: '학점은행제 경영학과 학사 학위 취득',
     type: 'education',
   },
   {
