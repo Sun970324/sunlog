@@ -217,7 +217,7 @@ export const caseStudies: CaseStudy[] = [
     id: 'highsleep',
     name: 'HighSleep',
     org: '올케어디엑스',
-    period: '2023.08 ~ 2023.12',
+    period: '2023.08 ~ 2024.03',
     role: '앱 풀스택 개발, 양대 스토어 출시',
     stacks: 'Flutter, Dart, Firebase, Node.js',
     numbers: [
@@ -371,7 +371,7 @@ export const careerRows: CareerRow[] = [
     type: 'education',
   },
   {
-    period: '2023.08 ~ 2023.12',
+    period: '2023.08 ~ 2024.03',
     org: '올케어디엑스',
     role: '앱 풀스택 개발',
     type: 'work',
