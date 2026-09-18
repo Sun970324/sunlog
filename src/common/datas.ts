@@ -9,6 +9,17 @@ export const heroStats: Stat[] = [
 
 export type CaseNumber = { before?: string; value: string; label: string };
 
+export type HistoryStage = {
+  label: string;
+  period: string;
+  title: string;
+  /** 왜 바꿨는지 한두 문장. */
+  caption: string;
+  /** 이 시기에 추가한 큰 기능. */
+  added: string[];
+  images: string[];
+};
+
 export type CaseStudy = {
   id: string;
   name: string;
@@ -26,6 +37,8 @@ export type CaseStudy = {
   images: string[];
   ratio: '16:9' | '9:19.5';
   links?: { label: string; href: string }[];
+  /** 화면이 바뀌어 온 과정. 있는 케이스에서만 접기·펼치기로 보여준다. */
+  history?: HistoryStage[];
 };
 
 export const caseStudies: CaseStudy[] = [
@@ -35,7 +48,7 @@ export const caseStudies: CaseStudy[] = [
     org: '(주)드림픽셀',
     period: '2022.10 ~ 2023.08',
     role: '프론트엔드, 백엔드, 배포 전담',
-    stacks: 'Next.js, Node.js, GraphQL, React Native, MariaDB, AWS',
+    stacks: 'Next.js, Node.js, GraphQL, Apollo Client, Prisma, React Native, MariaDB, AWS',
     numbers: [
       { before: '40s', value: '5s', label: '지도 응답 시간' },
       { before: '50MB', value: '5MB', label: 'API 페이로드' },
@@ -48,7 +61,7 @@ export const caseStudies: CaseStudy[] = [
       result: '지도 응답이 40초에서 5초로, 페이로드가 50MB에서 5MB로 줄었습니다.',
     },
     summary:
-      '위치기반 구인구직 플랫폼입니다. 대표, 디자이너와 서비스 방향과 UX 개선안을 이야기하고 구현해서 보여준 다음 다시 다듬는 식으로 일했습니다. 입사했을 때 지도 검색이 40초 걸렸는데, 원인을 찾는 것부터 고치는 것까지 제가 맡았습니다.',
+      '위치기반 구인구직 플랫폼입니다. 경력 없는 신입으로 입사했는데 회사에 개발자가 없어 운영 중이던 웹과 앱을 그대로 인수받았고, 처음 접한 GraphQL과 Apollo, Prisma를 공부해 3주 만에 수정 작업을 시작했습니다. 대표, 디자이너와 서비스 방향과 UX 개선안을 이야기하고 구현해서 보여준 다음 다시 다듬는 식으로 일했습니다. 입사했을 때 지도 검색이 40초 걸렸는데, 원인을 찾는 것부터 고치는 것까지 제가 맡았습니다.',
     problem:
       '검색 조건을 바꿀 때마다 수백 개의 마커를 전부 다시 그려서 그동안 지도가 멈췄습니다. 마커를 찍는 데 쓰지도 않는 기업 이미지와 재무 정보까지 같이 내려오느라 GraphQL 응답이 평균 50MB였습니다.',
     decision:
@@ -110,6 +123,62 @@ export const caseStudies: CaseStudy[] = [
       '/assets/projects/sudoku/sudoku-ipad-party.png',
     ],
     ratio: '9:19.5',
+    history: [
+      {
+        label: 'v1',
+        period: '2026.07.12 ~',
+        title: '혼자 푸는 스도쿠',
+        caption:
+          'Flutter 기본 테마에 퍼즐 생성기와 힌트만 붙인 상태로 시작했습니다. 결과 화면의 상위 퍼센트는 서버가 없어 예시 값이었고, 힌트는 기법 이름과 한 줄 설명이 전부였습니다.',
+        added: [
+          '퍼즐 생성기와 난이도 6단계',
+          '기법 이름을 알려 주는 힌트',
+          'Supabase 연동과 실시간 1:1 대결 (07.14)',
+        ],
+        images: [
+          '/assets/projects/sudoku/history/v1_main_1.jpeg',
+          '/assets/projects/sudoku/history/v1_game.jpeg',
+          '/assets/projects/sudoku/history/v1_hint.jpeg',
+        ],
+      },
+      {
+        label: 'v2',
+        period: '2026.07.18 ~',
+        title: '대전 게임으로',
+        caption:
+          '대결과 티어가 들어오면서 퍼즐 도구가 아니라 게임으로 보이도록 화면 전체를 다시 그렸습니다. 기법 이름만으로는 왜 그 숫자가 지워지는지 알 수 없다는 의견을 받아, 힌트에 인과관계 화살표와 단계별 설명을 넣었습니다.',
+        added: [
+          '친구 대결과 게임형 UI 리디자인 (07.18)',
+          '월간 랭크 시즌제, 힌트 인과관계 시각화 (07.20)',
+          '프리미엄: 리플레이, 테마 6종 (07.21)',
+          '풀이 기법 47종과 기법 연습 (07.27)',
+          '2~8인 파티 대전 (08.04)',
+          'App Store, Google Play 정식 출시 (08.14)',
+        ],
+        images: [
+          '/assets/projects/sudoku/history/v2_main.jpeg',
+          '/assets/projects/sudoku/history/v2_game.jpeg',
+          '/assets/projects/sudoku/history/v2_hint.jpeg',
+        ],
+      },
+      {
+        label: 'v3',
+        period: '2026.08.18 ~',
+        title: '늘어난 기능에 맞춘 구조',
+        caption:
+          '기능이 늘면서 홈 상단 아이콘 네 개로는 길을 안내할 수 없게 됐습니다. 하단 4탭으로 나누고, 홈에는 승급까지 남은 점수와 시즌, 연속 도전 일수처럼 다시 들어올 이유를 올렸습니다.',
+        added: [
+          '하단 4탭 구조 (08.18)',
+          '점령전 모드 (08.30)',
+          '관리자 대시보드와 알림 센터 (09.03)',
+          '경험치와 레벨 (09.17)',
+        ],
+        images: [
+          '/assets/projects/sudoku/history/v3_main.jpeg',
+          '/assets/projects/sudoku/history/v3_hint.jpeg',
+        ],
+      },
+    ],
   },
   {
     id: 'jay',
@@ -250,7 +319,7 @@ export const skillGroups: SkillGroup[] = [
   { title: 'App', items: ['Flutter (Riverpod)', 'React Native', 'Dart'] },
   {
     title: 'Back-End',
-    items: ['Node.js', 'GraphQL', 'FastAPI', 'Supabase', 'PostgreSQL', 'Firebase'],
+    items: ['Node.js', 'GraphQL', 'Prisma', 'FastAPI', 'Supabase', 'PostgreSQL', 'Firebase'],
   },
   { title: 'DevOps', items: ['AWS (EC2, S3)', 'Vercel', 'Git'] },
   { title: 'AI', items: ['Claude Code', 'LangChain', 'RAG', 'TensorFlow', 'Keras'] },

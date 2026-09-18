@@ -36,12 +36,12 @@ export default function Work() {
               caseStudy={caseStudy}
               index={idx + 1}
               total={caseStudies.length}
-              onOpenLightbox={index =>
+              onOpenLightbox={(index, override) =>
                 setLightbox({
-                  images: caseStudy.images,
+                  images: override?.images ?? caseStudy.images,
                   index,
                   ratio: caseStudy.ratio,
-                  alt: caseStudy.name,
+                  alt: override?.alt ?? caseStudy.name,
                 })
               }
             />

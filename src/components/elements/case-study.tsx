@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Container from '@/components/elements/container';
 import Reveal from '@/components/elements/reveal';
 import ScreenshotGrid from '@/components/elements/screenshot-grid';
+import HistoryStages from '@/components/elements/history-stages';
 import AnimatedNumber from '@/components/elements/animated-number';
 import { setLightboxOrigin } from '@/components/elements/lightbox';
 import type { CaseStudy } from '@/common/datas';
@@ -11,7 +12,7 @@ type Props = {
   caseStudy: CaseStudy;
   index: number;
   total: number;
-  onOpenLightbox: (index: number) => void;
+  onOpenLightbox: (index: number, override?: { images: string[]; alt: string }) => void;
 };
 
 export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox }: Props) {
@@ -28,9 +29,12 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
     decision,
     result,
     links,
+    history,
   } = caseStudy;
   const [expanded, setExpanded] = useState(false);
+  const [historyExpanded, setHistoryExpanded] = useState(false);
   const detailId = `case-detail-${index}`;
+  const historyId = `case-history-${index}`;
 
   return (
     <Reveal as='article'>
@@ -51,7 +55,7 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
           ))}
         </div>
 
-        <div className='order-1 md:order-none'>
+        <div className='order-1 min-w-0 md:order-none'>
           <p className='mb-3 text-[13px] tabular-nums tracking-[0.04em] text-muted'>
             {String(index).padStart(2, '0')} / {String(total).padStart(2, '0')}
           </p>
@@ -109,6 +113,31 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
             <h4 className='mb-2 mt-8 text-[14px] font-semibold text-muted'>결과</h4>
             <p className='text-[16px] leading-[1.7]'>{result}</p>
           </div>
+
+          {history && history.length > 0 && (
+            <>
+              <button
+                type='button'
+                onClick={() => setHistoryExpanded(prev => !prev)}
+                aria-expanded={historyExpanded}
+                aria-controls={historyId}
+                className='mt-6 block text-[14px] text-accent underline underline-offset-4'
+              >
+                {historyExpanded ? '화면이 바뀌어 온 과정 접기' : '화면이 바뀌어 온 과정 보기'}
+              </button>
+
+              <div id={historyId} hidden={!historyExpanded} className='mt-8 min-w-0'>
+                <HistoryStages
+                  stages={history}
+                  alt={name}
+                  onOpen={(images, imageIndex, rect) => {
+                    setLightboxOrigin(rect);
+                    onOpenLightbox(imageIndex, { images, alt: name });
+                  }}
+                />
+              </div>
+            </>
+          )}
         </div>
 
         {caseStudy.images.length > 0 && (
