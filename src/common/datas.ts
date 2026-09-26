@@ -23,6 +23,8 @@ export type HistoryStage = {
 export type CaseStudy = {
   id: string;
   name: string;
+  /** 이 케이스가 해결한 문제를 한 문장으로. 제목 바로 아래에 보인다. */
+  problemTitle: string;
   org: string;
   period: string;
   role: string;
@@ -45,6 +47,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'go2work',
     name: '출근하자',
+    problemTitle: '조건을 바꿀 때마다 지도가 40초 멈추던 문제',
     org: '(주)드림픽셀',
     period: '2022.10 ~ 2023.08',
     role: '프론트엔드, 백엔드, 배포 전담',
@@ -82,6 +85,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'sudoku',
     name: '스도쿠 리그',
+    problemTitle: '기능이 늘어나는 동안 이미 만든 것이 조용히 틀어지던 문제',
     org: '제이위드미 (개인사업자)',
     period: '2026.07 ~ 진행 중',
     role: '기획, 프론트엔드, 백엔드, 스토어 심사, 운영, 마케팅',
@@ -186,6 +190,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'jay',
     name: 'Jay',
+    problemTitle: '화면 6개와 백엔드를 서버 없이 혼자 만들어야 했던 문제',
     org: '제이위드미 (개인사업자)',
     period: '2025.10 ~ 진행 중',
     role: '기획, 프론트엔드, 백엔드, 배포 1인 개발',
@@ -219,6 +224,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'highsleep',
     name: 'HighSleep',
+    problemTitle: '반복 재생될 때마다 소리가 1초 비어 자던 사람이 깨던 문제',
     org: '올케어디엑스',
     period: '2023.08 ~ 2024.03',
     role: '앱 풀스택 개발, 양대 스토어 출시',
@@ -254,6 +260,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'sunslog',
     name: "Sun's log",
+    problemTitle: '기술 스택만 나열해 무엇을 판단했는지 읽히지 않던 문제',
     org: '개인',
     period: '2022.07 ~ 2026.09',
     role: '설계, 구현, 배포',
@@ -270,7 +277,7 @@ export const caseStudies: CaseStudy[] = [
     problem:
       '처음 버전은 프로젝트를 기술 스택과 기능 목록으로 나열해서 읽는 사람이 제가 무엇을 판단했는지 알 수 없었습니다. 스크린샷을 페이지 안에서 크게 볼 방법도 없었습니다.',
     decision:
-      '2022년 CRA와 Redux Toolkit으로 만든 첫 버전을 2024년 12월에 Next.js와 TypeScript, Tailwind CSS로 새로 짰습니다. 프로젝트마다 문제와 판단, 결과를 나눠 쓰고 숫자를 앞에 두었습니다. 스크린샷은 클릭하면 크게 보이고 방향키로 넘기고 Esc로 닫게 했습니다. 다크 모드는 시스템 설정을 따르다가 직접 바꾸면 그 값을 기억합니다.',
+      '2022년 CRA와 Redux Toolkit으로 만든 첫 버전을 2024년 12월에 Next.js와 TypeScript, Tailwind CSS로 새로 짰습니다. 프로젝트마다 문제와 판단, 결과를 나눠 쓰고 숫자를 앞에 두었습니다.',
     result: '이 페이지가 결과입니다. 코드는 github.com/Sun970324/sunlog에 있습니다.',
     images: [],
     ratio: '16:9',

@@ -6,6 +6,7 @@ import ScreenshotGrid from '@/components/elements/screenshot-grid';
 import HistoryStages from '@/components/elements/history-stages';
 import AnimatedNumber from '@/components/elements/animated-number';
 import { setLightboxOrigin } from '@/components/elements/lightbox';
+import { diagramsByCase } from '@/components/elements/diagrams';
 import type { CaseStudy } from '@/common/datas';
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
 export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox }: Props) {
   const {
     name,
+    problemTitle,
     org,
     period,
     role,
@@ -31,6 +33,7 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
     links,
     history,
   } = caseStudy;
+  const diagrams = diagramsByCase[caseStudy.id];
   const [expanded, setExpanded] = useState(false);
   const [historyExpanded, setHistoryExpanded] = useState(false);
   const detailId = `case-detail-${index}`;
@@ -67,6 +70,7 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
               {org}, {period}
             </span>
           </div>
+          <p className='mt-3 text-[17px] font-medium leading-[1.5] text-fg'>{problemTitle}</p>
           <p className='mt-2 text-[14px] text-muted'>{role}</p>
           <p className='mt-1 text-[14px] text-muted'>{stacks}</p>
           {links && links.length > 0 && (
@@ -85,6 +89,33 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
             </p>
           )}
           <p className='mt-8 text-[17px] leading-[1.7]'>{summary}</p>
+
+          {/* 구조도는 글보다 먼저, 접지 않고 항상 보인다. */}
+          {diagrams && (
+            <div className='mt-8 space-y-8'>
+              {diagrams.map(diagram => (
+                <figure key={diagram.caption} className='m-0'>
+                  <div className='grid gap-6 rounded border border-line p-4 md:grid-cols-2'>
+                    <div>
+                      <p className='mb-2 text-[12px] tracking-[0.04em] text-muted'>
+                        {diagram.before.label}
+                      </p>
+                      {diagram.before.svg}
+                    </div>
+                    <div className='border-t border-line pt-4 md:border-0 md:pt-0'>
+                      <p className='mb-2 text-[12px] tracking-[0.04em] text-muted'>
+                        {diagram.after.label}
+                      </p>
+                      {diagram.after.svg}
+                    </div>
+                  </div>
+                  <figcaption className='mt-3 text-[13px] leading-[1.6] text-muted'>
+                    {diagram.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
 
           <dl className='mt-6 grid gap-x-4 gap-y-2 md:grid-cols-[56px_minmax(0,1fr)]'>
             <dt className='text-[14px] font-semibold text-muted'>문제</dt>
