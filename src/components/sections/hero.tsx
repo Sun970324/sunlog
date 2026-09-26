@@ -30,7 +30,7 @@ export default function Hero() {
             Next.js와 Flutter로 웹과 앱 4개를 기획부터 출시까지 맡았습니다.
           </span>
           <span className='block'>
-            지도 검색 응답을 40초에서 5초로 줄였고, 스도쿠 리그는 출시 1주에 가입자 300명을 모았습니다.
+            지도 검색 응답을 40초에서 5초로 줄였고, 스도쿠 리그는 출시 한 달에 가입자 600명을 모았습니다.
           </span>
           <span className='block'>AI 코드는 사용자 흐름으로 검증한 뒤 배포합니다.</span>
         </p>
