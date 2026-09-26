@@ -346,12 +346,6 @@ export type CareerRow = {
 export const careerRows: CareerRow[] = [
   {
     period: '2026.07 ~ 현재',
-    org: '제이위드미 (개인사업자)',
-    role: '앱 2개 스토어 등록과 운영, 인앱 결제와 개인정보 처리',
-    type: 'work',
-  },
-  {
-    period: '2026.07 ~ 현재',
     org: '스도쿠 리그 (제이위드미)',
     role: '기획, 개발, 운영',
     type: 'project',
