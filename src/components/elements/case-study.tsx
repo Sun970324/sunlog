@@ -5,7 +5,7 @@ import Reveal from '@/components/elements/reveal';
 import ScreenshotGrid from '@/components/elements/screenshot-grid';
 import HistoryStages from '@/components/elements/history-stages';
 import AnimatedNumber from '@/components/elements/animated-number';
-import CompareBars, { compareNumbers } from '@/components/elements/compare-bars';
+import MetricBars from '@/components/elements/metric-bars';
 import { setLightboxOrigin } from '@/components/elements/lightbox';
 import { diagramsByCase } from '@/components/elements/diagrams';
 import type { CaseStudy } from '@/common/datas';
@@ -44,35 +44,19 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
     <Reveal as='article'>
       <Container wide className='grid items-start gap-x-20 md:grid-cols-[240px_minmax(0,1fr)]'>
         <div className='order-2 mt-10 flex flex-row flex-wrap gap-x-8 gap-y-4 border-t border-line pt-6 md:order-none md:mt-0 md:flex-col md:border-0 md:pt-2 md:self-start md:sticky md:top-[80px]'>
-          {numbers.map(number => {
-            const comparison = compareNumbers(number.before, number.value);
-            // 늘어난 수치는 전 값을 지우지 않는다. 줄인 수치만 취소선.
-            const strike = !comparison || !comparison.growth;
-            return (
-              <div key={number.label}>
-                <div className='text-[40px] font-semibold leading-[1.1] tracking-[-0.03em] text-accent'>
-                  {number.before && (
-                    <span
-                      className={clsx(
-                        'mr-2 font-normal text-muted',
-                        strike && 'line-through decoration-1',
-                      )}
-                    >
-                      {number.before}
-                    </span>
-                  )}
-                  <AnimatedNumber text={number.value} from={number.before} />
-                </div>
-                {comparison && (
-                  <CompareBars
-                    comparison={comparison}
-                    title={`${number.label}: ${number.before}에서 ${number.value}`}
-                  />
+          {numbers.map(number => (
+            <div key={number.label}>
+              <div className='text-[40px] font-semibold leading-[1.1] tracking-[-0.03em] text-accent'>
+                {number.before && (
+                  <span className='mr-2 font-normal text-muted line-through decoration-1'>
+                    {number.before}
+                  </span>
                 )}
-                <div className='mt-1 text-[13px] text-muted'>{number.label}</div>
+                <AnimatedNumber text={number.value} from={number.before} />
               </div>
-            );
-          })}
+              <div className='mt-1 text-[13px] text-muted'>{number.label}</div>
+            </div>
+          ))}
         </div>
 
         <div className='order-1 min-w-0 md:order-none'>
@@ -112,19 +96,27 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
             <div className='mt-8 space-y-8'>
               {diagrams.map(diagram => (
                 <figure key={diagram.caption} className='m-0'>
-                  <div className='grid gap-6 rounded border border-line p-4 md:grid-cols-2'>
-                    <div>
-                      <p className='mb-2 text-[12px] tracking-[0.04em] text-muted'>
-                        {diagram.before.label}
-                      </p>
-                      {diagram.before.svg}
+                  <div className='rounded border border-line p-4'>
+                    <div className='grid gap-6 md:grid-cols-2'>
+                      <div>
+                        <p className='mb-2 text-[12px] tracking-[0.04em] text-muted'>
+                          {diagram.before.label}
+                        </p>
+                        {diagram.before.svg}
+                      </div>
+                      <div className='border-t border-line pt-4 md:border-0 md:pt-0'>
+                        <p className='mb-2 text-[12px] tracking-[0.04em] text-muted'>
+                          {diagram.after.label}
+                        </p>
+                        {diagram.after.svg}
+                      </div>
                     </div>
-                    <div className='border-t border-line pt-4 md:border-0 md:pt-0'>
-                      <p className='mb-2 text-[12px] tracking-[0.04em] text-muted'>
-                        {diagram.after.label}
-                      </p>
-                      {diagram.after.svg}
-                    </div>
+                    {/* 캡션에 적은 수치를 막대로. 구조도와 같은 상자 안에 둔다. */}
+                    {diagram.metrics && (
+                      <div className='mt-6 border-t border-line pt-5'>
+                        <MetricBars metrics={diagram.metrics} />
+                      </div>
+                    )}
                   </div>
                   <figcaption className='mt-3 text-[13px] leading-[1.6] text-muted'>
                     {diagram.caption}

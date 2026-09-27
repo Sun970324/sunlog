@@ -1,8 +1,11 @@
 import type { ReactNode } from 'react';
+import type { Metric } from '@/components/elements/metric-bars';
 
 export type Diagram = {
   /** 이 그림이 무엇을 보여주는지 한 줄. 그림 아래에 캡션으로 깔린다. */
   caption: string;
+  /** 캡션에 적은 개선 수치. 있으면 구조도 아래에 전후 막대로 그린다. */
+  metrics?: Metric[];
   /** 왼쪽(개선 전) 패널. */
   before: { label: string; svg: ReactNode };
   /** 오른쪽(개선 후) 패널. */
@@ -151,6 +154,13 @@ const sudokuTrust: Diagram = {
 const sudokuEngines: Diagram = {
   caption:
     '보드를 만들 때 두 엔진을 같이 돌려 결과가 다르면 실패하게 했습니다. 연습 보드 137개 중 4개가 방치되던 문제가 0개로 줄었고, 새 보드는 만드는 시점에 바로 걸립니다.',
+  metrics: [
+    {
+      label: '방치된 연습 보드 (137개 중)',
+      before: { value: 4, text: '4개' },
+      after: { value: 0, text: '0개' },
+    },
+  ],
   before: {
     label: '개선 전',
     svg: (
@@ -202,6 +212,18 @@ const sudokuEngines: Diagram = {
 const go2workMap: Diagram = {
   caption:
     '마커에 쓰지 않는 필드 140줄을 제거하고 클러스터러로 묶어 그리자 지도 응답이 40초에서 5초로, 페이로드가 50MB에서 5MB로 줄었습니다. Chrome DevTools Performance 탭으로 전후를 측정했습니다.',
+  metrics: [
+    {
+      label: '지도 응답 시간',
+      before: { value: 40, text: '40초' },
+      after: { value: 5, text: '5초' },
+    },
+    {
+      label: 'API 페이로드',
+      before: { value: 50, text: '50MB' },
+      after: { value: 5, text: '5MB' },
+    },
+  ],
   before: {
     label: '개선 전',
     svg: (
@@ -254,6 +276,13 @@ const go2workMap: Diagram = {
 const highsleepTracks: Diagram = {
   caption:
     '트랙 3개를 ViewModel 하나로 묶어 제어해서 반복 재생 때 1초씩 비던 소리와 재생, 정지 딜레이를 없앴습니다. 트랙별 음량 조절도 가능해졌습니다.',
+  metrics: [
+    {
+      label: '반복 재생 시 소리 공백',
+      before: { value: 1, text: '1초' },
+      after: { value: 0, text: '0초' },
+    },
+  ],
   before: {
     label: '개선 전',
     svg: (
