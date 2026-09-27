@@ -9,7 +9,7 @@ type Props = {
 
 type Parsed = { value: number; decimals: number; suffix: string };
 
-const parse = (text: string): Parsed | null => {
+export const parse = (text: string): Parsed | null => {
   const match = /^\s*(-?\d+(?:\.\d+)?)(.*)$/.exec(text);
   if (!match) return null;
   const [, numberPart, suffix] = match;

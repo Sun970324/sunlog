@@ -99,10 +99,11 @@ export const caseStudies: CaseStudy[] = [
     ],
     numbers: [
       { value: '2개월', label: '개발 시작부터 양대 스토어 출시' },
-      { value: '600', label: '출시 1달 가입자' },
-      { value: '1000', label: '출시 1달 다운로드' },
+      { before: '300', value: '600', label: '가입자, 출시 1주에서 1달' },
+      { before: '500', value: '1000', label: '다운로드, 출시 1주에서 1달' },
+      { before: '40', value: '80', label: 'DAU, 출시 2주에서 1달' },
       { value: '34위', label: 'App Store 보드 게임 순위' },
-      { value: '0', label: '수정 누락 재발 (4건에서 0)' },
+      { before: '4', value: '0', label: '수정 누락 재발' },
     ],
     brief: {
       problem:

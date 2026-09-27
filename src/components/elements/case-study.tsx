@@ -5,6 +5,7 @@ import Reveal from '@/components/elements/reveal';
 import ScreenshotGrid from '@/components/elements/screenshot-grid';
 import HistoryStages from '@/components/elements/history-stages';
 import AnimatedNumber from '@/components/elements/animated-number';
+import CompareBars, { compareNumbers } from '@/components/elements/compare-bars';
 import { setLightboxOrigin } from '@/components/elements/lightbox';
 import { diagramsByCase } from '@/components/elements/diagrams';
 import type { CaseStudy } from '@/common/datas';
@@ -43,19 +44,35 @@ export default function CaseStudyItem({ caseStudy, index, total, onOpenLightbox 
     <Reveal as='article'>
       <Container wide className='grid items-start gap-x-20 md:grid-cols-[240px_minmax(0,1fr)]'>
         <div className='order-2 mt-10 flex flex-row flex-wrap gap-x-8 gap-y-4 border-t border-line pt-6 md:order-none md:mt-0 md:flex-col md:border-0 md:pt-2 md:self-start md:sticky md:top-[80px]'>
-          {numbers.map(number => (
-            <div key={number.label}>
-              <div className='text-[40px] font-semibold leading-[1.1] tracking-[-0.03em] text-accent'>
-                {number.before && (
-                  <span className='mr-2 font-normal text-muted line-through decoration-1'>
-                    {number.before}
-                  </span>
+          {numbers.map(number => {
+            const comparison = compareNumbers(number.before, number.value);
+            // 늘어난 수치는 전 값을 지우지 않는다. 줄인 수치만 취소선.
+            const strike = !comparison || !comparison.growth;
+            return (
+              <div key={number.label}>
+                <div className='text-[40px] font-semibold leading-[1.1] tracking-[-0.03em] text-accent'>
+                  {number.before && (
+                    <span
+                      className={clsx(
+                        'mr-2 font-normal text-muted',
+                        strike && 'line-through decoration-1',
+                      )}
+                    >
+                      {number.before}
+                    </span>
+                  )}
+                  <AnimatedNumber text={number.value} from={number.before} />
+                </div>
+                {comparison && (
+                  <CompareBars
+                    comparison={comparison}
+                    title={`${number.label}: ${number.before}에서 ${number.value}`}
+                  />
                 )}
-                <AnimatedNumber text={number.value} from={number.before} />
+                <div className='mt-1 text-[13px] text-muted'>{number.label}</div>
               </div>
-              <div className='mt-1 text-[13px] text-muted'>{number.label}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className='order-1 min-w-0 md:order-none'>
