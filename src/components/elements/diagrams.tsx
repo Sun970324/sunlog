@@ -154,13 +154,6 @@ const sudokuTrust: Diagram = {
 const sudokuEngines: Diagram = {
   caption:
     '보드를 만들 때 두 엔진을 같이 돌려 결과가 다르면 실패하게 했습니다. 연습 보드 137개 중 4개가 방치되던 문제가 0개로 줄었고, 새 보드는 만드는 시점에 바로 걸립니다.',
-  metrics: [
-    {
-      label: '방치된 연습 보드 (137개 중)',
-      before: { value: 4, text: '4개' },
-      after: { value: 0, text: '0개' },
-    },
-  ],
   before: {
     label: '개선 전',
     svg: (
@@ -276,13 +269,6 @@ const go2workMap: Diagram = {
 const highsleepTracks: Diagram = {
   caption:
     '트랙 3개를 ViewModel 하나로 묶어 제어해서 반복 재생 때 1초씩 비던 소리와 재생, 정지 딜레이를 없앴습니다. 트랙별 음량 조절도 가능해졌습니다.',
-  metrics: [
-    {
-      label: '반복 재생 시 소리 공백',
-      before: { value: 1, text: '1초' },
-      after: { value: 0, text: '0초' },
-    },
-  ],
   before: {
     label: '개선 전',
     svg: (
