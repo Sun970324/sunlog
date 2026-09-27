@@ -78,7 +78,8 @@ function Box({
 }
 
 const sudokuTrust: Diagram = {
-  caption: '점수 검사를 앱 화면에서 DB와 서버 함수로 옮긴 전후입니다.',
+  caption:
+    '점수 검사를 서버 함수 135개와 RLS 테이블 35개로 옮겨서 앱을 거치지 않은 직접 요청으로는 검사를 건너뛸 수 없게 했습니다. 정답과 관리자, 토큰 테이블은 정책을 0개로 두어 권한을 회수했습니다.',
   before: {
     label: '개선 전',
     svg: (
@@ -148,7 +149,8 @@ const sudokuTrust: Diagram = {
 };
 
 const sudokuEngines: Diagram = {
-  caption: '난이도 판정과 힌트 엔진이 어긋나면 보드를 만들 때 바로 걸리게 한 전후입니다.',
+  caption:
+    '보드를 만들 때 두 엔진을 같이 돌려 결과가 다르면 실패하게 했습니다. 연습 보드 137개 중 4개가 방치되던 문제가 0개로 줄었고, 새 보드는 만드는 시점에 바로 걸립니다.',
   before: {
     label: '개선 전',
     svg: (
@@ -198,7 +200,8 @@ const sudokuEngines: Diagram = {
 };
 
 const go2workMap: Diagram = {
-  caption: '검색 조건을 바꿀 때 지도가 다시 그려지는 경로의 전후입니다.',
+  caption:
+    '마커에 쓰지 않는 필드 140줄을 제거하고 클러스터러로 묶어 그리자 지도 응답이 40초에서 5초로, 페이로드가 50MB에서 5MB로 줄었습니다. Chrome DevTools Performance 탭으로 전후를 측정했습니다.',
   before: {
     label: '개선 전',
     svg: (
@@ -249,7 +252,8 @@ const go2workMap: Diagram = {
 };
 
 const highsleepTracks: Diagram = {
-  caption: '수면 음악이 처음으로 돌아갈 때 소리가 비던 구조를 바꾼 전후입니다.',
+  caption:
+    '트랙 3개를 ViewModel 하나로 묶어 제어해서 반복 재생 때 1초씩 비던 소리와 재생, 정지 딜레이를 없앴습니다. 트랙별 음량 조절도 가능해졌습니다.',
   before: {
     label: '개선 전',
     svg: (
