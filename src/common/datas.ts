@@ -52,7 +52,7 @@ export const caseStudies: CaseStudy[] = [
     period: '2022.10 ~ 2023.08',
     role: '프론트엔드, 백엔드, 배포 전담',
     stacks:
-      'Next.js, MUI, styled-components, Node.js, GraphQL, Apollo Client, Prisma, React Native (WebView), MariaDB, AWS',
+      'Next.js, MUI, Emotion, Node.js, GraphQL, Apollo Client, Prisma, React Native (WebView), MariaDB, AWS',
     numbers: [
       { before: '40s', value: '5s', label: '지도 응답 시간' },
       { before: '50MB', value: '5MB', label: 'API 페이로드' },
@@ -325,7 +325,7 @@ export type SkillGroup = { title: string; items: string[] };
 export const skillGroups: SkillGroup[] = [
   {
     title: 'Front-End',
-    items: ['Next.js', 'React', 'TypeScript', 'MUI', 'styled-components', 'Tailwind CSS'],
+    items: ['Next.js', 'React', 'TypeScript', 'MUI', 'Emotion', 'Tailwind CSS'],
   },
   { title: 'App', items: ['Flutter (Riverpod)', 'React Native', 'Dart'] },
   {
