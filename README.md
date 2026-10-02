@@ -9,6 +9,7 @@
 ## Features
 
 - **Work** 프로젝트 로고를 누르면 아래 패널이 그 프로젝트로 바뀌고, 문제, 판단, 결과를 세 줄로 보여 줌. 키보드 ←/→로도 이동
+- **그 외 프로젝트** 상세 페이지가 없는 프로젝트는 Work 아래에 이름, 기간, 두 줄 설명, 대표 스택 카드로 짧게 표시
 - **프로젝트 상세** `/work/[id]` 페이지마다 배경, 문제, 판단, 결과, 개선 전후 구조도, 스크린샷을 담음. 스크롤하면 헤더에 프로젝트 썸네일과 이름이 나타남
 - **갤러리** 스크린샷을 원래 비율 그대로 열에 나눠 쌓고, 비율이 다른 화면(관리자 웹, 모바일 앱, iPad)은 따로 묶음. 클릭하면 확대 보기, 방향키로 넘기고 Esc로 닫기
 - **프로젝트별 포인트 색** 숫자, 구조도, 링크가 프로젝트 색을 따름. 라이트, 다크 모드마다 명도를 따로 맞춤
@@ -41,14 +42,14 @@ npm run dev
 ```
 src/
 ├── pages/
-│   ├── index.tsx           # 메인: 히어로, Work, 연혁과 스킬
+│   ├── index.tsx           # 메인: 히어로, Work, 그 외 프로젝트, 연혁과 스킬
 │   └── work/[id].tsx       # 프로젝트 상세 (빌드 때 정적 생성)
 ├── components/
 │   ├── top-bar.tsx         # 로고, 상세 페이지에서 프로젝트 표시
-│   ├── sections/           # hero, work, career, skills
+│   ├── sections/           # hero, work, other-projects, career, skills
 │   └── elements/           # project-icon, screenshot-grid, lightbox, diagrams, metric-bars 등
 ├── common/
-│   ├── datas.ts            # 프로젝트, 연혁, 스킬 데이터
+│   ├── datas.ts            # 프로젝트, 그 외 프로젝트, 연혁, 스킬 데이터
 │   └── selected-case.ts    # 메인에서 고른 프로젝트 기억 (sessionStorage)
 ├── styles/globals.css      # 색 토큰, 프로젝트별 포인트 색
 └── hooks/use-theme.ts      # 다크 모드 상태
