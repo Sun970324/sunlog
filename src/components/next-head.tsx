@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 const NAME = "Sun's log";
 const DESCRIPTION =
-  "웹과 앱을 만들어 스토어에 올리는 프론트엔드 개발자 윤선웅의 포트폴리오, Sun's log. 지도 검색 응답 40초에서 5초, 기획부터 출시까지 맡은 서비스 4개. Next.js, Flutter.";
+  "사용자의 불편을 구조로 해결하는 프론트엔드 개발자 윤선웅의 포트폴리오, Sun's log. 구인구직 서비스와 수면 유도 앱에서 풀스택 역량을 쌓고 스도쿠 대전 앱과 전화 기반 재활 서비스를 직접 기획하고 개발했습니다. Next.js, Flutter.";
 
 const NextHead = () => {
   const [routerChange, setRouterChange] = useState(false);
