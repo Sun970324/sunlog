@@ -4,6 +4,7 @@ import TopBar from '@/components/top-bar';
 import Container from '@/components/elements/container';
 import Hero from '@/components/sections/hero';
 import Work from '@/components/sections/work';
+import OtherProjects from '@/components/sections/other-projects';
 import Skills from '@/components/sections/skills';
 import Career from '@/components/sections/career';
 import { caseStudies } from '@/common/datas';
@@ -36,6 +37,9 @@ export default function Home() {
         <Hero />
         <section id='work'>
           <Work selected={selected} onSelect={select} />
+        </section>
+        <section id='other-projects'>
+          <OtherProjects />
         </section>
         <section id='career' className='pb-16 md:pb-24'>
           <Container

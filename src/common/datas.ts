@@ -250,6 +250,47 @@ export const caseStudies: CaseStudy[] = [
   },
 ];
 
+/** 메인 Work 아래에 짧게 보여 주는 나머지 프로젝트. 상세 페이지는 없다. */
+export type OtherProject = {
+  name: string;
+  period: string;
+  description: string;
+  stack: string[];
+  link?: { label: string; href: string };
+};
+
+export const otherProjects: OtherProject[] = [
+  {
+    name: 'Jay',
+    period: '2025.10 ~ 2026.07',
+    description:
+      '질환과 지역, 나이, 소득 조건으로 받을 수 있는 의료복지 혜택을 찾아 주는 플랫폼입니다. Supabase로 서버 없이 백엔드를 구성했고 Flutter Web으로 클라이언트를 만들어 Vercel로 배포했습니다.',
+    stack: ['Flutter', 'Supabase'],
+    link: { label: 'jaywithme.com', href: 'https://jaywithme.com' },
+  },
+  {
+    name: '모두의 점원',
+    period: '2024.10 ~ 2024.11',
+    description:
+      'K-Digital Training 해커톤에서 팀장 역할을 맡아 진행한 프로젝트입니다. 고령층과 시각장애인이 음성 대화로 키오스크를 사용할 수 있도록 LLM-STT-TTS-Interface 연동 음성 주문 시스템을 만들었습니다.',
+    stack: ['LangChain', 'FastAPI'],
+  },
+  {
+    name: '감정 일기',
+    period: '2024.09',
+    description:
+      '일기를 쓰면 그날의 감정을 색으로 보여 주는 앱입니다. BERT를 파인튜닝해 정확도 약 97%로 감정을 분류하고 결과에 따라 테마 색이 바뀝니다.',
+    stack: ['Keras', 'Flutter'],
+  },
+  {
+    name: 'Airus 홈페이지',
+    period: '2024.09',
+    description:
+      '드론 제작사 소개 사이트입니다. 공용 컴포넌트로 모바일 반응형을 구현하고 한국어와 영어 두 언어를 지원했습니다.',
+    stack: ['Next.js', 'Tailwind CSS'],
+  },
+];
+
 /** work: 재직, 강사 / project: 프로젝트 / education: 교육, 수료, 해커톤 */
 export type TimelineRow = {
   period: string;
@@ -279,7 +320,7 @@ export const timeline: TimelineRow[] = [
     now: true,
     caseId: 'kkulkkuk',
   },
-  { period: '2025.10 ~ 현재', org: 'Jay', role: '의료복지 정보 플랫폼', type: 'project' },
+  { period: '2025.10 ~ 2026.07', org: 'Jay', role: '의료복지 정보 플랫폼', type: 'project' },
   { period: '2025.01 ~ 2025.10', org: '경기도교육청 방과후학교', role: '코딩 강사', type: 'work' },
   { period: '2024.10 ~ 2024.11', org: '모두의 점원', role: '해커톤 팀장', type: 'education' },
   { period: '2024.05 ~ 2024.11', org: 'AIFFEL 코어과정 8기', type: 'education' },
