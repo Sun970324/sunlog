@@ -31,19 +31,20 @@ export default function Hero() {
     <Reveal as='section' stagger staggerStep={110} className='hero-seq'>
       <Container wide className='pb-12 pt-16 md:pb-16 md:pt-24'>
         <p data-reveal-item className='text-[15px] text-muted'>
-          프론트엔드 개발자 윤선웅
+          프론트엔드 개발자
         </p>
-        <h1 className='mt-4 text-[32px] font-semibold leading-[1.2] tracking-[-0.02em] md:text-[48px]'>
+        <h1 className='mt-4 text-[32px] font-semibold leading-[1.25] tracking-[-0.02em] md:text-[48px]'>
           <span data-reveal-item className='block'>
-            Create value with code
+            사용자의 불편을 구조로 해결하는
           </span>
           <span data-reveal-item className='block'>
-            Plan, Build, Improve
+            개발자 윤선웅입니다.
           </span>
         </h1>
         <p data-reveal-item className='mt-5 max-w-[600px] text-[17px] leading-[1.7] text-muted'>
-          Next.js와 Flutter로 웹과 앱 4개를 기획부터 출시까지 맡았습니다. AI가 만든 코드는 직접
-          실행해 확인한 뒤 배포합니다.
+          위치 기반 구인구직 서비스와 수면 유도 사운드 앱의 개발을 맡아 프론트엔드, 백엔드, 배포까지
+          다루며 풀스택 역량을 쌓았습니다. 그 경험으로 스도쿠 대전 앱과 고령 환자를 위한 전화 기반
+          재활 서비스를 직접 기획하고 개발했습니다.
         </p>
         <div data-reveal-item className='mt-6 flex flex-wrap gap-2.5'>
           <button type='button' onClick={copyEmail} className={PILL_CLASS}>
