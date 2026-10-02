@@ -1,69 +1,42 @@
 import clsx from 'clsx';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState, type CSSProperties } from 'react';
+import ProjectIcon from '@/components/elements/project-icon';
+import type { CaseStudy } from '@/common/datas';
 
-const NAV_ITEMS = [
-  { id: 'work', label: 'Work' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'career', label: 'Career' },
-  { id: 'contact', label: 'Contact' },
-];
+type Props = {
+  /** 상세 페이지에서 넘긴다. showCase가 켜지면 로고 옆에 프로젝트 썸네일과 이름이 나타난다. */
+  caseStudy?: CaseStudy;
+  showCase?: boolean;
+};
 
-const TopBar = () => {
+/* 프로젝트 정보가 나타날 때는 썸네일, 이름 순서로 조금씩 늦게 떠오르고, 사라질 때는 한 번에 내려간다. */
+const rise = (visible: boolean, order: number): CSSProperties => ({
+  opacity: visible ? 1 : 0,
+  transform: visible ? 'translateY(0)' : 'translateY(10px)',
+  transitionDelay: visible ? `${order * 70}ms` : '0ms',
+});
+const RISE_CLASS =
+  'transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none';
+
+const TopBar = ({ caseStudy, showCase = false }: Props) => {
+  const router = useRouter();
+  const isHome = router.pathname === '/';
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState<string | null>(null);
-  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
-  const [indicator, setIndicator] = useState({ left: 0, width: 0 });
-
-  const syncIndicator = useCallback(() => {
-    const el = activeSection ? linkRefs.current[activeSection] : null;
-    if (!el) return;
-    setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
-  }, [activeSection]);
+  const caseVisible = Boolean(caseStudy) && showCase;
 
   useEffect(() => {
-    syncIndicator();
-    window.addEventListener('resize', syncIndicator);
-    return () => window.removeEventListener('resize', syncIndicator);
-  }, [syncIndicator]);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const update = () => {
-      ticking = false;
-      setScrolled(window.scrollY > 8);
-
-      const atBottom =
-        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
-
-      let active: string | null = null;
-      if (atBottom) {
-        active = NAV_ITEMS[NAV_ITEMS.length - 1].id;
-      } else {
-        NAV_ITEMS.forEach(item => {
-          const el = document.getElementById(item.id);
-          if (el && el.getBoundingClientRect().top <= 64) active = item.id;
-        });
-      }
-      setActiveSection(active);
-    };
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    };
-
-    update();
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 상세 페이지에서는 로고가 메인으로 돌아가는 링크 역할을 한다.
+  const scrollTop = () => {
+    if (isHome) window.scrollTo({ top: 0, behavior: 'smooth' });
+    else router.push('/');
+  };
 
   return (
     <header
@@ -72,8 +45,8 @@ const TopBar = () => {
         scrolled ? 'border-line' : 'border-transparent',
       )}
     >
-      <div className='mx-auto flex h-14 w-full max-w-[1040px] items-center justify-between gap-6 px-5'>
-        <button type='button' onClick={scrollTop} className='rounded-sm text-fg'>
+      <div className='mx-auto flex h-14 w-full max-w-[1040px] items-center px-5'>
+        <button type='button' onClick={scrollTop} className='shrink-0 rounded-sm text-fg'>
           <span
             aria-hidden
             className='block h-9 w-auto bg-current'
@@ -89,34 +62,36 @@ const TopBar = () => {
           />
           <span className='sr-only'>Sun&apos;s log</span>
         </button>
-        <nav className='flex items-center gap-6 text-[14px]'>
-          <div className='relative hidden items-center gap-6 md:flex'>
-            {NAV_ITEMS.map(item => (
-              <a
-                key={item.id}
-                ref={node => {
-                  linkRefs.current[item.id] = node;
-                }}
-                href={`#${item.id}`}
-                className={clsx(
-                  'rounded-sm transition-colors hover:text-fg',
-                  activeSection === item.id ? 'text-fg' : 'text-muted',
-                )}
-              >
-                {item.label}
-              </a>
-            ))}
+
+        {caseStudy && (
+          <button
+            type='button'
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-hidden={!caseVisible}
+            tabIndex={caseVisible ? 0 : -1}
+            className={clsx(
+              'flex min-w-0 items-center gap-3 text-left',
+              !caseVisible && 'pointer-events-none',
+            )}
+          >
             <span
               aria-hidden
-              className='pointer-events-none absolute -bottom-2 left-0 h-px bg-accent transition-[transform,width,opacity] duration-[320ms] ease-out motion-reduce:transition-none'
-              style={{
-                width: indicator.width,
-                transform: `translateX(${indicator.left}px)`,
-                opacity: activeSection ? 1 : 0,
-              }}
+              className={clsx(
+                'mx-1 h-5 w-px bg-line transition-opacity duration-300 md:mx-4',
+                caseVisible ? 'opacity-100' : 'opacity-0',
+              )}
             />
-          </div>
-        </nav>
+            <span className={RISE_CLASS} style={rise(caseVisible, 0)}>
+              <ProjectIcon caseStudy={caseStudy} className='h-8 w-8 rounded-[9px]' sizes='32px' />
+            </span>
+            <span
+              className={clsx('min-w-0 truncate text-[15px] font-semibold', RISE_CLASS)}
+              style={rise(caseVisible, 1)}
+            >
+              {caseStudy.name}
+            </span>
+          </button>
+        )}
       </div>
     </header>
   );

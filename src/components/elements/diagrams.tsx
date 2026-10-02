@@ -153,7 +153,7 @@ const sudokuTrust: Diagram = {
 
 const sudokuEngines: Diagram = {
   caption:
-    '보드를 만들 때 두 엔진을 같이 돌려 결과가 다르면 실패하게 했습니다. 연습 보드 137개 중 4개가 방치되던 문제가 0개로 줄었고, 새 보드는 만드는 시점에 바로 걸립니다.',
+    '보드를 만들 때 두 엔진을 같이 돌려 결과가 다르면 실패하게 했습니다. 연습 보드 137개 중 4개가 방치되던 것이 0개로 줄었고, 새 보드는 만드는 시점에 바로 걸립니다.',
   before: {
     label: '개선 전',
     svg: (
@@ -342,8 +342,64 @@ const highsleepTracks: Diagram = {
   },
 };
 
+const kkulkkukCall: Diagram = {
+  caption:
+    '환자가 앱을 열어야 시작되던 재활을 서버가 정해진 시각에 거는 전화로 옮겼습니다. Agent가 방에 들어온 것을 확인한 뒤에 벨을 울리고 받는 즉시 음원을 재생해 수신 후 최대 15초이던 무음을 0초로 줄였습니다.',
+  before: {
+    label: '개선 전',
+    svg: (
+      <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
+        <title>개선 전: 환자가 앱을 직접 열어야 재활이 시작된다</title>
+        <ArrowHead id='call-before-arrow' />
+        <Box x={16} y={16} w={170} lines={['환자가 앱을 연다']} stroke={ACCENT} />
+        <text x={196} y={30} fontSize={11} fill={ACCENT}>
+          <tspan x={196}>직접 조작이</tspan>
+          <tspan x={196} dy={15}>
+            진입 장벽
+          </tspan>
+        </text>
+        <Arrow d='M101 50V70' marker='call-before-arrow' />
+        <Box x={16} y={70} w={170} lines={['세션 선택']} />
+        <Arrow d='M101 104V124' marker='call-before-arrow' />
+        <Box x={16} y={124} w={170} h={48} lines={['앱이 음원 재생,', '녹음']} />
+        <Arrow d='M101 172V192' marker='call-before-arrow' />
+        <Box x={16} y={192} w={170} lines={['기록 업로드']} />
+      </svg>
+    ),
+  },
+  after: {
+    label: '개선 후',
+    svg: (
+      <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
+        <title>개선 후: 서버가 정해진 시각에 전화를 걸고 환자는 받기만 한다</title>
+        <ArrowHead id='call-after-arrow' />
+        <Box x={16} y={16} w={170} lines={['1분마다 예정 환자 확인']} />
+        <text x={196} y={37} fontSize={11} fill={MUTED}>
+          pg_cron
+        </text>
+        <Arrow d='M101 50V70' marker='call-after-arrow' />
+        <Box x={16} y={70} w={170} lines={['Agent 입장 확인 후 벨']} stroke={ACCENT} />
+        <text x={196} y={84} fontSize={11} fill={MUTED}>
+          <tspan x={196}>FCM, APNs VoIP</tspan>
+          <tspan x={196} dy={15}>
+            5분 뒤 재발신
+          </tspan>
+        </text>
+        <Arrow d='M101 104V124' marker='call-after-arrow' />
+        <Box x={16} y={124} w={170} h={48} lines={['환자는 받기만', '받자마자 음원 재생']} />
+        <Arrow d='M101 172V192' marker='call-after-arrow' />
+        <Box x={16} y={192} w={170} lines={['녹음, 결과 기록']} />
+        <text x={160} y={252} textAnchor='middle' fontSize={11} fill={MUTED}>
+          중간에 끊거나 못 받아도 기록이 남음
+        </text>
+      </svg>
+    ),
+  },
+};
+
 export const diagramsByCase: Record<string, Diagram[]> = {
   go2work: [go2workMap],
   sudoku: [sudokuTrust, sudokuEngines],
+  kkulkkuk: [kkulkkukCall],
   highsleep: [highsleepTracks],
 };

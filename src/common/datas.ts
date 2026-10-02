@@ -1,62 +1,62 @@
-export type Stat = { before?: string; value: string; label: string };
-
-export const heroStats: Stat[] = [
-  { before: '40s', value: '5s', label: '지도 응답 시간' },
-  { before: '50MB', value: '5MB', label: 'API 페이로드' },
-  { value: '600', label: '스도쿠 리그 출시 1달 가입자' },
-  { value: '4', label: '기획부터 출시까지 만든 서비스' },
-];
-
 export type CaseNumber = { before?: string; value: string; label: string };
-
-export type HistoryStage = {
-  label: string;
-  period: string;
-  title: string;
-  /** 왜 바꿨는지 한두 문장. */
-  caption: string;
-  /** 이 시기에 추가한 큰 기능. */
-  added: string[];
-  images: string[];
-};
 
 export type CaseStudy = {
   id: string;
   name: string;
-  /** 이 케이스가 해결한 문제를 한 문장으로. 제목 바로 아래에 보인다. */
+  /** 선반 아이콘 아래에 보이는 연도. */
+  year: string;
+  /** 이 케이스가 해결한 문제 상황을 평서문 한 문장으로. */
   problemTitle: string;
   org: string;
   period: string;
+  /** 짧은 역할 표기. 패널과 상세 머리에 "소속, 기간 · 역할"로 보인다. */
   role: string;
-  stacks: string;
+  /** 대표 스택 2~3개. */
+  stack: string[];
   numbers: CaseNumber[];
-  summary: string;
-  /** 기본으로 보이는 한 줄 요약. 아래 problem/decision/result 전문은 "과정 자세히 보기"로 펼친다. */
+  /** 메인 패널에 보일 대표 숫자의 numbers 인덱스. */
+  highlight: number;
+  /** 메인 패널의 문제, 판단, 결과 3줄. */
   brief: { problem: string; decision: string; result: string };
+  /** 상세 페이지 배경 문단. */
+  summary: string;
   problem: string;
   decision: string;
   result: string;
   images: string[];
-  ratio: '16:9' | '9:19.5';
+  /** 기본 화면과 비율이 다른 화면 묶음(관리자 웹, 모바일 앱, 태블릿 등). 상세 페이지에서 기본 갤러리 아래에 제목을 달고 따로 보여 준다.
+   *  wide가 true면 가로로 넓은 화면이라 2열로 크게, false면 세로 화면이라 여러 열로 보여 준다. */
+  extraGallery?: { title: string; images: string[]; wide: boolean };
+  /** 웹 화면(가로)이면 true, 앱 화면(세로)이면 false. */
+  wide: boolean;
   links?: { label: string; href: string }[];
-  /** 화면이 바뀌어 온 과정. 있는 케이스에서만 접기·펼치기로 보여준다. */
-  history?: HistoryStage[];
+  logo: string;
+  /** 로고 타일 바탕. 로고 이미지의 바탕색과 같게 맞춘다. 브랜드 색이라 두 테마에서 같다. */
+  tile: string;
+  /** 패널 위 색 띠. */
+  band: string;
+  /** 로고가 바탕까지 포함한 앱 아이콘이면 true(타일을 꽉 채움), 글자 로고면 false. */
+  iconFull: boolean;
 };
+
+// HighSleep 브랜드 배경(피그마 선형 그라디언트 스톱 그대로).
+const HIGHSLEEP_STOPS = '#99AAFF 0%, #8C9FFD 19%, #5244C0 45%, #251C66 74%, #000000 100%';
 
 export const caseStudies: CaseStudy[] = [
   {
     id: 'go2work',
     name: '출근하자',
-    problemTitle: '조건을 바꿀 때마다 지도가 40초 멈추던 문제',
+    year: '2022 ~ 2023',
+    problemTitle: '검색 조건을 바꿀 때마다 지도가 40초씩 멈췄습니다.',
     org: '(주)드림픽셀',
     period: '2022.10 ~ 2023.08',
     role: '프론트엔드, 백엔드, 배포 전담',
-    stacks:
-      'Next.js, MUI, Emotion, Node.js, GraphQL, Apollo Client, Prisma, React Native (WebView), MariaDB, AWS',
+    stack: ['Next.js', 'GraphQL', 'Node.js'],
     numbers: [
       { before: '40s', value: '5s', label: '지도 응답 시간' },
       { before: '50MB', value: '5MB', label: 'API 페이로드' },
     ],
+    highlight: 0,
     brief: {
       problem:
         '검색 조건을 바꿀 때마다 마커 수백 개를 다시 그려 지도가 40초씩 멈췄고, 쓰지 않는 필드까지 내려와 응답이 50MB였습니다.',
@@ -77,20 +77,31 @@ export const caseStudies: CaseStudy[] = [
       '/assets/projects/go2work/go2work-2.png',
       '/assets/projects/go2work/go2work-3.png',
       '/assets/projects/go2work/go2work-4.png',
-      '/assets/projects/go2work/go2work-5.png',
-      '/assets/projects/go2work/go2work-6.png',
-      '/assets/projects/go2work/go2work-7.png',
     ],
-    ratio: '16:9',
+    extraGallery: {
+      title: '모바일 앱',
+      images: [
+        '/assets/projects/go2work/go2work-5.png',
+        '/assets/projects/go2work/go2work-6.png',
+        '/assets/projects/go2work/go2work-7.png',
+      ],
+      wide: false,
+    },
+    wide: true,
+    logo: '/assets/projects/go2work/go2work-logo.png',
+    tile: '#0e2bb9',
+    band: '#0e2bb9',
+    iconFull: true,
   },
   {
     id: 'sudoku',
     name: '스도쿠 리그',
-    problemTitle: '기능이 늘어나는 동안 이미 만든 것이 조용히 틀어지던 문제',
+    year: '2026',
+    problemTitle: '1:1 대전에서 고친 버그 4건이 파티 대전에는 그대로 남아 있었습니다.',
     org: '제이위드미 (개인사업자)',
     period: '2026.07 ~ 진행 중',
-    role: '기획, 프론트엔드, 백엔드, 스토어 심사, 운영, 마케팅',
-    stacks: 'Flutter, Dart, Supabase, PostgreSQL, Edge Functions',
+    role: '기획, 개발, 스토어 심사, 운영',
+    stack: ['Flutter', 'Supabase', 'PostgreSQL'],
     links: [
       { label: 'App Store', href: 'https://apps.apple.com/kr/app/id6794986328' },
       {
@@ -105,6 +116,7 @@ export const caseStudies: CaseStudy[] = [
       { value: '34위', label: 'App Store 보드 게임 순위' },
       { value: '0', label: '수정 누락 재발 (4건에서 0)' },
     ],
+    highlight: 1,
     brief: {
       problem:
         '난이도 판정과 힌트 엔진의 판단이 어긋나도 에러가 나지 않아 연습 보드 137개 중 4개가 방치됐고, 1:1에서 고친 문제 4건이 파티 대전에는 반영되지 않았습니다.',
@@ -127,115 +139,89 @@ export const caseStudies: CaseStudy[] = [
       '/assets/projects/sudoku/sudoku-race.png',
       '/assets/projects/sudoku/sudoku-leaderboard.png',
       '/assets/projects/sudoku/sudoku-replay.png',
-      '/assets/projects/sudoku/sudoku-ipad-hint.png',
-      '/assets/projects/sudoku/sudoku-ipad-party.png',
     ],
-    ratio: '9:19.5',
-    history: [
-      {
-        label: 'v1',
-        period: '2026.07.12 ~',
-        title: '혼자 푸는 스도쿠',
-        caption:
-          'Flutter 기본 테마에 퍼즐 생성기와 힌트만 붙인 상태로 시작했습니다. 결과 화면의 상위 퍼센트는 서버가 없어 예시 값이었고, 힌트는 기법 이름과 한 줄 설명이 전부였습니다.',
-        added: [
-          '퍼즐 생성기와 난이도 6단계',
-          '기법 이름을 알려 주는 힌트',
-          'Supabase 연동과 실시간 1:1 대결 (07.14)',
-        ],
-        images: [
-          '/assets/projects/sudoku/history/v1_main_1.jpeg',
-          '/assets/projects/sudoku/history/v1_game.jpeg',
-          '/assets/projects/sudoku/history/v1_hint.jpeg',
-        ],
-      },
-      {
-        label: 'v2',
-        period: '2026.07.18 ~',
-        title: '대전 게임으로',
-        caption:
-          '대결과 티어가 들어오면서 퍼즐 도구가 아니라 게임으로 보이도록 화면 전체를 다시 그렸습니다. 기법 이름만으로는 왜 그 숫자가 지워지는지 알 수 없다는 의견을 받아, 힌트에 인과관계 화살표와 단계별 설명을 넣었습니다.',
-        added: [
-          '친구 대결과 게임형 UI 리디자인 (07.18)',
-          '월간 랭크 시즌제, 힌트 인과관계 시각화 (07.20)',
-          '프리미엄: 리플레이, 테마 6종 (07.21)',
-          '풀이 기법 47종과 기법 연습 (07.27)',
-          '2~8인 파티 대전 (08.04)',
-          'App Store, Google Play 정식 출시 (08.14)',
-        ],
-        images: [
-          '/assets/projects/sudoku/history/v2_main.jpeg',
-          '/assets/projects/sudoku/history/v2_game.jpeg',
-          '/assets/projects/sudoku/history/v2_hint.jpeg',
-        ],
-      },
-      {
-        label: 'v3',
-        period: '2026.08.18 ~',
-        title: '늘어난 기능에 맞춘 구조',
-        caption:
-          '기능이 늘면서 홈 상단 아이콘 네 개로는 길을 안내할 수 없게 됐습니다. 하단 4탭으로 나누고, 홈에는 승급까지 남은 점수와 시즌, 연속 도전 일수처럼 다시 들어올 이유를 올렸습니다.',
-        added: [
-          '하단 4탭 구조 (08.18)',
-          '점령전 모드 (08.30)',
-          '관리자 대시보드와 알림 센터 (09.03)',
-          '경험치와 레벨 (09.17)',
-        ],
-        images: [
-          '/assets/projects/sudoku/history/v3_main.jpeg',
-          '/assets/projects/sudoku/history/v3_hint.jpeg',
-        ],
-      },
-    ],
+    extraGallery: {
+      title: 'iPad',
+      images: [
+        '/assets/projects/sudoku/sudoku-ipad-hint.png',
+        '/assets/projects/sudoku/sudoku-ipad-party.png',
+      ],
+      wide: true,
+    },
+    wide: false,
+    logo: '/assets/projects/sudoku/sudoku-logo.png',
+    tile: '#021e4e',
+    band: '#f2c14e',
+    iconFull: true,
   },
   {
-    id: 'jay',
-    name: 'Jay',
-    problemTitle: '화면 6개와 백엔드를 서버 없이 혼자 만들어야 했던 문제',
-    org: '제이위드미 (개인사업자)',
-    period: '2025.10 ~ 진행 중',
-    role: '기획, 프론트엔드, 백엔드, 배포 1인 개발',
-    stacks: 'Flutter, Supabase, Riverpod, Claude Code',
-    links: [{ label: 'jaywithme.com', href: 'https://jaywithme.com' }],
-    numbers: [{ before: '1시간', value: '5~30분', label: '화면 하나 구현 시간' }],
+    id: 'kkulkkuk',
+    name: '꿀꺽',
+    year: '2026',
+    problemTitle: '화면 조작을 최대한 줄였는데도 고령 환자분들은 앱에 적응하는 데 오래 걸렸습니다.',
+    org: '창업 팀 프로젝트 (2인)',
+    period: '2026.04 ~ 진행 중',
+    role: '개발 전체 (앱, 통화 파이프라인, 관리자 웹)',
+    stack: ['Flutter', 'LiveKit', 'Supabase'],
+    numbers: [
+      { value: '대상', label: 'ICT 이노베이션 스퀘어 (2026.09)' },
+      { before: '15s', value: '0s', label: '전화를 받은 뒤 음원까지 무음' },
+    ],
+    highlight: 1,
     brief: {
-      problem: '화면 6개와 백엔드를 서버 없이 혼자 만들어야 했습니다.',
+      problem:
+        '화면 조작을 최대한 줄인 MVP에서도 고령 환자가 적응하는 데 오래 걸려, 직접 조작해야 하는 구조 자체가 진입 장벽이었습니다.',
       decision:
-        'Supabase로 백엔드를 구성하고, 화면 구조와 상태 경계는 직접 정한 뒤 그 안을 채우는 코드는 Claude Code에 맡겼습니다.',
+        '진입 방식을 화면 조작에서 전화 수신으로 바꿔, 정해진 시각에 서버가 전화를 걸고 통화 안에서 재활 음원을 재생하고 환자 목소리를 녹음하게 했습니다.',
       result:
-        '화면 하나 만드는 시간이 1시간에서 5~30분으로 줄었고, 웹과 iOS, Android를 서버 비용 없이 서비스합니다.',
+        '받기만 하면 재활이 시작되는 통화 파이프라인을 완성했고, 받은 뒤 최대 15초이던 무음을 0초로 줄였습니다. ICT 이노베이션 스퀘어 개별역량강화에서 대상을 받았습니다.',
     },
     summary:
-      '질환과 지역, 나이, 소득 조건으로 받을 수 있는 의료복지 혜택을 찾아 주는 플랫폼입니다. 가족의 보호자로 지원사업을 직접 찾아다니면서 몰라서 못 받는 지원이 많다는 걸 알게 돼 만들기 시작했습니다. 웹과 iOS, Android로 동시에 서비스하고 있습니다.',
+      '삼킴장애(연하장애) 환자가 집에서 혼자 재활을 이어가도록 돕는 음악 기반 재활 서비스입니다. 국립재활원 연하곤란 환자 대상 디지털 재활 연구에서 퇴원 뒤 재활이 끊기는 공백을 보고 시작했고, 환자는 걸려온 전화를 받기만 하면 별도 조작 없이 세션이 시작됩니다. 두 명이 함께 진행하고 있고, 개발은 환자 앱부터 통화 파이프라인, 치료사용 관리자 웹까지 모두 제가 맡았습니다. 앱 중심이던 구조를 전화 기반으로 바꾸는 설계도 제가 했습니다.',
     problem:
-      '지원 탐색부터 로그인, 커뮤니티, 마이페이지까지 화면 6개와 백엔드를 혼자, 그것도 서버를 따로 두지 않고 만들어야 했습니다.',
+      '첫 버전은 환자가 앱을 열고 세션을 골라 음원을 들으며 따라 하는 구조였습니다. 화면 조작을 최대한 줄였는데도 고령, 뇌졸중 환자가 적응하는 데 오래 걸렸고, 버튼이나 단계를 줄이는 것으로는 "환자가 스스로 앱을 열어야 한다"는 전제가 남았습니다. 구조를 바꾼 뒤에도 통화 품질 문제가 남았습니다. 무료 플랜에서는 통화가 없을 때 음원을 트는 Agent 서버가 꺼져 있다가 깨어나는 데 10~20초가 걸렸고, 그 사이 벨이 먼저 울려 환자가 받으면 무음이 흘렀습니다. Agent가 환자 마이크가 올라오기를 기다린 뒤에 음원을 재생해서 여기서도 최대 15초 무음이 생겼습니다. 환자가 통화 중간에 먼저 끊으면 녹음도 기록도 남지 않아 치료사 쪽에서는 그 통화가 없었던 것처럼 보였습니다.',
     decision:
-      'Supabase의 Auth와 DB, RLS로 서버 없이 백엔드를 구성했습니다. 상태 관리는 Riverpod MVVM으로 뷰와 로직을 분리해 기능을 추가할 때 영향 범위를 좁혔고 로그인은 Google과 Kakao OAuth를 PKCE로 붙였습니다. 설계와 코드 생성, 디버깅은 Claude Code와 같이 했지만 화면 구조와 상태 관리 경계, DB 스키마는 제가 정했습니다. 생성된 코드는 읽기 전에 먼저 실행해 사용자 흐름을 따라가 봤고 프로필 사진 기능을 도로 뺀 것도 그렇게 정했습니다.',
+      '진입 방식을 화면 조작에서 전화 수신으로 바꿨습니다. pg_cron이 1분마다 Edge Function을 불러 예정 시각이 된 환자를 고르고, LiveKit 방을 만들어 통화 Agent를 호출한 뒤 Android는 FCM, iOS는 APNs VoIP 푸시로 벨을 울립니다. 앱이 꺼져 있어도 OS 통화 화면이 뜨도록 iOS는 PushKit을 받는 즉시 CallKit에 신고하게 만들었습니다. 같은 시간대에 전화가 두 번 걸리지 않게 부분 유니크 인덱스로 차단했고, 못 받으면 5분 간격으로 두 번 더 겁니다. 실제 전화(PSTN) 대신 앱 안 VoIP를 고른 것은 비용과 구현 속도, 그리고 전화번호를 따로 모으지 않아도 되기 때문입니다. 통화는 처음에 직접 구현한 P2P였는데, 서버의 Agent가 통화에 참가자로 들어갈 수 없고 TURN 중계와 재접속 처리도 없어 LiveKit으로 교체했습니다. 무음 문제는 Agent가 방에 들어온 것을 확인한 뒤에만 벨을 울리고, 마이크를 기다리지 않고 받는 즉시 음원을 재생하도록 수정했습니다. 기록 유실은 재생을 중간에 끊을 때 ffmpeg 프로세스가 영영 끝나지 않던 것이 원인이어서, 남은 파이프를 비우면서 종료하도록 수정하고 녹음 업로드에 제한 시간을 뒀습니다.',
     result:
-      '화면 하나 만드는 시간이 1시간에서 5~30분으로 줄었습니다. 서버 운영 비용 없이 웹과 iOS, Android를 동시에 서비스하고 있습니다.',
+      '환자는 전화를 받기만 하면 재활이 시작되고 끝나면 통화가 자동으로 끊깁니다. 받은 뒤 음원이 나오기까지 걸리던 무음은 최대 15초에서 0초로 줄었고, 끝까지 받은 통화, 중간에 끊은 통화, 부재중 세 경우 모두 기록이 남는 것을 실제 LiveKit과 Supabase로 확인했습니다. 2026년 9월 ICT 이노베이션 스퀘어 개별역량강화에서 대상을 받았고 임상 파일럿을 준비하고 있습니다.',
     images: [
-      '/assets/projects/jay/jay-1.png',
-      '/assets/projects/jay/jay-2.png',
-      '/assets/projects/jay/jay-3.png',
-      '/assets/projects/jay/jay-4.png',
-      '/assets/projects/jay/jay-5.png',
+      '/assets/projects/kkul/kkul-1.png',
+      '/assets/projects/kkul/kkul-2.png',
+      '/assets/projects/kkul/kkul-3.png',
+      '/assets/projects/kkul/kkul-4.jpg',
     ],
-    ratio: '9:19.5',
+    extraGallery: {
+      title: '치료사용 관리자 웹',
+      images: [
+        '/assets/projects/kkul/kkulkkeok_admin_01_dashboard.png',
+        '/assets/projects/kkul/kkulkkeok_admin_05_patient_adherence.png',
+        '/assets/projects/kkul/kkulkkeok_admin_04_patient_detail.png',
+      ],
+      wide: true,
+    },
+    wide: false,
+    logo: '/assets/projects/kkul/kkul-logo-green.svg',
+    tile: '#0ca167',
+    band: '#0e9f6e',
+    iconFull: true,
   },
   {
     id: 'highsleep',
     name: 'HighSleep',
-    problemTitle: '반복 재생될 때마다 소리가 1초 비어 자던 사람이 깨던 문제',
+    year: '2023 ~ 2024',
+    problemTitle: '음원이 처음으로 돌아갈 때마다 1초씩 소리가 비어 자던 사람이 깼습니다.',
     org: '올케어디엑스',
     period: '2023.08 ~ 2024.03',
     role: '앱 풀스택 개발, 양대 스토어 출시',
-    stacks: 'Flutter, Dart, Firebase, Node.js',
+    stack: ['Flutter', 'Firebase'],
     numbers: [
       { value: '2', label: '출시한 스토어' },
       { before: '1s', value: '0', label: '반복 재생 끊김' },
     ],
+    highlight: 1,
     brief: {
-      problem: '반복 재생되는 수면 음악이 처음으로 돌아갈 때 1초쯤 소리가 비어 자는 사람이 깼습니다.',
+      problem:
+        '반복 재생되는 수면 음악이 처음으로 돌아갈 때 1초쯤 소리가 비어 자는 사람이 깼습니다.',
       decision: '음원을 트랙 세 개로 나누고 ViewModel 하나가 세 트랙을 같이 제어하게 묶었습니다.',
       result: '재생 공백이 없어졌고 iOS와 Android 심사를 모두 통과했습니다.',
     },
@@ -244,7 +230,7 @@ export const caseStudies: CaseStudy[] = [
     problem:
       '수면 음악은 자는 동안 계속 반복 재생되는데, 음원이 끝나고 처음으로 돌아갈 때 1초쯤 소리가 비었습니다. 자다가 갑자기 조용해지면 깨는 경우가 있어서 이 공백을 없애는 게 중요했습니다. App Store는 개인정보 정책 문제로 심사를 반려했습니다.',
     decision:
-      '멜로디와 자연음, 수면 주파수를 트랙 세 개로 나눠서 멜로디가 끝나도 자연음은 계속 흐르게 했습니다. 그런데 오디오 인스턴스 세 개가 따로 놀아서 재생과 정지에 딜레이가 생겼습니다. ViewModel 하나가 세 개를 같이 관리하도록 묶었습니다. 회원과 음원, 좋아요 데이터는 Firebase로 설계하고 로그인은 OAuth 2.0으로 붙였습니다. 반려는 회원 탈퇴 기능을 만들고 약관을 앱 안에서 볼 수 있게 해서 해결했습니다.',
+      '멜로디와 자연음, 수면 주파수를 트랙 세 개로 나눠서 멜로디가 끝나도 자연음은 계속 흐르게 했습니다. 그런데 오디오 인스턴스 세 개가 따로 놀아서 재생과 정지에 딜레이가 생겼습니다. ViewModel 하나가 세 개를 같이 관리하도록 묶었습니다. 회원과 음원, 좋아요 데이터는 Firebase로 설계하고 로그인은 OAuth 2.0으로 연동했습니다. 반려는 회원 탈퇴 기능을 만들고 약관을 앱 안에서 볼 수 있게 해서 해결했습니다.',
     result:
       '반복 재생할 때 끊기는 부분이 없어졌고 트랙마다 음량을 조절해 취향대로 조합할 수 있게 됐습니다. iOS와 Android 심사를 모두 통과해 출시했습니다.',
     images: [
@@ -256,156 +242,74 @@ export const caseStudies: CaseStudy[] = [
       '/assets/projects/highsleep/highsleep-6.jpg',
       '/assets/projects/highsleep/highsleep-7.jpg',
     ],
-    ratio: '9:19.5',
-  },
-  {
-    id: 'sunslog',
-    name: "Sun's log",
-    problemTitle: '기술 스택만 나열해 무엇을 판단했는지 읽히지 않던 문제',
-    org: '개인',
-    period: '2022.07 ~ 2026.09',
-    role: '설계, 구현, 배포',
-    stacks: 'Next.js, React, TypeScript, Tailwind CSS, Vercel',
-    numbers: [{ value: '5', label: '문제, 판단, 결과로 다시 쓴 케이스' }],
-    brief: {
-      problem:
-        '프로젝트를 기술 스택과 기능 목록으로 나열해 제가 무엇을 판단했는지 읽는 사람이 알 수 없었습니다.',
-      decision: '프로젝트마다 문제, 판단, 결과를 나눠 쓰고 숫자를 앞에 두는 구조로 다시 짰습니다.',
-      result: '지금 보고 계신 페이지입니다.',
-    },
-    summary:
-      '지금 보고 계신 사이트입니다. 2022년 React로 만든 첫 버전을 2024년 12월에 Next.js와 TypeScript로 새로 만들었고 2026년 9월에 구조와 디자인을 다시 잡았습니다.',
-    problem:
-      '처음 버전은 프로젝트를 기술 스택과 기능 목록으로 나열해서 읽는 사람이 제가 무엇을 판단했는지 알 수 없었습니다. 스크린샷을 페이지 안에서 크게 볼 방법도 없었습니다.',
-    decision:
-      '2022년 CRA와 Redux Toolkit으로 만든 첫 버전을 2024년 12월에 Next.js와 TypeScript, Tailwind CSS로 새로 짰습니다. 프로젝트마다 문제와 판단, 결과를 나눠 쓰고 숫자를 앞에 두었습니다.',
-    result: '이 페이지가 결과입니다. 코드는 github.com/Sun970324/sunlog에 있습니다.',
-    images: [],
-    ratio: '16:9',
+    wide: false,
+    logo: '/assets/projects/highsleep/highsleep-logo.png',
+    tile: `linear-gradient(180deg, ${HIGHSLEEP_STOPS})`,
+    band: `linear-gradient(90deg, ${HIGHSLEEP_STOPS})`,
+    iconFull: false,
   },
 ];
 
-export type OtherProject = {
-  name: string;
-  period: string;
-  role?: string;
-  description: string;
-  stacks: string;
-};
-
-export const otherProjects: OtherProject[] = [
-  {
-    name: '모두의 점원',
-    period: '2024.10 ~ 2024.11',
-    role: '팀장 (기술 리드)',
-    description:
-      '고령층과 시각장애인이 키오스크 대신 말로 주문할 수 있게 만든 시스템입니다. LangChain과 RAG를 붙여 동일 질문 20개 기준 의도대로 답한 비율이 35%에서 90%로 올랐고 주문 완료 시간은 72초에서 25초로 줄었습니다.',
-    stacks: 'Python, LangChain, RAG, Whisper (STT), FastAPI, Flutter',
-  },
-  {
-    name: '감정 일기',
-    period: '2024.09',
-    description:
-      '일기를 쓰면 그날의 감정을 색으로 보여주는 앱입니다. BERT를 파인튜닝해 정확도 약 97%로 감정을 분류하고, 결과에 따라 테마 색이 바뀝니다.',
-    stacks: 'Keras (BERT), Flutter',
-  },
-  {
-    name: 'Airus 홈페이지',
-    period: '2024.09',
-    description:
-      '드론 제작사 소개 사이트입니다. 반응형으로 만들고 한국어와 영어를 함께 지원합니다.',
-    stacks: 'Next.js, Tailwind CSS',
-  },
-];
-
-export const primarySkills: string[] = ['Next.js', 'React', 'Flutter', 'TypeScript'];
-
-export type SkillGroup = { title: string; items: string[] };
-
-export const skillGroups: SkillGroup[] = [
-  {
-    title: 'Front-End',
-    items: ['Next.js', 'React', 'TypeScript', 'MUI', 'Emotion', 'Tailwind CSS'],
-  },
-  { title: 'App', items: ['Flutter (Riverpod)', 'React Native', 'Dart'] },
-  {
-    title: 'Back-End',
-    items: ['Node.js', 'GraphQL', 'Prisma', 'FastAPI', 'Supabase', 'PostgreSQL', 'Firebase'],
-  },
-  { title: 'DevOps', items: ['AWS (EC2, S3)', 'Vercel', 'Git'] },
-  { title: 'AI', items: ['Claude Code', 'LangChain', 'RAG', 'TensorFlow', 'Keras'] },
-];
-
-/** work: 재직, 운영, 강사 / project: 개인 프로젝트 / education: 교육, 수료, 해커톤 */
-export type CareerRow = {
+/** work: 재직, 강사 / project: 프로젝트 / education: 교육, 수료, 해커톤 */
+export type TimelineRow = {
   period: string;
   org: string;
   role?: string;
   type: 'work' | 'project' | 'education';
+  /** 진행 중이면 accent 원으로 표시한다. */
+  now?: boolean;
+  /** 메인 Work 패널에 있는 케이스면 그 id. "보기" 버튼으로 패널을 바꾼다. */
+  caseId?: string;
 };
 
-export const careerRows: CareerRow[] = [
+export const timeline: TimelineRow[] = [
   {
     period: '2026.07 ~ 현재',
-    org: '스도쿠 리그 (제이위드미)',
+    org: '스도쿠 리그',
     role: '기획, 개발, 운영',
     type: 'project',
+    now: true,
+    caseId: 'sudoku',
   },
   {
-    period: '2025.10 ~ 현재',
-    org: 'Jay (개인 프로젝트)',
-    role: '기획, 개발',
+    period: '2026.04 ~ 현재',
+    org: '꿀꺽',
+    role: '창업 팀 프로젝트',
     type: 'project',
+    now: true,
+    caseId: 'kkulkkuk',
   },
-  {
-    period: '2025.01 ~ 2025.10',
-    org: '경기도교육청 방과후학교',
-    role: '초등학생 코딩 수업 기획과 진행',
-    type: 'work',
-  },
-  {
-    period: '2024.10 ~ 2024.11',
-    org: 'K-Digital Training 해커톤 (고용노동부)',
-    role: '팀장 (기술 리드)',
-    type: 'education',
-  },
-  {
-    period: '2024.05 ~ 2024.11',
-    org: 'AIFFEL 온라인 코어과정 8기',
-    role: 'NLP, STT, RAG 프로젝트',
-    type: 'education',
-  },
+  { period: '2025.10 ~ 현재', org: 'Jay', role: '의료복지 정보 플랫폼', type: 'project' },
+  { period: '2025.01 ~ 2025.10', org: '경기도교육청 방과후학교', role: '코딩 강사', type: 'work' },
+  { period: '2024.10 ~ 2024.11', org: '모두의 점원', role: '해커톤 팀장', type: 'education' },
+  { period: '2024.05 ~ 2024.11', org: 'AIFFEL 코어과정 8기', type: 'education' },
   {
     period: '2023.08 ~ 2024.03',
     org: '올케어디엑스',
     role: '앱 풀스택 개발',
     type: 'work',
+    caseId: 'highsleep',
   },
   {
     period: '2022.10 ~ 2023.08',
     org: '(주)드림픽셀',
     role: '풀스택 개발',
     type: 'work',
+    caseId: 'go2work',
   },
-  {
-    period: '2021.12 ~ 2022.06',
-    org: '코드스테이츠 소프트웨어 엔지니어링 38기',
-    type: 'education',
-  },
-  {
-    period: '2026.08',
-    org: '학점은행제 경영학과 학사 학위 취득',
-    type: 'education',
-  },
-  {
-    period: '2016.03 ~ 2018.02',
-    org: '동서울대학교 세무회계과 전문학사',
-    type: 'education',
-  },
+  { period: '2021.12 ~ 2022.06', org: '코드스테이츠 38기', type: 'education' },
+  { period: '2026.08', org: '학점은행제 경영학 학사', type: 'education' },
 ];
 
-export const aiParagraphs: string[] = [
-  'Jay와 스도쿠 리그는 Claude Code와 함께 만들었습니다. 화면 구조와 상태 관리 경계, DB 스키마는 제가 정하고 그 안을 채우는 코드와 에러 추적, DB 세팅에 AI를 씁니다.',
-  '그래서 결과물을 어떻게 확인하느냐가 더 중요해졌습니다. 생성된 코드를 읽는 것만으로는 부족했습니다. Jay에서 AI가 써준 Supabase 쿼리가 테이블에 없는 컬럼을 불러온 적이 있는데, Dart 문법으로는 멀쩡해서 분석도 빌드도 그냥 통과했습니다. 앱을 켜서 그 화면에 들어가고 나서야 알았습니다. 오류 메시지 전체와 어디서 난 건지를 그대로 붙여넣어 한 번에 고쳤고 그 뒤로는 생성된 코드를 읽기 전에 일단 실행부터 해서 사용자 흐름을 그대로 따라갑니다.',
-  '프로필 수정 기능도 AI에 맡겨서 닉네임과 프로필 사진까지 바꿀 수 있게 만들었습니다. 만들고 나서 가입부터 사용자처럼 따라가 봤는데, 사진을 고르는 단계가 부담스러웠습니다. 그 부분은 다시 뺐습니다.',
+export const mainSkills: string[] = ['Next.js', 'React', 'Flutter', 'TypeScript'];
+
+export type SkillGroup = { title: string; items: string[] };
+
+export const skillGroups: SkillGroup[] = [
+  { title: '웹, 앱', items: ['Tailwind CSS', 'React Native'] },
+  {
+    title: '서버, DB',
+    items: ['Node.js', 'GraphQL', 'Prisma', 'Supabase', 'PostgreSQL', 'Firebase'],
+  },
+  { title: 'AI', items: ['Claude Code'] },
 ];

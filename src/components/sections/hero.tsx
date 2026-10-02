@@ -1,23 +1,39 @@
+import { useRef, useState } from 'react';
 import Container from '@/components/elements/container';
 import Reveal from '@/components/elements/reveal';
-import AnimatedNumber from '@/components/elements/animated-number';
-import { heroStats } from '@/common/datas';
 
-const LINK_CLASS = 'link-underline hover:text-accent';
+const EMAIL = 'ysw5202222@gmail.com';
+const PILL_CLASS =
+  'inline-flex items-center gap-2 rounded-full border border-line bg-bg px-4 py-2 text-[14px] text-fg transition-colors hover:border-accent';
 
 export default function Hero() {
+  const [copyLabel, setCopyLabel] = useState('복사');
+  const emailRef = useRef<HTMLSpanElement>(null);
+
+  // 클립보드를 쓸 수 없는 환경이면 주소 글자를 선택해 두어 직접 복사하게 한다.
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopyLabel('복사됨');
+    } catch {
+      const el = emailRef.current;
+      const selection = window.getSelection();
+      if (!el || !selection) return;
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      setCopyLabel('선택됨');
+    }
+  };
+
   return (
-    <Reveal
-      as='section'
-      stagger
-      staggerStep={110}
-      className='hero-seq section-fill flex flex-col justify-center'
-    >
-      <Container className='py-16'>
+    <Reveal as='section' stagger staggerStep={110} className='hero-seq'>
+      <Container wide className='pb-12 pt-16 md:pb-16 md:pt-24'>
         <p data-reveal-item className='text-[15px] text-muted'>
           프론트엔드 개발자 윤선웅
         </p>
-        <h1 className='mt-4 text-[36px] font-semibold leading-[1.2] tracking-[-0.02em] md:text-[56px]'>
+        <h1 className='mt-4 text-[32px] font-semibold leading-[1.2] tracking-[-0.02em] md:text-[48px]'>
           <span data-reveal-item className='block'>
             Create value with code
           </span>
@@ -25,45 +41,24 @@ export default function Hero() {
             Plan, Build, Improve
           </span>
         </h1>
-        <p data-reveal-item className='mt-6 max-w-[560px] text-[18px] leading-[1.7] text-muted'>
-          <span className='block'>
-            Next.js와 Flutter로 웹과 앱 4개를 기획부터 출시까지 맡았습니다.
-          </span>
-          <span className='block'>
-            지도 검색 응답을 40초에서 5초로 줄였고, 스도쿠 리그는 출시 한 달에 가입자 600명을 모았습니다.
-          </span>
-          <span className='block'>AI 코드는 사용자 흐름으로 검증한 뒤 배포합니다.</span>
+        <p data-reveal-item className='mt-5 max-w-[600px] text-[17px] leading-[1.7] text-muted'>
+          Next.js와 Flutter로 웹과 앱 4개를 기획부터 출시까지 맡았습니다. AI가 만든 코드는 직접
+          실행해 확인한 뒤 배포합니다.
         </p>
-        <div
-          data-reveal-item
-          className='mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-6 md:grid-cols-[auto_auto_auto_auto] md:justify-between'
-        >
-          {heroStats.map(stat => (
-            <div key={stat.label}>
-              <div className='whitespace-nowrap text-[24px] font-semibold leading-[1.2] tracking-[-0.02em] md:text-[32px]'>
-                {stat.before && (
-                  <span className='mr-2 font-normal text-muted line-through decoration-1'>
-                    {stat.before}
-                  </span>
-                )}
-                <AnimatedNumber text={stat.value} from={stat.before} className='text-accent' />
-              </div>
-              <div className='mt-1.5 text-[14px] text-muted'>{stat.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div data-reveal-item className='mt-10 flex flex-wrap gap-x-6 gap-y-2 text-[15px]'>
+        <div data-reveal-item className='mt-6 flex flex-wrap gap-2.5'>
+          <button type='button' onClick={copyEmail} className={PILL_CLASS}>
+            <span ref={emailRef}>{EMAIL}</span>
+            <span className='text-[12px] text-muted' aria-live='polite'>
+              {copyLabel}
+            </span>
+          </button>
           <a
             href='https://github.com/Sun970324'
             target='_blank'
             rel='noreferrer'
-            className={LINK_CLASS}
+            className={PILL_CLASS}
           >
-            GitHub
-          </a>
-          <a href='mailto:ysw5202222@gmail.com' className={LINK_CLASS}>
-            ysw5202222@gmail.com
+            GitHub ↗
           </a>
         </div>
       </Container>
