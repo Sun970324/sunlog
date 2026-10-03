@@ -1,19 +1,25 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef, type KeyboardEvent } from 'react';
+import { useRef, useState, type KeyboardEvent, type TouchEvent } from 'react';
 import Container from '@/components/elements/container';
 import SectionLabel from '@/components/elements/section-label';
 import Reveal from '@/components/elements/reveal';
 import ProjectIcon from '@/components/elements/project-icon';
 import CaseNumber from '@/components/elements/case-number';
 import Chips from '@/components/elements/chips';
+import Lightbox, { setLightboxOrigin } from '@/components/elements/lightbox';
 import { caseStudies } from '@/common/datas';
 
 type Props = {
   selected: number;
   onSelect: (index: number) => void;
 };
+
+/* 패널 스크린샷. 마우스를 올리면 살짝 커지고 누르면 크게 보기가 열린다.
+   확대는 마우스가 있는 기기에서만. 터치 기기에서 탭한 뒤 확대가 남으면 갤러리가 세로로 넘쳐 페이지 스크롤을 가로챈다. */
+const SHOT_CLASS =
+  'block w-full cursor-pointer overflow-hidden border border-line bg-subtle transition-[transform,border-color] duration-[280ms] [@media(hover:hover)]:hover:scale-[1.03] [@media(hover:hover)]:hover:border-fg motion-reduce:transition-none motion-reduce:hover:scale-100';
 
 const BRIEF_ROWS = [
   ['문제', 'problem'],
@@ -30,15 +36,55 @@ export default function Work({ selected, onSelect }: Props) {
   const next = caseStudies[(selected + 1) % total];
   const highlight = current.numbers[current.highlight];
 
-  const move = (index: number) => {
+  // 패널 스크린샷 크게 보기. 그 프로젝트의 기본 화면 전체를 좌우로 넘긴다.
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const openLightbox = (index: number, rect: DOMRect) => {
+    setLightboxOrigin(rect);
+    setLightboxIndex(index);
+  };
+
+  // 넘어간 방향. 패널 내용이 그 방향에서 미끄러져 들어온다.
+  const [direction, setDirection] = useState<'next' | 'prev' | null>(null);
+  const goTo = (index: number, dir: 'next' | 'prev') => {
+    setDirection(dir);
+    setLightboxIndex(null);
     onSelect(index);
+  };
+  const goNext = () => goTo((selected + 1) % total, 'next');
+  const goPrev = () => goTo((selected + total - 1) % total, 'prev');
+
+  const move = (index: number, dir: 'next' | 'prev') => {
+    goTo(index, dir);
     tabRefs.current[index]?.focus();
   };
 
   const onShelfKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
     event.preventDefault();
-    move((selected + (event.key === 'ArrowRight' ? 1 : -1) + total) % total);
+    if (event.key === 'ArrowRight') move((selected + 1) % total, 'next');
+    else move((selected + total - 1) % total, 'prev');
+  };
+
+  // 터치 스와이프로 이전/다음 프로젝트. 가로로 밀어 보는 앱 화면 갤러리 안에서 시작한 터치는 갤러리 스크롤로 둔다.
+  const touchRef = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const touch = event.touches[0];
+    touchRef.current = target.closest('[data-swipe-ignore]')
+      ? null
+      : { x: touch.clientX, y: touch.clientY };
+  };
+  const onTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const start = touchRef.current;
+    touchRef.current = null;
+    if (!start) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    // 가로로 50px 이상, 세로보다 확실히 가로일 때만. 세로 스크롤과 헷갈리지 않게 한다.
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0) goNext();
+    else goPrev();
   };
 
   return (
@@ -66,7 +112,9 @@ export default function Work({ selected, onSelect }: Props) {
                 aria-selected={isSelected}
                 aria-controls='work-panel'
                 tabIndex={isSelected ? 0 : -1}
-                onClick={() => onSelect(index)}
+                onClick={() => {
+                  if (index !== selected) goTo(index, index > selected ? 'next' : 'prev');
+                }}
                 className={clsx(
                   'flex min-w-[84px] shrink-0 flex-col items-center gap-2 rounded-[14px] px-2 pb-2 pt-2.5 transition-colors md:min-w-[104px] md:px-3',
                   isSelected ? 'bg-subtle text-fg' : 'text-muted hover:bg-subtle',
@@ -94,9 +142,18 @@ export default function Work({ selected, onSelect }: Props) {
           role='tabpanel'
           aria-labelledby={`tab-${current.id}`}
           className={`case-${current.id} mt-3 overflow-hidden rounded-[14px] border border-line bg-bg`}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <div className='h-1.5' style={{ background: current.band }} />
-          <div className='grid gap-6 p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] md:gap-9 md:p-7'>
+          <div
+            key={current.id}
+            className={clsx(
+              'grid gap-6 p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] md:gap-9 md:p-7',
+              direction === 'next' && 'panel-enter-next',
+              direction === 'prev' && 'panel-enter-prev',
+            )}
+          >
             <div className='min-w-0'>
               <div className='flex items-center gap-3.5'>
                 <ProjectIcon
@@ -155,14 +212,19 @@ export default function Work({ selected, onSelect }: Props) {
                   href={`/work/${current.id}`}
                   className='whitespace-nowrap rounded-full bg-fg px-[18px] py-2.5 text-center text-[14px] font-semibold text-bg'
                 >
-                  전체 과정 보기
+                  자세히 보기
                 </Link>
               </div>
             </div>
 
-            {/* 웹은 가로 화면 1장, 앱은 세로 화면 3장. 모바일에서 앱 화면은 옆으로 밀어서 본다. */}
+            {/* 웹은 가로 화면 1장, 앱은 세로 화면 3장. 모바일에서 앱 화면은 옆으로 밀어서 본다. 누르면 크게 보기 */}
             {current.wide ? (
-              <div className='relative aspect-[16/10] overflow-hidden rounded-lg border border-line bg-subtle'>
+              <button
+                type='button'
+                onClick={event => openLightbox(0, event.currentTarget.getBoundingClientRect())}
+                aria-label={`${current.name} 화면 크게 보기`}
+                className={clsx('relative aspect-[16/10] rounded-lg', SHOT_CLASS)}
+              >
                 <Image
                   src={current.images[0]}
                   alt={`${current.name} 화면`}
@@ -170,13 +232,21 @@ export default function Work({ selected, onSelect }: Props) {
                   sizes='(max-width: 768px) 100vw, 440px'
                   className='object-cover object-top'
                 />
-              </div>
+              </button>
             ) : (
-              <div className='grid snap-x snap-mandatory auto-cols-[42%] grid-flow-col gap-2.5 overflow-x-auto pb-1 md:grid-flow-row md:grid-cols-3 md:overflow-visible'>
+              <div
+                data-swipe-ignore
+                className='grid snap-x snap-mandatory auto-cols-[42%] grid-flow-col gap-2.5 overflow-x-auto overflow-y-hidden pb-1 md:grid-flow-row md:grid-cols-3 md:overflow-visible'
+              >
                 {current.images.slice(0, 3).map((src, index) => (
-                  <div
+                  <button
                     key={src}
-                    className='relative aspect-[9/19.5] snap-start overflow-hidden rounded-xl border border-line bg-subtle'
+                    type='button'
+                    onClick={event =>
+                      openLightbox(index, event.currentTarget.getBoundingClientRect())
+                    }
+                    aria-label={`${current.name} 화면 ${index + 1} 크게 보기`}
+                    className={clsx('relative aspect-[9/19.5] snap-start rounded-xl', SHOT_CLASS)}
                   >
                     <Image
                       src={src}
@@ -185,18 +255,14 @@ export default function Work({ selected, onSelect }: Props) {
                       sizes='(max-width: 768px) 42vw, 150px'
                       className='object-cover object-top'
                     />
-                  </div>
+                  </button>
                 ))}
               </div>
             )}
           </div>
 
           <div className='flex items-center justify-between border-t border-line px-5 py-3 text-[13px] text-muted md:px-7'>
-            <button
-              type='button'
-              onClick={() => onSelect((selected + total - 1) % total)}
-              className='max-w-[40%] truncate hover:text-fg'
-            >
+            <button type='button' onClick={goPrev} className='max-w-[40%] truncate hover:text-fg'>
               ← {prev.name}
             </button>
             <span className='flex gap-1.5' aria-hidden>
@@ -210,16 +276,23 @@ export default function Work({ selected, onSelect }: Props) {
                 />
               ))}
             </span>
-            <button
-              type='button'
-              onClick={() => onSelect((selected + 1) % total)}
-              className='max-w-[40%] truncate hover:text-fg'
-            >
+            <button type='button' onClick={goNext} className='max-w-[40%] truncate hover:text-fg'>
               {next.name} →
             </button>
           </div>
         </div>
       </Container>
+
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={current.images}
+          index={lightboxIndex}
+          ratio={current.wide ? '16:9' : '9:19.5'}
+          alt={current.name}
+          onClose={() => setLightboxIndex(null)}
+          onIndexChange={setLightboxIndex}
+        />
+      )}
     </Reveal>
   );
 }

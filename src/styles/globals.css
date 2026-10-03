@@ -47,6 +47,32 @@
   --accent: #a99dff;
 }
 
+/* 메인 프로젝트 패널이 바뀔 때 넘긴 방향에서 내용이 미끄러져 들어온다. */
+@keyframes panel-enter-next {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+@keyframes panel-enter-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+.panel-enter-next {
+  animation: panel-enter-next 280ms ease-out;
+}
+.panel-enter-prev {
+  animation: panel-enter-prev 280ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-enter-next,
+  .panel-enter-prev {
+    animation: none;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 56px;

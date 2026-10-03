@@ -47,7 +47,7 @@ export default function ScreenshotGrid({ images, alt, wide = false, onOpen }: Pr
               type='button'
               onClick={event => onOpen(index, event.currentTarget.getBoundingClientRect())}
               aria-label={`스크린샷 ${index + 1} 크게 보기`}
-              className='block w-full cursor-zoom-in overflow-hidden rounded-md border border-line bg-subtle transition-[transform,border-color] duration-[280ms] hover:scale-[1.02] hover:border-fg motion-reduce:transition-none motion-reduce:hover:scale-100'
+              className='block w-full cursor-pointer overflow-hidden rounded-md border border-line bg-subtle transition-[transform,border-color] duration-[280ms] hover:scale-[1.02] hover:border-fg motion-reduce:transition-none motion-reduce:hover:scale-100'
             >
               <Image
                 src={src}

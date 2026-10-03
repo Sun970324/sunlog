@@ -30,11 +30,11 @@ export const getStaticProps: GetStaticProps<Props> = ({ params }) => ({
 export default function WorkDetail({ id }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // 이름과 문제 제목 묶음이 헤더 밑으로 지나가면 헤더에 프로젝트 정보를 띄운다.
-  const titleRef = useRef<HTMLElement>(null);
+  // 썸네일 배너가 헤더 밑으로 다 지나가면 헤더에 프로젝트 아이콘과 이름을 띄운다.
+  const bannerRef = useRef<HTMLDivElement>(null);
   const [showCase, setShowCase] = useState(false);
   useEffect(() => {
-    const el = titleRef.current;
+    const el = bannerRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => setShowCase(!entry.isIntersecting && entry.boundingClientRect.top < 0),
@@ -78,6 +78,7 @@ export default function WorkDetail({ id }: Props) {
           </Link>
 
           <div
+            ref={bannerRef}
             className='flex aspect-[16/8] items-center justify-center overflow-hidden rounded-[14px] md:aspect-[16/5]'
             style={{ background: caseStudy.tile }}
           >
@@ -99,7 +100,7 @@ export default function WorkDetail({ id }: Props) {
             </div>
           </div>
 
-          <header ref={titleRef} className='flex flex-col gap-2'>
+          <header className='flex flex-col gap-2'>
             <h1 className='m-0 text-[28px] font-semibold tracking-[-0.02em] md:text-[36px]'>
               {caseStudy.name}
             </h1>
