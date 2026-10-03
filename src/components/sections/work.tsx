@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef, useState, type KeyboardEvent, type TouchEvent } from 'react';
+import { useRef, useState, type KeyboardEvent } from 'react';
 import Container from '@/components/elements/container';
 import SectionLabel from '@/components/elements/section-label';
 import Reveal from '@/components/elements/reveal';
@@ -65,28 +65,6 @@ export default function Work({ selected, onSelect }: Props) {
     else move((selected + total - 1) % total, 'prev');
   };
 
-  // 터치 스와이프로 이전/다음 프로젝트. 가로로 밀어 보는 앱 화면 갤러리 안에서 시작한 터치는 갤러리 스크롤로 둔다.
-  const touchRef = useRef<{ x: number; y: number } | null>(null);
-  const onTouchStart = (event: TouchEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement;
-    const touch = event.touches[0];
-    touchRef.current = target.closest('[data-swipe-ignore]')
-      ? null
-      : { x: touch.clientX, y: touch.clientY };
-  };
-  const onTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
-    const start = touchRef.current;
-    touchRef.current = null;
-    if (!start) return;
-    const touch = event.changedTouches[0];
-    const dx = touch.clientX - start.x;
-    const dy = touch.clientY - start.y;
-    // 가로로 50px 이상, 세로보다 확실히 가로일 때만. 세로 스크롤과 헷갈리지 않게 한다.
-    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
-    if (dx < 0) goNext();
-    else goPrev();
-  };
-
   return (
     <Reveal className='pb-16 pt-12 md:pb-24 md:pt-16'>
       <Container wide>
@@ -142,8 +120,6 @@ export default function Work({ selected, onSelect }: Props) {
           role='tabpanel'
           aria-labelledby={`tab-${current.id}`}
           className={`case-${current.id} mt-3 overflow-hidden rounded-[14px] border border-line bg-bg`}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
         >
           <div className='h-1.5' style={{ background: current.band }} />
           <div
@@ -234,10 +210,7 @@ export default function Work({ selected, onSelect }: Props) {
                 />
               </button>
             ) : (
-              <div
-                data-swipe-ignore
-                className='grid snap-x snap-mandatory auto-cols-[42%] grid-flow-col gap-2.5 overflow-x-auto overflow-y-hidden pb-1 md:grid-flow-row md:grid-cols-3 md:overflow-visible'
-              >
+              <div className='grid snap-x snap-mandatory auto-cols-[42%] grid-flow-col gap-2.5 overflow-x-auto overflow-y-hidden pb-1 md:grid-flow-row md:grid-cols-3 md:overflow-visible'>
                 {current.images.slice(0, 3).map((src, index) => (
                   <button
                     key={src}
