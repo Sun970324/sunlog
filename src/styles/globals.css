@@ -75,7 +75,7 @@
 
 /* 큰 모니터에서는 글자, 간격, 이미지까지 페이지 전체를 같은 비율로 키운다.
    크기가 px로 정해져 있어 컴포넌트마다 고치는 대신 한 곳에서 배율만 바꾼다.
-   배율은 화면 폭 / 1280에 맞춰 구간별로 올리고 1.6배에서 멈춘다(2560 화면에서 내용이 75%). */
+   창 폭 1920까지는 1.2배로 두고, 그보다 넓으면 화면 폭 / 1600에 맞춰 올려 2560에서 1.6배로 멈춘다. */
 @media (min-width: 1280px) {
   html {
     zoom: 1.1;
@@ -86,22 +86,22 @@
     zoom: 1.2;
   }
 }
-@media (min-width: 1600px) {
+@media (min-width: 2080px) {
   html {
-    zoom: 1.25;
+    zoom: 1.3;
   }
 }
-@media (min-width: 1760px) {
+@media (min-width: 2240px) {
   html {
-    zoom: 1.375;
+    zoom: 1.4;
   }
 }
-@media (min-width: 1920px) {
+@media (min-width: 2400px) {
   html {
     zoom: 1.5;
   }
 }
-@media (min-width: 2048px) {
+@media (min-width: 2560px) {
   html {
     zoom: 1.6;
   }
