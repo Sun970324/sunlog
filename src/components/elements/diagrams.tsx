@@ -80,9 +80,104 @@ function Box({
   );
 }
 
+// 대기열 진입 점. 시간축 위에 같은 높이로 찍는다.
+function Dots({ xs }: { xs: number[] }) {
+  return (
+    <g>
+      {xs.map(x => (
+        <circle key={x} cx={x} cy={54} r={3} fill={MUTED} />
+      ))}
+    </g>
+  );
+}
+
+// 0시부터 24시까지의 시간축.
+function DayAxis() {
+  return (
+    <g>
+      <line x1={16} y1={64} x2={304} y2={64} stroke={LINE} />
+      <text x={16} y={80} fontSize={10} fill={MUTED}>
+        0시
+      </text>
+      <text x={304} y={80} textAnchor='end' fontSize={10} fill={MUTED}>
+        24시
+      </text>
+    </g>
+  );
+}
+
+const sudokuMatching: Diagram = {
+  caption:
+    '매칭 범위를 넓혀도 그대로여서 시간대별 대기열 진입 인원을 세어 보니 같은 시간에 기다리는 사용자가 적었습니다. 피크타임으로 사용자를 모으고 대기열 진입 알림을 보내자 매칭 성공률이 3.5%에서 28.6%로 오르고 평균 대기는 760초에서 10.5초로 줄었습니다.',
+  metrics: [
+    {
+      label: '1:1 매칭 성공률',
+      before: { value: 3.5, text: '3.5%' },
+      after: { value: 28.6, text: '28.6%' },
+    },
+    {
+      label: '평균 매칭 대기',
+      before: { value: 760, text: '760초' },
+      after: { value: 10.5, text: '10.5초' },
+    },
+  ],
+  before: {
+    label: '개선 전',
+    svg: (
+      <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
+        <title>개선 전: 대기열 진입이 하루에 흩어져 314번 중 11번만 매칭</title>
+        <ArrowHead id='match-before-arrow' />
+        <text x={16} y={24} fontSize={11} fill={MUTED}>
+          시간대별 대기열 진입
+        </text>
+        <Dots xs={[30, 62, 96, 124, 152, 182, 210, 238, 266, 292]} />
+        <DayAxis />
+        <text x={160} y={100} textAnchor='middle' fontSize={11} fill={MUTED}>
+          진입이 흩어져 같은 시간에 기다리는 사람이 적음
+        </text>
+        <Box x={60} y={114} w={200} lines={['1차: 매칭 티어 범위 확대']} />
+        <text x={160} y={168} textAnchor='middle' fontSize={11} fill={ACCENT}>
+          매칭률 그대로
+        </text>
+        <Arrow d='M160 176V190' marker='match-before-arrow' />
+        <Box x={50} y={190} w={220} lines={['314번 중 매칭 11번 (3.5%)']} color={ACCENT} />
+        <text x={160} y={246} textAnchor='middle' fontSize={11} fill={MUTED}>
+          평균 대기 760초
+        </text>
+      </svg>
+    ),
+  },
+  after: {
+    label: '개선 후',
+    svg: (
+      <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
+        <title>개선 후: 피크타임에 진입을 모으고 알림을 보내 105번 중 30번 매칭</title>
+        <ArrowHead id='match-after-arrow' />
+        <text x={16} y={24} fontSize={11} fill={MUTED}>
+          시간대별 대기열 진입
+        </text>
+        <rect x={180} y={36} width={84} height={34} rx={4} fill='none' stroke={ACCENT} />
+        <text x={222} y={24} textAnchor='middle' fontSize={11} fill={ACCENT}>
+          피크타임
+        </text>
+        <Dots xs={[44, 120, 190, 200, 210, 220, 230, 240, 250]} />
+        <DayAxis />
+        <Box x={16} y={104} w={124} lines={['누군가 대기열 진입']} />
+        <Arrow d='M140 121H176' marker='match-after-arrow' />
+        <Box x={176} y={104} w={128} lines={['접속자에게 알림']} stroke={ACCENT} />
+        <Arrow d='M240 138V190' marker='match-after-arrow' />
+        <Box x={50} y={190} w={220} lines={['105번 중 매칭 30번 (28.6%)']} color={ACCENT} />
+        <text x={160} y={246} textAnchor='middle' fontSize={11} fill={MUTED}>
+          평균 대기 10.5초
+        </text>
+      </svg>
+    ),
+  },
+};
+
 const sudokuTrust: Diagram = {
   caption:
-    '점수 검사를 서버 함수 135개와 RLS 테이블 35개로 옮겨서 앱을 거치지 않은 직접 요청으로는 검사를 건너뛸 수 없게 했습니다. 정답과 관리자, 토큰 테이블은 정책을 0개로 두어 권한을 회수했습니다.',
+    '점수 검사를 서버 함수와 RLS 정책으로 옮겨서 앱을 거치지 않은 직접 요청으로는 검사를 건너뛸 수 없게 했습니다. 정답과 관리자, 토큰 테이블은 정책을 두지 않아 권한을 회수했습니다.',
   before: {
     label: '개선 전',
     svg: (
@@ -129,11 +224,11 @@ const sudokuTrust: Diagram = {
         <text x={108} y={101} fontSize={11} fill={ACCENT}>
           검사는 여기서만
         </text>
-        <Box x={130} y={110} w={140} lines={['서버 함수 135개']} />
+        <Box x={130} y={110} w={140} lines={['서버 함수']} />
         <Arrow d='M200 144V164' marker='trust-after-arrow' />
-        <Box x={130} y={164} w={140} lines={['DB 테이블 35개']} />
+        <Box x={130} y={164} w={140} lines={['DB (RLS 정책)']} />
         <text x={200} y={230} textAnchor='middle' fontSize={11} fill={MUTED}>
-          정답, 관리자, 토큰 테이블은 정책 0개
+          정답, 관리자, 토큰 테이블은 정책 없음
         </text>
         <text x={16} y={40} fontSize={12} fill={ACCENT}>
           <tspan x={16}>앱을 거치지 않은</tspan>
@@ -204,28 +299,28 @@ const sudokuEngines: Diagram = {
 
 const go2workMap: Diagram = {
   caption:
-    '마커에 쓰지 않는 필드 140줄을 제거하고 클러스터러로 묶어 그리자 지도 응답이 40초에서 5초로, 페이로드가 50MB에서 5MB로 줄었습니다. Chrome DevTools Performance 탭으로 전후를 측정했습니다.',
+    '마커에 쓰지 않는 필드 140줄을 제거하고 클러스터러로 묶어 그리자 지도가 뜨기까지 약 30초 걸리던 것이 2초 안팎으로, 응답이 약 50MB에서 5MB 수준으로 줄었습니다.',
   metrics: [
     {
-      label: '지도 응답 시간',
-      before: { value: 40, text: '40초' },
-      after: { value: 5, text: '5초' },
+      label: '지도 표시 시간 (대략)',
+      before: { value: 30, text: '약 30초' },
+      after: { value: 2, text: '2초 안팎' },
     },
     {
-      label: 'API 페이로드',
-      before: { value: 50, text: '50MB' },
-      after: { value: 5, text: '5MB' },
+      label: 'API 응답 크기 (대략)',
+      before: { value: 50, text: '약 50MB' },
+      after: { value: 5, text: '약 5MB' },
     },
   ],
   before: {
     label: '개선 전',
     svg: (
       <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
-        <title>개선 전: 50MB 응답과 마커 전량 재렌더로 40초 멈춤</title>
+        <title>개선 전: 약 50MB 응답과 마커 전량 재렌더로 약 30초 멈춤</title>
         <ArrowHead id='map-before-arrow' />
         <Box x={16} y={16} w={170} lines={['검색 조건 변경']} />
         <Arrow d='M101 50V70' marker='map-before-arrow' />
-        <Box x={16} y={70} w={170} lines={['GraphQL 응답 50MB']} />
+        <Box x={16} y={70} w={170} lines={['GraphQL 응답 약 50MB']} />
         <text x={196} y={84} fontSize={11} fill={MUTED}>
           <tspan x={196}>쓰지 않는 기업 이미지,</tspan>
           <tspan x={196} dy={15}>
@@ -235,7 +330,7 @@ const go2workMap: Diagram = {
         <Arrow d='M101 104V124' marker='map-before-arrow' />
         <Box x={16} y={124} w={170} h={48} lines={['마커 수백 개', '전량 재렌더']} />
         <Arrow d='M101 172V192' marker='map-before-arrow' />
-        <Box x={16} y={192} w={170} lines={['40초 멈춤']} color={ACCENT} />
+        <Box x={16} y={192} w={170} lines={['약 30초 멈춤']} color={ACCENT} />
       </svg>
     ),
   },
@@ -243,11 +338,11 @@ const go2workMap: Diagram = {
     label: '개선 후',
     svg: (
       <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
-        <title>개선 후: 5MB 응답과 MarkerClusterer 렌더로 5초</title>
+        <title>개선 후: 약 5MB 응답과 MarkerClusterer 렌더로 2초 안팎</title>
         <ArrowHead id='map-after-arrow' />
         <Box x={16} y={16} w={170} lines={['검색 조건 변경']} />
         <Arrow d='M101 50V70' marker='map-after-arrow' />
-        <Box x={16} y={70} w={170} lines={['응답 5MB']} />
+        <Box x={16} y={70} w={170} lines={['응답 약 5MB']} />
         <text x={196} y={84} fontSize={11} fill={MUTED}>
           <tspan x={196}>필드 140줄 제거,</tspan>
           <tspan x={196} dy={15}>
@@ -257,7 +352,7 @@ const go2workMap: Diagram = {
         <Arrow d='M101 104V124' marker='map-after-arrow' />
         <Box x={16} y={124} w={170} h={48} lines={['MarkerClusterer가', '묶어서 렌더']} />
         <Arrow d='M101 172V192' marker='map-after-arrow' />
-        <Box x={16} y={192} w={170} lines={['5초']} color={ACCENT} />
+        <Box x={16} y={192} w={170} lines={['2초 안팎']} color={ACCENT} />
         <text x={160} y={252} textAnchor='middle' fontSize={11} fill={MUTED}>
           직무 자동완성은 서버 대신 메모리에서 필터
         </text>
@@ -399,7 +494,7 @@ const kkulkkukCall: Diagram = {
 
 export const diagramsByCase: Record<string, Diagram[]> = {
   go2work: [go2workMap],
-  sudoku: [sudokuTrust, sudokuEngines],
+  sudoku: [sudokuMatching, sudokuTrust, sudokuEngines],
   kkulkkuk: [kkulkkukCall],
   highsleep: [highsleepTracks],
 };
