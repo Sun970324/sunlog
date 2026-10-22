@@ -35,13 +35,14 @@ export default function Home() {
       <TopBar />
       <main>
         <Hero />
-        <section id='work'>
+        {/* Work와 Career에 옅은 배경색을 깔아 섹션을 번갈아 나눈다. */}
+        <section id='work' className='bg-subtle'>
           <Work selected={selected} onSelect={select} />
         </section>
         <section id='other-projects'>
           <OtherProjects />
         </section>
-        <section id='career' className='pb-16 md:pb-24'>
+        <section id='career' className='bg-subtle pb-16 pt-16 md:pb-24 md:pt-24'>
           <Container
             wide
             className='grid gap-12 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:gap-14'

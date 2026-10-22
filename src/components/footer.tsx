@@ -6,7 +6,7 @@ const Footer = () => {
 
   return (
     <footer className='border-t border-line'>
-      <Container className='flex items-center justify-between py-6 text-[13px] text-muted'>
+      <Container wide className='flex items-center justify-between py-6 text-[13px] text-muted'>
         <span>© 2026 Sun&apos;s log</span>
         <button type='button' onClick={toggle} className='rounded-sm hover:text-fg'>
           {theme === 'dark' ? '라이트 모드' : '다크 모드'}

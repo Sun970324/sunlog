@@ -45,7 +45,7 @@ const TopBar = ({ caseStudy, showCase = false }: Props) => {
         scrolled ? 'border-line' : 'border-transparent',
       )}
     >
-      <div className='mx-auto flex h-14 w-full max-w-[1040px] items-center px-5'>
+      <div className='mx-auto flex h-14 w-full max-w-[1040px] items-center px-5 xl:max-w-[1200px]'>
         <button type='button' onClick={scrollTop} className='shrink-0 rounded-sm text-fg'>
           <span
             aria-hidden

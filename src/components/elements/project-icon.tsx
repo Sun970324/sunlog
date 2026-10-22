@@ -14,7 +14,7 @@ export default function ProjectIcon({ caseStudy, className, sizes }: Props) {
   const { logo, tile, iconFull } = caseStudy;
   return (
     <span
-      className={clsx('relative block shrink-0 overflow-hidden', className)}
+      className={clsx('relative block shrink-0 overflow-hidden border border-line', className)}
       style={{ background: tile }}
     >
       <span className={clsx('absolute', iconFull ? 'inset-0' : 'inset-[10%]')}>

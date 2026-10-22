@@ -79,7 +79,7 @@ export default function WorkDetail({ id }: Props) {
 
           <div
             ref={bannerRef}
-            className='flex aspect-[16/8] items-center justify-center overflow-hidden rounded-[14px] md:aspect-[16/5]'
+            className='flex aspect-[16/8] items-center justify-center overflow-hidden rounded-[14px] border border-line md:aspect-[16/5]'
             style={{ background: caseStudy.tile }}
           >
             <div

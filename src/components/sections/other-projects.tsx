@@ -5,7 +5,7 @@ import { otherProjects } from '@/common/datas';
 
 /* 상세 페이지가 없는 나머지 프로젝트. 이름, 기간, 한 줄 설명, 대표 스택만 2열로 짧게. */
 const OtherProjects = () => (
-  <Container wide className='pb-16 md:pb-24'>
+  <Container wide className='py-16 md:py-24'>
     <SectionLabel>그 외 프로젝트</SectionLabel>
     <ul className='m-0 mt-5 grid list-none gap-3 p-0 md:grid-cols-2'>
       {otherProjects.map(project => (

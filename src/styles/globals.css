@@ -73,6 +73,19 @@
   }
 }
 
+/* 큰 모니터에서는 글자, 간격, 이미지까지 페이지 전체를 같은 비율로 키운다.
+   크기가 px로 정해져 있어 컴포넌트마다 고치는 대신 한 곳에서 배율만 바꾼다. */
+@media (min-width: 1280px) {
+  html {
+    zoom: 1.1;
+  }
+}
+@media (min-width: 1536px) {
+  html {
+    zoom: 1.2;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 56px;

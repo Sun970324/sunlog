@@ -66,7 +66,7 @@ export default function Work({ selected, onSelect }: Props) {
   };
 
   return (
-    <Reveal className='pb-16 pt-12 md:pb-24 md:pt-16'>
+    <Reveal className='py-16 md:py-24'>
       <Container wide>
         <SectionLabel>Work</SectionLabel>
 
@@ -95,7 +95,8 @@ export default function Work({ selected, onSelect }: Props) {
                 }}
                 className={clsx(
                   'flex min-w-[84px] shrink-0 flex-col items-center gap-2 rounded-[14px] px-2 pb-2 pt-2.5 transition-colors md:min-w-[104px] md:px-3',
-                  isSelected ? 'bg-subtle text-fg' : 'text-muted hover:bg-subtle',
+                  // 섹션 배경이 subtle이라 선택, 호버 표시는 기본 배경색으로 띄운다.
+                  isSelected ? 'bg-bg text-fg' : 'text-muted hover:bg-bg',
                 )}
               >
                 <ProjectIcon

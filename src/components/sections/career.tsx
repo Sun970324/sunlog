@@ -5,8 +5,9 @@ import { timeline, type TimelineRow } from '@/common/datas';
 /* 채운 원: 재직 / 빈 원: 프로젝트 / 빈 마름모: 교육, 해커톤 / accent 원: 진행 중 */
 const markerByType: Record<TimelineRow['type'], string> = {
   work: 'rounded-full bg-fg',
-  project: 'rounded-full border border-muted bg-bg',
-  education: 'rotate-45 border border-muted bg-bg',
+  // 빈 도형 안쪽은 섹션 배경색(subtle)과 같아야 비어 보인다.
+  project: 'rounded-full border border-muted bg-subtle',
+  education: 'rotate-45 border border-muted bg-subtle',
 };
 const NOW_MARKER = 'rounded-full bg-accent';
 

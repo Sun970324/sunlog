@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import Image from 'next/image';
 
 type Props = {
@@ -15,6 +22,12 @@ let originRect: DOMRect | null = null;
 export function setLightboxOrigin(rect: DOMRect | null) {
   originRect = rect;
 }
+
+/* 큰 화면에서는 html에 zoom이 걸려 있어(globals.css) 창 크기를 배율로 나눠야 사진이 화면 안에 맞는다. */
+const readViewport = () => {
+  const zoom = Number(getComputedStyle(document.documentElement).getPropertyValue('zoom')) || 1;
+  return { w: window.innerWidth / zoom, h: window.innerHeight / zoom };
+};
 
 const OPEN_MS = 380;
 const CLOSE_MS = 280;
@@ -44,14 +57,7 @@ const flipTransform = (origin: DOMRect, target: DOMRect) => {
   return `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
 };
 
-export default function Lightbox({
-  images,
-  index,
-  ratio,
-  alt,
-  onClose,
-  onIndexChange,
-}: Props) {
+export default function Lightbox({ images, index, ratio, alt, onClose, onIndexChange }: Props) {
   const isWide = ratio === '16:9';
   const hasMultiple = images.length > 1;
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -70,13 +76,11 @@ export default function Lightbox({
   const [naturalRatios, setNaturalRatios] = useState<Record<string, number>>({});
 
   const [viewport, setViewport] = useState(() =>
-    typeof window === 'undefined'
-      ? { w: 0, h: 0 }
-      : { w: window.innerWidth, h: window.innerHeight },
+    typeof window === 'undefined' ? { w: 0, h: 0 } : readViewport(),
   );
 
   useEffect(() => {
-    const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
+    const onResize = () => setViewport(readViewport());
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
@@ -84,10 +88,7 @@ export default function Lightbox({
   const fallbackRatio = isWide ? 16 / 9 : 9 / 19.5;
   const currentRatio = naturalRatios[images[index]] ?? fallbackRatio;
   // Explicit px width/height (not aspect-ratio) so the frame can animate between images.
-  const frameWidth = Math.max(
-    0,
-    Math.min(viewport.w - 80, (viewport.h - 80) * currentRatio, 1200),
-  );
+  const frameWidth = Math.max(0, Math.min(viewport.w - 80, (viewport.h - 80) * currentRatio, 1200));
   const sizeStyle: CSSProperties = {
     width: frameWidth,
     height: frameWidth / currentRatio,
@@ -293,14 +294,11 @@ export default function Lightbox({
     [commit, snapBack],
   );
 
-  const handleLoad = useCallback(
-    (event: React.SyntheticEvent<HTMLImageElement>, key: string) => {
-      const { naturalWidth, naturalHeight } = event.currentTarget;
-      if (!naturalWidth || !naturalHeight) return;
-      setNaturalRatios(prev => (prev[key] ? prev : { ...prev, [key]: naturalWidth / naturalHeight }));
-    },
-    [],
-  );
+  const handleLoad = useCallback((event: React.SyntheticEvent<HTMLImageElement>, key: string) => {
+    const { naturalWidth, naturalHeight } = event.currentTarget;
+    if (!naturalWidth || !naturalHeight) return;
+    setNaturalRatios(prev => (prev[key] ? prev : { ...prev, [key]: naturalWidth / naturalHeight }));
+  }, []);
 
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -332,9 +330,8 @@ export default function Lightbox({
         return;
       }
       if (event.key === 'Tab') {
-        const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-          'button:not([disabled])',
-        );
+        const focusable =
+          dialogRef.current?.querySelectorAll<HTMLElement>('button:not([disabled])');
         if (!focusable || focusable.length === 0) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
