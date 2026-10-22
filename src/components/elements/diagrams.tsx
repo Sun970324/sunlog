@@ -302,12 +302,12 @@ const go2workMap: Diagram = {
     '마커에 쓰지 않는 필드 140줄을 제거하고 클러스터러로 묶어 그리자 지도가 뜨기까지 약 30초 걸리던 것이 2초 안팎으로, 응답이 약 50MB에서 5MB 수준으로 줄었습니다.',
   metrics: [
     {
-      label: '지도 표시 시간 (대략)',
+      label: '지도 표시 시간',
       before: { value: 30, text: '약 30초' },
       after: { value: 2, text: '2초 안팎' },
     },
     {
-      label: 'API 응답 크기 (대략)',
+      label: 'API 응답 크기',
       before: { value: 50, text: '약 50MB' },
       after: { value: 5, text: '약 5MB' },
     },

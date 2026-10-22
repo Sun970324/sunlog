@@ -53,8 +53,8 @@ export const caseStudies: CaseStudy[] = [
     role: '프론트엔드, 백엔드, 배포',
     stack: ['Next.js', 'GraphQL', 'Node.js'],
     numbers: [
-      { before: '30s', value: '2s', label: '지도 표시 시간 (대략)' },
-      { before: '50MB', value: '5MB', label: 'API 응답 크기 (대략)' },
+      { before: '30s', value: '2s', label: '지도 표시 시간' },
+      { before: '50MB', value: '5MB', label: 'API 응답 크기' },
     ],
     highlight: 0,
     brief: {
@@ -102,13 +102,7 @@ export const caseStudies: CaseStudy[] = [
     period: '2026.07 ~ 진행 중',
     role: '기획, 개발, 스토어 심사, 운영',
     stack: ['Flutter', 'Supabase', 'PostgreSQL'],
-    links: [
-      { label: 'App Store', href: 'https://apps.apple.com/kr/app/id6794986328' },
-      {
-        label: 'Google Play',
-        href: 'https://play.google.com/store/apps/details?id=jaywithme.sudoku',
-      },
-    ],
+    links: [{ label: '소개 페이지', href: 'https://sudoku.jaywithme.com' }],
     numbers: [
       { before: '3.5%', value: '28.6%', label: '1:1 매칭 성공률' },
       { value: '1개월', label: '개발 시작부터 양대 스토어 출시' },
