@@ -1,11 +1,17 @@
-export type CaseNumber = { before?: string; value: string; label: string };
+export type CaseNumber = {
+  before?: string;
+  value: string;
+  label: string;
+  /** 상세 페이지 숫자 줄에서 뺀다. 메인 패널 대표 숫자로는 그대로 쓴다. */
+  hideOnDetail?: boolean;
+};
 
 export type CaseStudy = {
   id: string;
   name: string;
   /** 선반 아이콘 아래에 보이는 연도. */
   year: string;
-  /** 이 케이스가 해결한 문제 상황을 평서문 한 문장으로. */
+  /** 이 케이스가 해결한 문제 상황을 개조식 한 줄로(마침표 없이). */
   problemTitle: string;
   org: string;
   period: string;
@@ -23,6 +29,14 @@ export type CaseStudy = {
   problem: string;
   decision: string;
   result: string;
+  /** 대표 사례 밖의 추가 사례. 상세 페이지에서 대표 사례 아래에 차례로 보여 준다. */
+  moreCases?: {
+    problemTitle: string;
+    numbers: CaseNumber[];
+    problem: string;
+    decision: string;
+    result: string;
+  }[];
   images: string[];
   /** 기본 화면과 비율이 다른 화면 묶음(관리자 웹, 모바일 앱, 태블릿 등). 상세 페이지에서 기본 갤러리 아래에 제목을 달고 따로 보여 준다.
    *  wide가 true면 가로로 넓은 화면이라 2열로 크게, false면 세로 화면이라 여러 열로 보여 준다. */
@@ -44,10 +58,64 @@ const HIGHSLEEP_STOPS = '#99AAFF 0%, #8C9FFD 19%, #5244C0 45%, #251C66 74%, #000
 
 export const caseStudies: CaseStudy[] = [
   {
+    id: 'highsleep',
+    name: 'HighSleep',
+    year: '2023 ~ 2024',
+    problemTitle: '수면 음악 반복 재생 때마다 1초씩 소리 공백',
+    org: '올케어디엑스',
+    period: '2023.08 ~ 2024.03',
+    role: '앱 풀스택 개발, 양대 스토어 출시',
+    stack: ['Flutter', 'Firebase'],
+    numbers: [
+      { value: '2', label: '출시한 스토어' },
+      { before: '1s', value: '0', label: '반복 재생 끊김' },
+    ],
+    highlight: 1,
+    brief: {
+      problem:
+        '반복 재생되는 수면 음악이 처음으로 돌아갈 때 1초쯤 소리가 비었고, 자는 중에 소리가 갑자기 끊기면 깰 수 있어 없애야 했습니다.',
+      decision: '음원을 트랙 세 개로 나누고 ViewModel 하나가 세 트랙을 같이 제어하게 묶었습니다.',
+      result: '재생 공백이 없어졌고 iOS와 Android 심사를 모두 통과했습니다.',
+    },
+    summary:
+      '숙면 유도 사운드 앱입니다. 음악 프로듀서와 함께 앱과 음원을 서로 맞춰 가며 만들었습니다. 음원 끝에 3초를 비워 달라는 요구는 제가, 멜로디와 자연음, 주파수를 동시에 재생해 달라는 요구는 프로듀서가 내는 식이었습니다. 기획자, 디자이너와 함께 Flutter 코드베이스 하나로 iOS와 Android를 같이 출시했습니다.',
+    problem:
+      '수면 음악은 자는 동안 계속 반복 재생되는데, 음원이 끝나고 처음으로 돌아갈 때 1초쯤 소리가 비었습니다. 자는 중에 소리가 갑자기 끊기면 깰 수 있어서 이 공백을 없애는 게 중요했습니다. App Store는 개인정보 정책 문제로 심사를 반려했습니다.',
+    decision:
+      '멜로디와 자연음, 수면 주파수를 트랙 세 개로 나눠서 멜로디가 끝나도 자연음은 계속 흐르게 했습니다. 그런데 오디오 인스턴스 세 개가 따로 놀아서 재생과 정지에 딜레이가 생겼습니다. ViewModel 하나가 세 개를 같이 관리하도록 묶었습니다. 회원과 음원, 좋아요 데이터는 Firebase Auth, Firestore, Storage, Cloud Functions로 설계했고 로그인은 Google, Apple, 카카오 소셜 로그인으로 연동했습니다. 음원을 올리고 태그를 다는 관리자 웹과 회사 홈페이지는 Next.js로 만들었습니다. 반려는 회원 탈퇴 기능을 만들고 약관을 앱 안에서 볼 수 있게 해서 해결했습니다.',
+    result:
+      '반복 재생할 때 끊기는 부분이 없어졌고 트랙마다 음량을 조절해 취향대로 조합할 수 있게 됐습니다. iOS와 Android 심사를 모두 통과해 출시했습니다.',
+    moreCases: [
+      {
+        problemTitle: '곡을 넘길 때마다 수면 주파수까지 처음부터 다시 재생',
+        numbers: [],
+        problem:
+          '곡을 넘기면 멜로디와 자연음만 바뀌면 되는데, 곡과 상관없는 수면 주파수 트랙까지 처음부터 다시 재생됐습니다.',
+        decision:
+          '곡을 넘길 때마다 플레이어 세 개 모두 setUrl로 음원을 다시 불러오고 볼륨과 반복 모드를 다시 설정하고 있었습니다. setUrl을 부르면 재생 위치가 0으로 돌아갑니다. 그래서 첫 초기화 여부로 나눠, 그 뒤 곡 전환에서는 멜로디와 자연음의 URL만 바꾸고 수면 주파수 플레이어는 잠깐 멈췄다가 이어서 재생하게 했습니다.',
+        result:
+          '곡을 넘겨도 수면 주파수가 처음으로 돌아가지 않고 이어서 재생되고, 전환할 때마다 같은 수면 주파수 파일을 다시 받던 요청도 없어졌습니다.',
+      },
+    ],
+    images: [
+      '/assets/projects/highsleep/highsleep-2.jpg',
+      '/assets/projects/highsleep/highsleep-3.jpg',
+      '/assets/projects/highsleep/highsleep-4.jpg',
+      '/assets/projects/highsleep/highsleep-5.jpg',
+      '/assets/projects/highsleep/highsleep-6.jpg',
+      '/assets/projects/highsleep/highsleep-7.jpg',
+    ],
+    wide: false,
+    logo: '/assets/projects/highsleep/highsleep-logo.svg',
+    tile: '#111116',
+    band: `linear-gradient(90deg, ${HIGHSLEEP_STOPS})`,
+    iconFull: true,
+  },
+  {
     id: 'go2work',
     name: '출근하자',
     year: '2022 ~ 2023',
-    problemTitle: '검색 조건을 바꿀 때마다 지도가 30초 가까이 멈췄습니다.',
+    problemTitle: '검색 조건을 바꿀 때마다 지도가 30초 가까이 멈춤',
     org: '(주)드림픽셀',
     period: '2022.10 ~ 2023.08',
     role: '프론트엔드, 백엔드, 배포',
@@ -72,6 +140,17 @@ export const caseStudies: CaseStudy[] = [
       '네이버 지도를 카카오맵으로 바꿨습니다. 공식 MarkerClusterer가 있어서 클러스터링을 직접 만들지 않아도 됐기 때문입니다. 쿼리에서는 마커에 필요 없는 필드를 약 140줄 지우고 검색 반경도 30% 줄였습니다. 직무 3단계 트리 자동완성은 서버를 부르지 않고 이미 받아 둔 데이터를 메모리에서 걸러내도록 다시 만들었습니다.',
     result:
       '지도가 뜨기까지 약 30초 걸리던 것이 2초 안팎으로, API 응답이 약 50MB에서 5MB 수준으로 줄었습니다. 필터를 바꿀 때마다 화면이 멈추던 것도 없어졌습니다.',
+    moreCases: [
+      {
+        problemTitle: '기업정보 페이지가 쿼리 4개를 모두 기다린 뒤에야 응답',
+        numbers: [],
+        problem:
+          '기업정보 페이지는 getServerSideProps에서 기업정보, 재무, 국민연금 인원, 업종 평균 연봉 쿼리 4개를 차례로 await 한 뒤에야 HTML을 내려줬습니다.',
+        decision:
+          '기본 기업정보만 SSR에 남기고, 무거운 재무, 국민연금 인원, 업종 평균 연봉은 Apollo useQuery와 useLazyQuery로 옮겨 브라우저에서 받게 했습니다. 업종 평균 연봉은 인원 데이터를 받은 뒤 이어서 부르고, 섹션마다 로딩 표시를 붙였습니다.',
+        result: '기본 정보를 먼저 보여 주고 무거운 데이터는 섹션별로 채우는 구조가 됐습니다.',
+      },
+    ],
     images: [
       '/assets/projects/go2work/go2work-1.png',
       '/assets/projects/go2work/go2work-2.png',
@@ -94,66 +173,11 @@ export const caseStudies: CaseStudy[] = [
     iconFull: true,
   },
   {
-    id: 'sudoku',
-    name: '스도쿠 리그',
-    year: '2026',
-    problemTitle: '1:1 대결 대기열에 들어온 314번 중 매칭은 11번뿐이었습니다.',
-    org: '제이위드미 (개인사업자)',
-    period: '2026.07 ~ 진행 중',
-    role: '기획, 개발, 스토어 심사, 운영',
-    stack: ['Flutter', 'Supabase', 'PostgreSQL'],
-    links: [{ label: '소개 페이지', href: 'https://sudoku.jaywithme.com' }],
-    numbers: [
-      { before: '3.5%', value: '28.6%', label: '1:1 매칭 성공률' },
-      { value: '1개월', label: '개발 시작부터 양대 스토어 출시' },
-      { value: '600', label: '출시 1달 가입자' },
-      { value: '1000', label: '출시 1달 다운로드' },
-      { value: '34위', label: 'App Store 보드 게임 순위' },
-    ],
-    highlight: 0,
-    brief: {
-      problem:
-        '1:1 대결 대기열에 들어온 314번 중 매칭은 11번(3.5%)이었고, 매칭되더라도 평균 760초를 기다려야 했습니다.',
-      decision:
-        '매칭 범위를 인접 티어까지 넓혀도 그대로여서, 시간대별 대기열 진입 인원을 세어 보고 동시 접속자가 적은 것을 원인으로 잡아 피크타임제와 대기열 진입 알림을 넣었습니다.',
-      result:
-        '대기열 진입 105번 중 30번이 매칭돼 성공률이 28.6%로 올랐고 평균 대기는 10.5초로 줄었습니다. 개발 시작 1개월 만에 양대 스토어에 출시해 출시 1달 가입자 600명과 다운로드 1,000회, DAU 80, App Store 보드 게임 순위 34위를 기록했습니다.',
-    },
-    summary:
-      '풀이 기법을 배우고 그 실력으로 실시간 랭크 대전을 하는 스도쿠 앱입니다. 개발 시작 1개월 만에 양대 스토어에 올렸고 출시 한 달에 가입자 600명과 다운로드 1,000회를 기록했습니다. 만드는 동안 스도쿠 카페에 진행 상황을 계속 올렸는데 색상 테마와 기법 설명 방식은 거기서 받은 의견을 반영했습니다.',
-    problem:
-      '출시 뒤 1:1 랭크 대결의 매칭이 거의 성사되지 않았습니다. 대기열에 들어온 314번 중 매칭은 11번(3.5%)이었고, 매칭된 경우에도 평균 760초를 기다려야 했습니다. 처음에는 같은 티어끼리만 매칭되는 조건 때문이라고 봤습니다. 기능이 빠르게 늘면서 이미 만든 게 틀어지는 일도 잦아졌습니다. 보드의 난이도를 매기는 프로그램과 힌트 프로그램의 판단이 달라도 에러가 나지 않았고, 랭크 대전인데 앱 화면에서만 점수를 검사하면 서버에 직접 요청을 보내 그 검사를 건너뛸 수 있었습니다.',
-    decision:
-      '먼저 매칭 범위를 인접 티어까지 넓히고 오래 기다리면 한 번 더 넓히도록 서버 설정값을 바꿨지만 매칭률은 그대로였습니다. 시간대별 대기열 진입 인원을 세어 보니 조건보다 같은 시간대에 들어오는 사용자 자체가 적은 것이 병목이었습니다. 그래서 대결 시간을 피크타임으로 정해 사용자를 모으고, 누군가 대기열에 들어오면 앱에 접속해 있는 사용자에게 알림이 뜨게 했습니다. 두 엔진의 판단이 어긋나는 문제는 보드를 만들 때마다 두 프로그램을 같이 돌려 결과가 다르면 실패하는 테스트로 막았고, 점수 검사 같은 핵심 검증은 서버 함수와 RLS 정책으로 옮겼습니다. Apple 영수증은 루트 인증서까지 서버에서 검증합니다.',
-    result:
-      '피크타임과 대기열 알림을 넣은 뒤 대기열 진입 105번 중 30번이 매칭돼 성공률이 3.5%에서 28.6%로 올랐고, 평균 대기는 760초에서 10.5초로 줄었습니다. 개발을 시작한 지 1개월 만에 App Store와 Google Play에 올렸습니다. 스도쿠 카페에 진행 상황을 올리며 모은 사용자가 출시 1주에 300명, 한 달에 600명이 됐습니다. 다운로드 1,000회를 달성했고 DAU 80으로 우상향해 App Store 보드 게임 순위 34위까지 올라갔습니다.',
-    images: [
-      '/assets/projects/sudoku/sudoku-home.png',
-      '/assets/projects/sudoku/sudoku-hint.png',
-      '/assets/projects/sudoku/sudoku-race.png',
-      '/assets/projects/sudoku/sudoku-leaderboard.png',
-      '/assets/projects/sudoku/sudoku-replay.png',
-    ],
-    extraGallery: {
-      title: 'iPad',
-      images: [
-        '/assets/projects/sudoku/sudoku-ipad-hint.png',
-        '/assets/projects/sudoku/sudoku-ipad-party.png',
-      ],
-      wide: true,
-    },
-    wide: false,
-    logo: '/assets/projects/sudoku/sudoku-logo.png',
-    tile: '#021e4e',
-    band: '#f2c14e',
-    iconFull: true,
-  },
-  {
     id: 'kkulkkuk',
     name: '꿀꺽',
     year: '2026',
-    problemTitle: '화면 조작을 최대한 줄였는데도 고령 환자분들은 앱에 적응하는 데 오래 걸렸습니다.',
-    org: '창업 팀 프로젝트 (2인)',
+    problemTitle: '화면 조작을 최소화해도 고령 환자의 앱 적응에 오랜 시간 소요',
+    org: '2인 팀 프로젝트',
     period: '2026.04 ~ 진행 중',
     role: '개발 전체 (앱, 통화 파이프라인, 관리자 웹)',
     stack: ['Flutter', 'LiveKit', 'Supabase'],
@@ -178,6 +202,18 @@ export const caseStudies: CaseStudy[] = [
       '진입 방식을 화면 조작에서 전화 수신으로 바꿨습니다. pg_cron이 1분마다 Edge Function을 불러 예정 시각이 된 환자를 고르고, LiveKit 방을 만들어 통화 Agent를 호출한 뒤 Android는 FCM, iOS는 APNs VoIP 푸시로 벨을 울립니다. 앱이 꺼져 있어도 OS 통화 화면이 뜨도록 iOS는 PushKit을 받는 즉시 CallKit에 신고하게 만들었습니다. 같은 시간대에 전화가 두 번 걸리지 않게 부분 유니크 인덱스로 차단했고, 못 받으면 5분 간격으로 두 번 더 겁니다. 실제 전화(PSTN) 대신 앱 안 VoIP를 고른 것은 비용과 구현 속도, 그리고 전화번호를 따로 모으지 않아도 되기 때문입니다. 통화는 처음에 직접 구현한 P2P였는데, 서버의 Agent가 통화에 참가자로 들어갈 수 없고 TURN 중계와 재접속 처리도 없어 LiveKit으로 교체했습니다. 무음 문제는 Agent가 방에 들어온 것을 확인한 뒤에만 벨을 울리고, 마이크를 기다리지 않고 받는 즉시 음원을 재생하도록 수정했습니다. 기록 유실은 재생을 중간에 끊을 때 ffmpeg 프로세스가 영영 끝나지 않던 것이 원인이어서, 남은 파이프를 비우면서 종료하도록 수정하고 녹음 업로드에 제한 시간을 뒀습니다.',
     result:
       '환자는 전화를 받기만 하면 재활이 시작되고 끝나면 통화가 자동으로 끊깁니다. 받은 뒤 음원이 나오기까지 걸리던 무음은 최대 15초에서 0초로 줄었고, 끝까지 받은 통화, 중간에 끊은 통화, 부재중 세 경우 모두 기록이 남는 것을 실제 LiveKit과 Supabase로 확인했습니다. 2026년 9월 ICT 이노베이션 스퀘어 개별역량강화에서 대상을 받았고 임상 파일럿을 준비하고 있습니다.',
+    moreCases: [
+      {
+        problemTitle: 'iOS에서 재발신 전화가 받기 버튼 없이 끊김',
+        numbers: [],
+        problem:
+          '3일간 테스트 통화 기록을 보니 받은 통화는 전부 1회차였고, 재발신으로 넘어간 5건은 모두 부재중이었습니다. 재현해 보니 재발신 때 벨이 1초 울리고 받기 버튼 없이 끊겼습니다.',
+        decision:
+          '푸시에 담는 통화 ID를 세션 ID로 고정해 쓴 것이 원인이었습니다. iOS는 이 값을 CallKit 전화 ID로 쓰는데, 이미 끝난 ID로 다시 신고하면 곧바로 정리합니다. 시도마다 새 UUID를 벨 ID로 쓰고 LiveKit 방 이름에도 시도 번호를 붙여 닫히는 중인 방을 다시 받지 않게 했습니다. Agent에는 세션 ID를 그대로 넘겨 결과가 맞는 기록에 남도록 했습니다.',
+        result:
+          '통화 ID만 새로 바꾸자 재발신 벨이 정상으로 울렸고, 같은 통화에 두 번 걸어 시도마다 방과 벨 ID가 달라지는 것을 로그로 확인했습니다.',
+      },
+    ],
     images: [
       '/assets/projects/kkul/kkul-1.png',
       '/assets/projects/kkul/kkul-2.png',
@@ -200,45 +236,86 @@ export const caseStudies: CaseStudy[] = [
     iconFull: true,
   },
   {
-    id: 'highsleep',
-    name: 'HighSleep',
-    year: '2023 ~ 2024',
-    problemTitle: '수면 음악이 처음으로 돌아갈 때마다 1초씩 소리가 비었습니다.',
-    org: '올케어디엑스',
-    period: '2023.08 ~ 2024.03',
-    role: '앱 풀스택 개발, 양대 스토어 출시',
-    stack: ['Flutter', 'Firebase'],
+    id: 'sudoku',
+    name: '스도쿠 리그',
+    year: '2026',
+    problemTitle: '1:1 대결 대기열 진입 314번 중 매칭 11번',
+    org: '제이위드미 (개인사업자)',
+    period: '2026.07 ~ 진행 중',
+    role: '기획, 개발, 스토어 심사, 운영',
+    stack: ['Flutter', 'Supabase', 'PostgreSQL'],
+    links: [{ label: '소개 페이지', href: 'https://sudoku.jaywithme.com' }],
     numbers: [
-      { value: '2', label: '출시한 스토어' },
-      { before: '1s', value: '0', label: '반복 재생 끊김' },
+      { before: '3.5%', value: '28.6%', label: '1:1 매칭 성공률', hideOnDetail: true },
+      { value: '1개월', label: '개발 시작부터 양대 스토어 출시' },
+      { value: '600', label: '출시 1달 가입자' },
+      { value: '1000', label: '출시 1달 다운로드' },
+      { value: '34위', label: 'App Store 보드 게임 순위' },
     ],
-    highlight: 1,
+    highlight: 0,
     brief: {
       problem:
-        '반복 재생되는 수면 음악이 처음으로 돌아갈 때 1초쯤 소리가 비었고, 자는 중에 소리가 갑자기 끊기면 깰 수 있어 없애야 했습니다.',
-      decision: '음원을 트랙 세 개로 나누고 ViewModel 하나가 세 트랙을 같이 제어하게 묶었습니다.',
-      result: '재생 공백이 없어졌고 iOS와 Android 심사를 모두 통과했습니다.',
+        '1:1 대결 대기열에 들어온 314번 중 매칭은 11번(3.5%)이었고, 매칭되더라도 평균 760초를 기다려야 했습니다.',
+      decision:
+        '매칭 범위를 인접 티어까지 넓혀도 그대로여서, 시간대별 대기열 진입 인원을 세어 보고 동시 접속자가 적은 것을 원인으로 잡아 피크타임제와 대기열 진입 알림을 넣었습니다.',
+      result:
+        '대기열 진입 105번 중 30번이 매칭돼 성공률이 28.6%로 올랐고 평균 대기는 10.5초로 줄었습니다. 개발 시작 1개월 만에 양대 스토어에 출시해 출시 1달 가입자 600명과 다운로드 1,000회, DAU 80, App Store 보드 게임 순위 34위를 기록했습니다.',
     },
     summary:
-      '숙면 유도 사운드 앱입니다. 음악 프로듀서와 함께 앱과 음원을 서로 맞춰 가며 만들었습니다. 음원 끝에 3초를 비워 달라는 요구는 제가, 멜로디와 자연음, 주파수를 동시에 재생해 달라는 요구는 프로듀서가 내는 식이었습니다. 기획자, 디자이너와 함께 Flutter 코드베이스 하나로 iOS와 Android를 같이 출시했습니다.',
+      '풀이 기법을 배우고 그 실력으로 실시간 랭크 대전을 하는 스도쿠 앱입니다. 개발 시작 1개월 만에 양대 스토어에 올렸고 출시 한 달에 가입자 600명과 다운로드 1,000회를 기록했습니다. 만드는 동안 스도쿠 카페에 진행 상황을 계속 올렸는데 색상 테마와 기법 설명 방식은 거기서 받은 의견을 반영했습니다.',
     problem:
-      '수면 음악은 자는 동안 계속 반복 재생되는데, 음원이 끝나고 처음으로 돌아갈 때 1초쯤 소리가 비었습니다. 자는 중에 소리가 갑자기 끊기면 깰 수 있어서 이 공백을 없애는 게 중요했습니다. App Store는 개인정보 정책 문제로 심사를 반려했습니다.',
+      '출시 뒤 1:1 랭크 대결의 매칭이 거의 성사되지 않았습니다. 대기열에 들어온 314번 중 매칭은 11번(3.5%)이었고, 매칭된 경우에도 평균 760초를 기다려야 했습니다. 처음에는 같은 티어끼리만 매칭되는 조건 때문이라고 봤습니다. 기능이 빠르게 늘면서 이미 만든 게 틀어지는 일도 잦아졌습니다. 보드의 난이도를 매기는 프로그램과 힌트 프로그램의 판단이 달라도 에러가 나지 않았고, 랭크 대전인데 앱 화면에서만 점수를 검사하면 서버에 직접 요청을 보내 그 검사를 건너뛸 수 있었습니다.',
     decision:
-      '멜로디와 자연음, 수면 주파수를 트랙 세 개로 나눠서 멜로디가 끝나도 자연음은 계속 흐르게 했습니다. 그런데 오디오 인스턴스 세 개가 따로 놀아서 재생과 정지에 딜레이가 생겼습니다. ViewModel 하나가 세 개를 같이 관리하도록 묶었습니다. 회원과 음원, 좋아요 데이터는 Firebase로 설계하고 로그인은 OAuth 2.0으로 연동했습니다. 반려는 회원 탈퇴 기능을 만들고 약관을 앱 안에서 볼 수 있게 해서 해결했습니다.',
+      '먼저 매칭 범위를 인접 티어까지 넓히고 오래 기다리면 한 번 더 넓히도록 서버 설정값을 바꿨지만 매칭률은 그대로였습니다. 시간대별 대기열 진입 인원을 세어 보니 조건보다 같은 시간대에 들어오는 사용자 자체가 적은 것이 병목이었습니다. 그래서 대결 시간을 피크타임으로 정해 사용자를 모으고, 누군가 대기열에 들어오면 앱에 접속해 있는 사용자에게 알림이 뜨게 했습니다. 두 엔진의 판단이 어긋나는 문제는 보드를 만들 때마다 두 프로그램을 같이 돌려 결과가 다르면 실패하는 테스트로 막았고, 점수 검사 같은 핵심 검증은 서버 함수와 RLS 정책으로 옮겼습니다. Apple 영수증은 루트 인증서까지 서버에서 검증합니다.',
     result:
-      '반복 재생할 때 끊기는 부분이 없어졌고 트랙마다 음량을 조절해 취향대로 조합할 수 있게 됐습니다. iOS와 Android 심사를 모두 통과해 출시했습니다.',
-    images: [
-      '/assets/projects/highsleep/highsleep-2.jpg',
-      '/assets/projects/highsleep/highsleep-3.jpg',
-      '/assets/projects/highsleep/highsleep-4.jpg',
-      '/assets/projects/highsleep/highsleep-5.jpg',
-      '/assets/projects/highsleep/highsleep-6.jpg',
-      '/assets/projects/highsleep/highsleep-7.jpg',
+      '피크타임과 대기열 알림을 넣은 뒤 대기열 진입 105번 중 30번이 매칭돼 성공률이 3.5%에서 28.6%로 올랐고, 평균 대기는 760초에서 10.5초로 줄었습니다. 개발을 시작한 지 1개월 만에 App Store와 Google Play에 올렸습니다. 스도쿠 카페에 진행 상황을 올리며 모은 사용자가 출시 1주에 300명, 한 달에 600명이 됐습니다. 다운로드 1,000회를 달성했고 DAU 80으로 우상향해 App Store 보드 게임 순위 34위까지 올라갔습니다.',
+    moreCases: [
+      {
+        problemTitle: '최고 난이도는 다음 퍼즐 시작까지 2분 이상 대기',
+        numbers: [
+          { before: '120초 이상', value: '0초', label: '다음 퍼즐 시작 대기' },
+          { before: '124초', value: '2.4초', label: '최고 난이도 퍼즐 생성 (최대)' },
+        ],
+        problem:
+          '개발 중 가장 어려운 난이도를 직접 플레이해 보니 다음 퍼즐이 나오기까지 한참을 기다려야 했습니다. 퍼즐의 난이도를 판정하려면 후보 보드를 여러 번 풀어 봐야 하다 보니, 상위 난이도는 PC에서도 퍼즐 하나에 평균 30초, 최대 124초가 걸렸습니다. 이 때 시작 버튼을 누르면 화면이 멈춘 채로 생성이 끝나기를 기다리는 구조였습니다.',
+        decision:
+          '그래서 퍼즐을 누른 뒤에 만들지 않고 미리 만들어 두기로 했습니다. 난이도 6개마다 퍼즐을 3개씩 큐에 쌓아 두고, 남은 퍼즐이 1개 이하가 되면 백그라운드 Isolate에서 다시 채웁니다. 큐는 기기에 저장해 앱을 다시 켜도 유지되고, 처음 설치한 기기는 큐가 비어 있기 때문에 난이도별 퍼즐 3개를 앱에 넣어 배포했습니다. 여러 난이도를 동시에 만들면 CPU와 배터리를 많이 쓰기 때문에 쉬운 난이도부터 하나씩 채우도록 했습니다. 이후 생성 방식을 목표 난이도를 넘으면 바로 중단하고 다시 시도하는 방식으로 교체했고, 난이도 채점 솔버는 칸마다 Set으로 관리하던 후보 숫자를 비트마스크로 전환해 다시 구현했습니다.',
+        result:
+          '다음 퍼즐은 큐에서 꺼내기 때문에 생성을 기다리지 않고 바로 시작합니다. 같은 PC, 같은 시드로 다시 측정해 보니 상위 난이도의 최대 생성 시간이 124초에서 2.4초로 줄었습니다. 그중 비트마스크 솔버만의 효과는 최고 난이도 평균 1.59초에서 0.49초로 약 3배 단축입니다.',
+      },
+      {
+        problemTitle: '리플레이 한 판 기법 분석에 145초 소요',
+        numbers: [
+          { before: '145초', value: '3초 이내', label: '리플레이 한 판 기법 분석' },
+          { before: '5.8초', value: '0.2초', label: '리플레이를 열 때 CPU 사용' },
+        ],
+        problem:
+          '리플레이는 플레이어가 둔 수마다 어떤 기법으로 둔 것인지 분석해 보여 줍니다. 다이아 난이도 86수짜리 판 하나를 분석하는 데 145초가 걸렸고, 한 수에 143초를 쓰고도 답을 찾지 못하는 경우가 있었습니다. 체인 계열 기법으로 둔 수는 "설명되지 않아요"로 나오기도 했습니다.',
+        decision:
+          'AI가 제안한 기존 방식은 플레이어가 지운 후보마다 그 소거의 이유가 되는 기법을 역으로 찾는 방식이었습니다. 찾지 못하면 가능한 탐색을 끝까지 다 돌다 보니 시간이 오래 걸렸습니다. 그래서 질문을 거꾸로 바꿨습니다. 그 자리에서 쓸 수 있는 기법을 한 번에 뽑아 두고 플레이어의 수와 대조하는 방식입니다. 탐색 횟수에 상한을 두고, 지운 후보가 전부 설명되면 그 자리에서 멈추도록 했습니다.',
+        result:
+          '같은 판의 분석 시간이 145초에서 1.2~2.8초로 줄었고, 엔진이 설명할 수 있는 수 중 설명하지 못하는 수는 0개가 되었습니다. 뽑아 둔 기법 목록으로 수마다 쓸 수 있었던 다른 기법을 보여 주는 "다른 길" 기능도 만들었습니다. 다음 날 리플레이를 열면 기기가 뜨거워지는 것을 발견해 원인을 찾아 보니, 미리 계산이 판 끝까지 연쇄로 돌아 84회 실행에 CPU 5.8초를 쓰고 있었습니다. 다음 한 칸만 미리 계산하도록 수정해 4회 실행, 0.2초로 줄였습니다.',
+      },
     ],
+    images: [
+      '/assets/projects/sudoku/sudoku-home.png',
+      '/assets/projects/sudoku/sudoku-hint.png',
+      '/assets/projects/sudoku/sudoku-race.png',
+      '/assets/projects/sudoku/sudoku-leaderboard.png',
+      '/assets/projects/sudoku/sudoku-replay.png',
+    ],
+    extraGallery: {
+      title: 'iPad',
+      images: [
+        '/assets/projects/sudoku/sudoku-ipad-hint.png',
+        '/assets/projects/sudoku/sudoku-ipad-party.png',
+      ],
+      wide: true,
+    },
     wide: false,
-    logo: '/assets/projects/highsleep/highsleep-logo.svg',
-    tile: '#111116',
-    band: `linear-gradient(90deg, ${HIGHSLEEP_STOPS})`,
+    logo: '/assets/projects/sudoku/sudoku-logo.png',
+    tile: '#021e4e',
+    band: '#f2c14e',
     iconFull: true,
   },
 ];
@@ -308,7 +385,7 @@ export const timeline: TimelineRow[] = [
   {
     period: '2026.04 ~ 현재',
     org: '꿀꺽',
-    role: '창업 팀 프로젝트',
+    role: '2인 팀 프로젝트',
     type: 'project',
     now: true,
     caseId: 'kkulkkuk',
@@ -332,7 +409,6 @@ export const timeline: TimelineRow[] = [
     caseId: 'go2work',
   },
   { period: '2021.12 ~ 2022.06', org: '코드스테이츠 38기', type: 'education' },
-  { period: '2026.08', org: '학점은행제 경영학 학사', type: 'education' },
 ];
 
 export const mainSkills: string[] = ['Next.js', 'React', 'Flutter', 'TypeScript'];

@@ -113,12 +113,14 @@ export default function WorkDetail({ id }: Props) {
           </header>
 
           <div className='flex flex-wrap gap-x-8 gap-y-5'>
-            {caseStudy.numbers.map(number => (
-              <div key={number.label} className='flex flex-col gap-1'>
-                <CaseNumber number={number} className='text-[26px] md:text-[30px]' />
-                <span className='text-[13px] text-muted'>{number.label}</span>
-              </div>
-            ))}
+            {caseStudy.numbers
+              .filter(number => !number.hideOnDetail)
+              .map(number => (
+                <div key={number.label} className='flex flex-col gap-1'>
+                  <CaseNumber number={number} className='text-[26px] md:text-[30px]' />
+                  <span className='text-[13px] text-muted'>{number.label}</span>
+                </div>
+              ))}
           </div>
 
           <div className='flex flex-col gap-7'>
@@ -160,6 +162,44 @@ export default function WorkDetail({ id }: Props) {
                 {diagram.caption}
               </figcaption>
             </figure>
+          ))}
+
+          {caseStudy.moreCases?.map(more => (
+            <section
+              key={more.problemTitle}
+              className='flex flex-col gap-8 border-t border-line pt-10'
+            >
+              <h2 className='m-0 text-[18px] font-medium leading-[1.55] md:text-[20px]'>
+                {more.problemTitle}
+              </h2>
+              {more.numbers.length > 0 && (
+                <div className='flex flex-wrap gap-x-8 gap-y-5'>
+                  {more.numbers.map(number => (
+                    <div key={number.label} className='flex flex-col gap-1'>
+                      <CaseNumber number={number} className='text-[26px] md:text-[30px]' />
+                      <span className='text-[13px] text-muted'>{number.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className='flex flex-col gap-7'>
+                {[
+                  { label: '문제', body: more.problem },
+                  { label: '판단', body: more.decision },
+                  { label: '결과', body: more.result },
+                ].map(section => (
+                  <div
+                    key={section.label}
+                    className='grid gap-x-6 gap-y-2 md:grid-cols-[72px_minmax(0,1fr)]'
+                  >
+                    <h3 className='m-0 pt-0.5 text-[14px] font-semibold text-muted'>
+                      {section.label}
+                    </h3>
+                    <p className='m-0 max-w-[65ch] text-[16px] leading-[1.8]'>{section.body}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
           ))}
 
           <ScreenshotGrid

@@ -73,37 +73,26 @@
   }
 }
 
-/* 큰 모니터에서는 글자, 간격, 이미지까지 페이지 전체를 같은 비율로 키운다.
-   크기가 px로 정해져 있어 컴포넌트마다 고치는 대신 한 곳에서 배율만 바꾼다.
-   창 폭 1920까지는 1.2배로 두고, 그보다 넓으면 화면 폭 / 1600에 맞춰 올려 2560에서 1.6배로 멈춘다. */
-@media (min-width: 1280px) {
+/* 넓은 화면의 공백은 Container의 내용 폭을 넓혀서 채우고, 확대는 아주 넓은 창에서만 조금 한다.
+   창 폭 1920까지는 확대하지 않고, 그보다 넓으면 단계적으로 올려 2560에서 1.25배로 멈춘다. */
+@media (min-width: 2080px) {
   html {
     zoom: 1.1;
   }
 }
-@media (min-width: 1536px) {
-  html {
-    zoom: 1.2;
-  }
-}
-@media (min-width: 2080px) {
-  html {
-    zoom: 1.3;
-  }
-}
 @media (min-width: 2240px) {
   html {
-    zoom: 1.4;
+    zoom: 1.15;
   }
 }
 @media (min-width: 2400px) {
   html {
-    zoom: 1.5;
+    zoom: 1.2;
   }
 }
 @media (min-width: 2560px) {
   html {
-    zoom: 1.6;
+    zoom: 1.25;
   }
 }
 
@@ -115,7 +104,12 @@ html {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Pretendard Variable', Pretendard, -apple-system, system-ui, sans-serif;
+  font-family:
+    'Pretendard Variable',
+    Pretendard,
+    -apple-system,
+    system-ui,
+    sans-serif;
   font-variant-numeric: tabular-nums;
   word-break: keep-all;
   text-wrap: pretty;
@@ -140,7 +134,9 @@ section[id] {
 .reveal {
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 320ms ease-out, transform 320ms ease-out;
+  transition:
+    opacity 320ms ease-out,
+    transform 320ms ease-out;
 }
 
 .reveal.is-visible {
@@ -151,7 +147,9 @@ section[id] {
 [data-reveal-item] {
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 360ms ease-out, transform 360ms ease-out;
+  transition:
+    opacity 360ms ease-out,
+    transform 360ms ease-out;
 }
 
 [data-reveal-item].is-visible {
@@ -161,6 +159,32 @@ section[id] {
 
 .hero-seq [data-reveal-item] {
   transition-duration: 480ms;
+}
+
+/* 히어로 성과 카드는 글보다 느리게 떠오르고, 나타난 뒤에는 위아래로 몇 픽셀만 떠 있는다. */
+.hero-seq .hero-card[data-reveal-item] {
+  transition-duration: 1200ms;
+  transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.hero-float {
+  animation: hero-float var(--float-duration) ease-in-out var(--float-delay) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-float {
+    animation: none;
+  }
 }
 
 @keyframes label-fade {
@@ -181,7 +205,9 @@ section[id] {
   background-size: 0% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
-  transition: background-size 320ms ease, color 280ms ease;
+  transition:
+    background-size 320ms ease,
+    color 280ms ease;
 }
 
 .link-underline:hover {
@@ -192,7 +218,10 @@ html.theme-transition,
 html.theme-transition *,
 html.theme-transition *::before,
 html.theme-transition *::after {
-  transition: background-color 450ms ease, color 450ms ease, border-color 450ms ease !important;
+  transition:
+    background-color 450ms ease,
+    color 450ms ease,
+    border-color 450ms ease !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
