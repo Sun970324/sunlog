@@ -35,16 +35,15 @@ export default function Hero() {
         </p>
         <h1 className='mt-4 text-[32px] font-semibold leading-[1.25] tracking-[-0.02em] md:text-[48px]'>
           <span data-reveal-item className='block'>
-            사용자의 불편을 구조로 해결하는
+            사용자를 멈춰 세우는 문제는
           </span>
           <span data-reveal-item className='block'>
-            개발자 윤선웅입니다.
+            끝까지 파고들어 해결합니다.
           </span>
         </h1>
         <p data-reveal-item className='mt-5 max-w-[600px] text-[17px] leading-[1.7] text-muted'>
-          위치 기반 구인구직 서비스와 수면 유도 사운드 앱의 개발을 맡아 프론트엔드, 백엔드, 배포까지
-          다루며 풀스택 역량을 쌓았습니다. 그 경험으로 스도쿠 대전 앱과 고령 환자를 위한 전화 기반
-          재활 서비스를 직접 기획하고 개발했습니다.
+          구인구직 서비스의 지도 마커 표시를 약 30초에서 2초 안팎으로, 실시간 대결 앱의 매칭
+          성공률을 3.5%에서 28.6%로 개선했습니다.
         </p>
         <div data-reveal-item className='mt-6 flex flex-wrap gap-2.5'>
           <button type='button' onClick={copyEmail} className={PILL_CLASS}>
