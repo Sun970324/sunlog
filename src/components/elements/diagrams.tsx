@@ -108,7 +108,7 @@ function DayAxis() {
 
 const sudokuMatching: Diagram = {
   caption:
-    '매칭 범위를 넓혀도 그대로여서 시간대별 대기열 진입 인원을 세어 보니 같은 시간에 기다리는 사용자가 적었습니다. 피크타임으로 사용자를 모으고 대기열 진입 알림을 보내자 매칭 성공률이 3.5%에서 28.6%로 오르고 평균 대기는 760초에서 10.5초로 줄었습니다.',
+    '매칭 범위를 넓히자 성공률이 오히려 1.0%로 떨어져 시간대별 대기열 진입 인원을 세어 보니 같은 시간에 기다리는 사용자가 적었습니다. 피크타임으로 사용자를 모으자 12.7%, 대기열 진입 알림까지 보내자 28.6%로 오르고 평균 대기는 760초에서 10.5초로 줄었습니다.',
   metrics: [
     {
       label: '1:1 매칭 성공률',
@@ -137,7 +137,7 @@ const sudokuMatching: Diagram = {
         </text>
         <Box x={60} y={114} w={200} lines={['1차: 매칭 티어 범위 확대']} />
         <text x={160} y={168} textAnchor='middle' fontSize={11} fill={ACCENT}>
-          매칭률 그대로
+          성공률 오히려 1.0%로 하락
         </text>
         <Arrow d='M160 176V190' marker='match-before-arrow' />
         <Box x={50} y={190} w={220} lines={['314번 중 매칭 11번 (3.5%)']} color={ACCENT} />
@@ -299,28 +299,28 @@ const sudokuEngines: Diagram = {
 
 const go2workMap: Diagram = {
   caption:
-    '마커에 쓰지 않는 필드 140줄을 제거하고 클러스터러로 묶어 그리자 지도가 뜨기까지 약 30초 걸리던 것이 2초 안팎으로, 응답이 약 50MB에서 5MB 수준으로 줄었습니다.',
+    '마커에 쓰지 않는 필드 140줄을 제거하고 조회 범위를 제한한 뒤 클러스터러로 묶어 그리자 지도가 뜨기까지 30초 걸리던 것이 2초로, 응답이 50MB에서 5MB로 줄었습니다.',
   metrics: [
     {
       label: '지도 표시 시간',
-      before: { value: 30, text: '약 30초' },
-      after: { value: 2, text: '2초 안팎' },
+      before: { value: 30, text: '30초' },
+      after: { value: 2, text: '2초' },
     },
     {
       label: 'API 응답 크기',
-      before: { value: 50, text: '약 50MB' },
-      after: { value: 5, text: '약 5MB' },
+      before: { value: 50, text: '50MB' },
+      after: { value: 5, text: '5MB' },
     },
   ],
   before: {
     label: '개선 전',
     svg: (
       <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
-        <title>개선 전: 약 50MB 응답과 마커 전량 재렌더로 약 30초 멈춤</title>
+        <title>개선 전: 50MB 응답과 마커 전량 재렌더로 30초 멈춤</title>
         <ArrowHead id='map-before-arrow' />
         <Box x={16} y={16} w={170} lines={['검색 조건 변경']} />
         <Arrow d='M101 50V70' marker='map-before-arrow' />
-        <Box x={16} y={70} w={170} lines={['GraphQL 응답 약 50MB']} />
+        <Box x={16} y={70} w={170} lines={['GraphQL 응답 50MB']} />
         <text x={196} y={84} fontSize={11} fill={MUTED}>
           <tspan x={196}>쓰지 않는 기업 이미지,</tspan>
           <tspan x={196} dy={15}>
@@ -330,7 +330,7 @@ const go2workMap: Diagram = {
         <Arrow d='M101 104V124' marker='map-before-arrow' />
         <Box x={16} y={124} w={170} h={48} lines={['마커 수백 개', '전량 재렌더']} />
         <Arrow d='M101 172V192' marker='map-before-arrow' />
-        <Box x={16} y={192} w={170} lines={['약 30초 멈춤']} color={ACCENT} />
+        <Box x={16} y={192} w={170} lines={['30초 멈춤']} color={ACCENT} />
       </svg>
     ),
   },
@@ -338,21 +338,21 @@ const go2workMap: Diagram = {
     label: '개선 후',
     svg: (
       <svg viewBox='0 0 320 264' className='h-auto w-full' role='img'>
-        <title>개선 후: 약 5MB 응답과 MarkerClusterer 렌더로 2초 안팎</title>
+        <title>개선 후: 5MB 응답과 MarkerClusterer 렌더로 2초</title>
         <ArrowHead id='map-after-arrow' />
         <Box x={16} y={16} w={170} lines={['검색 조건 변경']} />
         <Arrow d='M101 50V70' marker='map-after-arrow' />
-        <Box x={16} y={70} w={170} lines={['응답 약 5MB']} />
+        <Box x={16} y={70} w={170} lines={['응답 5MB']} />
         <text x={196} y={84} fontSize={11} fill={MUTED}>
           <tspan x={196}>필드 140줄 제거,</tspan>
           <tspan x={196} dy={15}>
-            반경 30% 축소
+            조회 범위 제한
           </tspan>
         </text>
         <Arrow d='M101 104V124' marker='map-after-arrow' />
         <Box x={16} y={124} w={170} h={48} lines={['MarkerClusterer가', '묶어서 렌더']} />
         <Arrow d='M101 172V192' marker='map-after-arrow' />
-        <Box x={16} y={192} w={170} lines={['2초 안팎']} color={ACCENT} />
+        <Box x={16} y={192} w={170} lines={['2초']} color={ACCENT} />
         <text x={160} y={252} textAnchor='middle' fontSize={11} fill={MUTED}>
           직무 자동완성은 서버 대신 메모리에서 필터
         </text>

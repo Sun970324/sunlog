@@ -12,8 +12,8 @@ const HERO_CARDS = [
     id: 'go2work',
     name: '출근하자',
     label: '지도 표시 시간',
-    before: '약 30초',
-    after: '2초 안팎',
+    before: '30초',
+    after: '2초',
     position: 'lg:left-0 lg:top-0',
   },
   {
@@ -84,8 +84,8 @@ export default function Hero() {
             </span>
           </h1>
           <p data-reveal-item className='mt-5 max-w-[600px] text-[17px] leading-[1.7] text-muted'>
-            구인구직 서비스의 지도 마커 표시를 약 30초에서 2초 안팎으로, 실시간 대결 앱의 매칭
-            성공률을 3.5%에서 28.6%로 개선했습니다.
+            구인구직 서비스의 지도 마커 표시를 30초에서 2초로, 모의 티켓팅 서비스의 모바일 LCP를
+            6.46초에서 2.29초로, 실시간 대결 앱의 매칭 성공률을 3.5%에서 28.6%로 개선했습니다.
           </p>
           <div data-reveal-item className='mt-6 flex flex-wrap gap-2.5'>
             <button type='button' onClick={copyEmail} className={PILL_CLASS}>

@@ -34,6 +34,9 @@
 .case-highsleep {
   --accent: #5244c0;
 }
+.case-ticketrun {
+  --accent: #6d28d9;
+}
 .dark .case-go2work {
   --accent: #8094ff;
 }
@@ -45,6 +48,9 @@
 }
 .dark .case-highsleep {
   --accent: #a99dff;
+}
+.dark .case-ticketrun {
+  --accent: #b18cff;
 }
 
 /* 메인 프로젝트 패널이 바뀔 때 넘긴 방향에서 내용이 미끄러져 들어온다. */
