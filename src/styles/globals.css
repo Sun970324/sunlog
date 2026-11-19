@@ -37,6 +37,9 @@
 .case-ticketrun {
   --accent: #6d28d9;
 }
+.case-companeer {
+  --accent: #13795b;
+}
 .dark .case-go2work {
   --accent: #8094ff;
 }
@@ -51,6 +54,9 @@
 }
 .dark .case-ticketrun {
   --accent: #b18cff;
+}
+.dark .case-companeer {
+  --accent: #4fc79c;
 }
 
 /* 메인 프로젝트 패널이 바뀔 때 넘긴 방향에서 내용이 미끄러져 들어온다. */

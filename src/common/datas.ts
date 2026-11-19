@@ -396,6 +396,66 @@ export const caseStudies: CaseStudy[] = [
     band: '#6d28d9',
     iconFull: true,
   },
+  {
+    id: 'companeer',
+    name: 'Companeer',
+    year: '2026',
+    problemTitle: '채용 사이트 4곳 중 2곳에서 서버로 읽은 공고 상세 내용이 빠짐',
+    org: '개인 프로젝트',
+    period: '2026.11 ~ 진행 중',
+    role: '기획, 설계, AI 에이전트 개발',
+    stack: ['Next.js', 'Supabase', 'Chrome Extension'],
+    numbers: [
+      { value: '2/4곳', label: '서버 수집으로 상세 내용이 빠진 채용 사이트' },
+      { value: '0회', label: '서버의 채용 사이트 접속' },
+      { before: '$0.025', value: '$0.0006', label: '공고 1건 AI 정리 비용' },
+    ],
+    highlight: 0,
+    brief: {
+      problem:
+        '서버가 공고 링크를 가져와 정리하는 방식으로 사람인, 원티드, 점핏, 잡코리아를 시험하니 사람인과 잡코리아는 상세 내용이 빠졌고 원티드에는 크롤링 금지 문구가 있었습니다.',
+      decision:
+        '서버는 채용 사이트에 접속하지 않기로 하고 사용자가 보고 있는 탭을 읽어 보내는 크롬 확장과 본문 붙여넣기로 공고를 받게 바꿨습니다.',
+      result:
+        '서버 수집 코드를 지우고 확장과 붙여넣기가 같은 정리 API를 쓰게 했습니다. 서버의 채용 사이트 접속은 0회입니다.',
+    },
+    summary:
+      '취업 준비생이 관심 공고와 지원 단계, 마감과 면접 일정, 이력서와 자소서를 한곳에서 관리하는 웹 서비스입니다. 크롬 확장으로 보고 있는 공고를 바로 담을 수 있습니다. 혼자 만들고 있으며 기능 범위, 데이터 모델, 공고 수집 방식은 제가 정하고 구현은 Claude Code 에이전트에게 단계별로 맡긴 뒤 테스트와 실제 화면으로 확인하고 있습니다.',
+    problem:
+      '처음에는 공고 링크만 넣으면 서버가 페이지를 가져와 정리하는 방식으로 만들었습니다. 공개 주소에만 연결하도록 막고 robots.txt도 확인했습니다. 그런데 사람인, 원티드, 점핏, 잡코리아 공고로 한 번씩 시험하니 사람인과 잡코리아는 상세요강을 JS로 따로 불러와서 서버가 받은 HTML에는 상세 내용이 없었습니다. 원티드 공고 하단에는 동의 없이 크롤링할 수 없다는 문구가 있었습니다.',
+    decision:
+      '서버 수집을 보완하는 대신 서버가 채용 사이트에 접속하지 않도록 구조를 바꿨습니다. 채용 공고를 크롤링해 다시 게시한 것이 DB제작자 권리 침해로 인정된 잡코리아와 사람인 판례도 확인했습니다. 그래서 주 경로는 크롬 확장으로 정했습니다. 모든 사이트 권한 대신 activeTab 권한으로 사용자가 아이콘을 누른 탭만 읽고 같은 사이트 iframe까지 합쳐 스크립트와 이미지를 뺀 본문을 보냅니다. 웹과 휴대폰에서는 본문을 붙여넣게 했습니다. 받은 본문에 JSON-LD가 있으면 회사명, 마감일, 근무지는 그 값을 쓰고 나머지 항목만 AI로 나눕니다.',
+    result:
+      '서버 수집 코드와 관련 라이브러리 3개를 지우고 확장과 붙여넣기가 같은 정리 API를 쓰게 했습니다. 서버는 채용 사이트에 접속하지 않고 확장은 브라우저에 이미 그려진 페이지를 사람인 상세요강 iframe까지 함께 읽어 보냅니다.',
+    moreCases: [
+      {
+        problemTitle: '공고 1건 정리에 Opus로 최대 $0.025',
+        numbers: [
+          { before: '$0.025', value: '$0.0006', label: '공고 1건 정리 비용' },
+          { before: '3~7초', value: '2~3초', label: '정리 시간' },
+        ],
+        problem:
+          '담은 공고를 회사, 포지션, 마감일, 주요업무, 자격요건으로 나누는 데 AI를 씁니다. 사용자가 공고를 담을 때마다 호출되기 때문에 1건 비용이 그대로 운영비가 됩니다.',
+        decision:
+          '원티드와 사람인 실제 공고 2건으로 Opus, Sonnet, Haiku를 비교했습니다. 세 모델 모두 사람인 공고의 접수 시작일과 마감일을 구분했고 상시채용도 맞게 처리해서 Haiku로 정했습니다. 사용자별 하루 20건 한도를 두었고 확장 팝업은 정리 버튼을 눌렀을 때만 호출하게 해 공고가 아닌 페이지에서 열어도 한도가 쓰이지 않게 했습니다.',
+        result:
+          '공고 1건 정리 비용이 Opus 기준 $0.014~0.025에서 Haiku $0.0004~0.0006으로, 정리 시간은 3~7초에서 2~3초로 줄었습니다.',
+      },
+    ],
+    images: [
+      '/assets/projects/companeer/companeer-1.png',
+      '/assets/projects/companeer/companeer-2.png',
+      '/assets/projects/companeer/companeer-3.png',
+      '/assets/projects/companeer/companeer-4.png',
+      '/assets/projects/companeer/companeer-5.png',
+      '/assets/projects/companeer/companeer-6.png',
+    ],
+    wide: true,
+    logo: '/assets/projects/companeer/companeer-logo.png',
+    tile: '#13795b',
+    band: '#13795b',
+    iconFull: true,
+  },
 ];
 
 /** 메인 Work 아래에 짧게 보여 주는 나머지 프로젝트. 상세 페이지는 없다. */
@@ -452,6 +512,14 @@ export type TimelineRow = {
 };
 
 export const timeline: TimelineRow[] = [
+  {
+    period: '2026.11 ~ 현재',
+    org: 'Companeer',
+    role: '개인 프로젝트',
+    type: 'project',
+    now: true,
+    caseId: 'companeer',
+  },
   {
     period: '2026.10 ~ 현재',
     org: '티켓런',
