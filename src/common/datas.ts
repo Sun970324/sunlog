@@ -239,9 +239,9 @@ export const caseStudies: CaseStudy[] = [
       wide: true,
     },
     wide: false,
-    logo: '/assets/projects/kkul/kkul-logo-green.svg',
-    tile: '#0ca167',
-    band: '#0e9f6e',
+    logo: '/assets/projects/kkul/kkul-logo-blue.png',
+    tile: '#0050e0',
+    band: '#0050e0',
     iconFull: true,
   },
   {
