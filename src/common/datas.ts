@@ -469,6 +469,9 @@ export const caseStudies: CaseStudy[] = [
     ],
     images: [
       '/assets/projects/companeer/companeer-1.png',
+      '/assets/projects/companeer/companeer-10.png',
+      '/assets/projects/companeer/companeer-11.png',
+      '/assets/projects/companeer/companeer-12.png',
       '/assets/projects/companeer/companeer-2.png',
       '/assets/projects/companeer/companeer-3.png',
       '/assets/projects/companeer/companeer-4.png',
